@@ -1,0 +1,31 @@
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Admin Dashboard</title>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<style>body{font-family:Inter,sans-serif;padding:14px;background:#f5f7fa} .card{background:#fff;border:1px solid #ddd;padding:12px;border-radius:8px;margin-bottom:10px} .btn{background:#e74c3c;color:#fff;border:0;padding:6px 10px;border-radius:6px;cursor:pointer}</style>
+</head><body>
+<h2>Admin Dashboard — Subjectivity Intersection</h2><p>Login with your admin email to moderate.</p>
+<div id="login"><input id="email" placeholder="admin email"><input id="pass" type="password" placeholder="password"><button onclick="login()">Login</button></div>
+<div id="panel" style="display:none"><h3>All Questions</h3><div id="list"></div></div>
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyD5TT7In_Rvn-pmj1HyRKblF9fSYBhPuS8",
+  authDomain: "subjectivity-intersection.firebaseapp.com",
+  projectId: "subjectivity-intersection",
+  storageBucket: "subjectivity-intersection.firebasestorage.app",
+  messagingSenderId: "1002806897957",
+  appId: "1:1002806897957:web:d8fb17e389e777f6c17ecc"
+};
+firebase.initializeApp(firebaseConfig); const db=firebase.firestore(), auth=firebase.auth();
+const ADMINS=["pandaniga16-eng@github.com","pandaniga16@gmail.com"]; 
+async function login(){await auth.signInWithEmailAndPassword(email.value,pass.value);}
+auth.onAuthStateChanged(u=>{
+if(!u)return; if(!ADMINS.includes(u.email) && !u.email.includes('pandaniga')){alert('Not admin: '+u.email); return;}
+document.getElementById('login').style.display='none'; document.getElementById('panel').style.display='block';
+db.collection('questions').orderBy('time','desc').onSnapshot(s=>{
+document.getElementById('list').innerHTML=s.docs.map(d=>{const q=d.data(); return `<div class="card"><b>${q.title}</b><br><small>${q.name} • ${q.cat}</small><p>${q.body}</p><button class="btn" onclick="delQ('${d.id}')">Delete Post (spam)</button> <button class="btn" style="background:#111" onclick="delUser('${q.uid}')">Ban User (hide)</button></div>`}).join('');
+});
+});
+async function delQ(id){if(confirm('Delete this post?')) await db.collection('questions').doc(id).delete();}
+async function delUser(uid){alert('To ban, delete their questions from list, and block in Firebase Auth manually. UID:'+uid);}
+</script></body></html>
