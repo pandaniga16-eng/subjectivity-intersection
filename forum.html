@@ -3,74 +3,126 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Forum — Subjectivity Intersection + AI</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@600;700;900&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+<title>Forum — Subjectivity Intersection + ChatGPT AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;700;900&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 <style>
-:root{--ink:#0e0e0f;--blue:#0051ff;--yellow:#ffe600;--bg:#f6f5f0}
+:root{--ink:#0e0e0f;--blue:#0051ff;--yellow:#ffe600;--bg:#f6f5f0;--green:#00c853}
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:var(--bg);color:var(--ink);font-family:Inter,sans-serif}
 .mono{font-family:'JetBrains Mono',monospace}
-header{position:sticky;top:0;z-index:50;background:#fff;border-bottom:5px solid var(--ink);display:flex;align-items:center;justify-content:space-between;padding:14px 18px;gap:10px}
-.logo{font-weight:900;line-height:.9;font-size:20px}
-.btn{border:4px solid var(--ink);border-radius:999px;padding:12px 18px;font-weight:900;cursor:pointer;background:var(--ink);color:#fff}
-.btn-blue{background:var(--blue)} .btn-yellow{background:var(--yellow);color:var(--ink)} .btn-white{background:#fff;color:var(--ink)}
-.poster{max-width:1280px;margin:18px auto 0;border:6px solid var(--ink);border-radius:28px;overflow:hidden;box-shadow:14px 14px 0 var(--ink);background:#000}
+header{position:sticky;top:0;z-index:50;background:#fff;border-bottom:5px solid var(--ink);display:flex;align-items:center;justify-content:space-between;padding:12px 14px;gap:8px;flex-wrap:wrap}
+.logo{font-weight:900;line-height:.85;font-size:18px}
+.btn{border:4px solid var(--ink);border-radius:999px;padding:10px 16px;font-weight:900;cursor:pointer;background:var(--ink);color:#fff;font-size:14px}
+.btn-blue{background:var(--blue)} .btn-yellow{background:var(--yellow);color:var(--ink)} .btn-white{background:#fff;color:var(--ink)} .btn-green{background:var(--green);color:#fff}
+.poster{max-width:1280px;margin:12px auto 0;border:6px solid var(--ink);border-radius:28px;overflow:hidden;box-shadow:12px 12px 0 var(--ink);background:#000}
 .poster img{width:100%;display:block}
-.grid{max-width:1280px;margin:0 auto;padding:18px;display:grid;grid-template-columns:280px 1fr 360px;gap:18px} @media(max-width:1100px){.grid{grid-template-columns:1fr}}
-.card{background:#fff;border:5px solid var(--ink);border-radius:24px;padding:22px;box-shadow:10px 10px 0 var(--ink);margin-bottom:16px}
-.tag{display:inline-block;border:3px solid var(--ink);border-radius:999px;padding:6px 12px;font-family:'JetBrains Mono';font-weight:800;font-size:11px;background:#fff;margin:3px}
-.qitem{border:4px solid var(--ink);border-radius:22px;padding:18px;background:#fff;cursor:pointer;margin-bottom:12px}
-.qitem:hover{transform:translate(-2px,-2px);box-shadow:8px 8px 0 var(--ink)}
-.ans{border:4px solid var(--ink);border-radius:18px;padding:16px;background:#f6f5f0;margin-bottom:10px}
+.grid{max-width:1280px;margin:0 auto;padding:14px;display:grid;grid-template-columns:320px 1fr 380px;gap:14px}
+@media(max-width:1100px){.grid{grid-template-columns:1fr}}
+.card{background:#fff;border:5px solid var(--ink);border-radius:24px;padding:18px;box-shadow:8px 8px 0 var(--ink);margin-bottom:12px}
+.tag{display:inline-block;border:3px solid var(--ink);border-radius:999px;padding:5px 10px;font-family:'JetBrains Mono';font-weight:800;font-size:11px;background:#fff;margin:2px}
+.qitem{border:4px solid var(--ink);border-radius:20px;padding:14px;background:#fff;cursor:pointer;margin-bottom:10px}
+.qitem:hover{transform:translate(-1px,-1px);box-shadow:6px 6px 0 var(--ink)}
+.ans{border:4px solid var(--ink);border-radius:18px;padding:14px;background:#f6f5f0;margin-bottom:10px}
 .ans.ai{border-color:var(--blue);background:#eef3ff}
-.ans.ai::before{content:'SIEL AI • Grounded in your papers';font-family:'JetBrains Mono';font-size:10px;background:var(--blue);color:#fff;padding:3px 8px;border-radius:99px;display:inline-block;margin-bottom:8px}
-.modal{position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center;padding:18px}
+.chatBox{height:380px;overflow:auto;border:4px solid var(--ink);border-radius:20px;padding:12px;background:#fff;display:flex;flex-direction:column;gap:10px}
+.msg{max-width:85%;padding:10px 14px;border-radius:18px;font-size:15px;line-height:1.4}
+.msg.user{align-self:flex-end;background:var(--ink);color:#fff;border:4px solid var(--ink)}
+.msg.ai{align-self:flex-start;background:#eef3ff;border:4px solid var(--blue)}
+.modal{position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center;padding:14px}
 .modal.open{display:flex}
-.modalInner{width:100%;max-width:720px;background:#fff;border:6px solid var(--ink);border-radius:28px;padding:26px;max-height:90vh;overflow:auto}
-.input{border:4px solid var(--ink);border-radius:18px;padding:16px;width:100%;font-size:18px;font-weight:600;margin-bottom:10px}
-textarea.input{min-height:120px}
+.modalInner{width:100%;max-width:520px;background:#fff;border:6px solid var(--ink);border-radius:28px;padding:22px;max-height:92vh;overflow:auto}
+.input{border:4px solid var(--ink);border-radius:16px;padding:12px;width:100%;font-size:16px;font-weight:600;margin-bottom:8px}
+textarea.input{min-height:100px}
+.userBadge{display:flex;align-items:center;gap:8px;border:3px solid var(--ink);border-radius:999px;padding:6px 10px;background:#fff}
+.avatar{width:32px;height:32px;border-radius:50%;background:var(--blue);color:#fff;display:grid;place-items:center;font-weight:900}
 </style>
 </head>
 <body>
 <header>
 <div class="logo">SUBJECTIVITY<br>INTERSECTION<br>FORUM + AI</div>
-<div style="display:flex;gap:8px"><button class="btn btn-white" onclick="location.href='index.html'">HOME</button><button class="btn btn-blue" onclick="openAsk()">ASK QUESTION</button></div>
+<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+<span id="userInfo"></span>
+<button class="btn btn-white" onclick="openLogin()" id="loginBtn">LOGIN / SIGN UP</button>
+<button class="btn btn-blue" onclick="openAsk()">ASK QUESTION</button>
+<button class="btn btn-green" onclick="openGroupModal()">+ CREATE GROUP</button>
+</div>
 </header>
 
 <div class="poster"><img src="23de654b-9e60-483f-825d-b76250152f61.jpeg" alt="Poster"></div>
 
-<div style="max-width:1280px;margin:0 auto;padding:0 18px"><div class="card" style="margin-top:18px;display:flex;gap:12px;flex-wrap:wrap;align-items:center"><span class="tag" style="background:#0051ff;color:#fff">FORUM v2 • FIREBASE REALTIME</span><span class="tag" style="background:#111;color:#fff">SIEL AI • GROUNDED IN DOI 23047902 + 23284177</span><span class="tag" style="background:#ffe600">pB=3/5 • SPEC 12/25,52/25 • -+++</span><span class="tag" id="status">Connecting to Firebase...</span></div></div>
+<div style="max-width:1280px;margin:0 auto;padding:0 14px"><div class="card" style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+<span class="tag" style="background:#0051ff;color:#fff">FORUM v3 • AUTH + GROUPS + CHATGPT AI</span>
+<span class="tag" style="background:#111;color:#fff">SIEL AI • DOI 23047902 + 23284177</span>
+<span class="tag" style="background:#ffe600">pB=3/5 • SPEC 12/25,52/25 • -+++</span>
+<span class="tag" id="status" style="background:var(--green);color:#fff">Connecting...</span>
+</div></div>
 
 <div class="grid">
+<!-- LEFT -->
 <div>
-<div class="card"><h3 class="mono">CATEGORIES</h3><div id="cats" style="margin-top:12px;display:grid;gap:8px"></div></div>
-<div class="card"><h3 class="mono">SIEL AI KNOWLEDGE</h3><p style="font-size:14px;line-height:1.5;margin-top:10px">AI only answers from:<br>• Foundation paper: finite pointed involutive braid source → Born, V4 → diag(-1,1,1,1), spectrum (12/25,52/25...), pB=3/5, integer clock<br>• Bridge paper: world begins when subjectivities intersect<br>• Poster 6 steps: Different → Intersection → Objectivity → 4D → Gravity → Einstein<br>• Old OS WORLD→SUBJ vs New OS INTERSECTION→WORLD<br>• ResearchGate 414975934</p></div>
+<div class="card"><h3 class="mono">GROUPS FOR DISCUSSION</h3><div id="groupList" style="margin-top:10px;display:grid;gap:8px"></div><p class="mono" style="font-size:11px;opacity:.6;margin-top:8px">Create a group → others join → discuss. Like WhatsApp groups.</p></div>
+<div class="card"><h3 class="mono">CATEGORIES</h3><div id="cats" style="margin-top:10px;display:grid;gap:6px"></div></div>
+<div class="card"><h3 class="mono">SIEL AI KNOWLEDGE</h3><p style="font-size:13px;line-height:1.5;margin-top:8px">Grounded in your papers only:<br>• Foundation: finite pointed involutive braid → Born, V4 → diag(-1,1,1,1), spectrum 12/25,52/25, pB=3/5<br>• Bridge: world begins when subjectivities intersect<br>• Poster 6 steps<br>• Old WORLD→SUBJ vs New INTERSECTION→WORLD<br>• ResearchGate 414975934</p></div>
 </div>
 
+<!-- CENTER -->
 <div>
-<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px"><h3 class="mono">QUESTIONS (<span id="qCount">0</span>) • REALTIME</h3><input id="search" placeholder="Search..." style="border:3px solid #111;border-radius:999px;padding:8px 14px;font-weight:700"></div>
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:8px"><h3 class="mono">QUESTIONS (<span id="qCount">0</span>) • REALTIME</h3><input id="search" placeholder="Search..." style="border:3px solid #111;border-radius:999px;padding:8px 12px;font-weight:700;flex:1;max-width:200px"></div>
 <div id="qList"></div>
 </div>
 
+<!-- RIGHT - CHATGPT STYLE AI -->
 <div>
-<div class="card"><h3 class="mono">QUESTION DETAIL + AI</h3><div id="detail"><p class="mono" style="opacity:.6">Select a question. AI will auto-answer if about subjectivity/intersection.</p></div></div>
+<div class="card">
+<h3 class="mono">SIEL AI • CHATGPT MODE</h3>
+<p class="mono" style="font-size:11px;opacity:.6;margin:6px 0">Ask anything, like ChatGPT, but answers ONLY from your papers.</p>
+<div id="chatBox" class="chatBox">
+<div class="msg ai">Hi, I'm SIEL AI. I'm grounded in your Subjectivity-Intersection Braid QG papers (DOI 23047902, 23284177). Ask me about subjectivity, intersection, 4D emergence, gravity, Einstein. How can I help? — Kira ↔ Tokyo</div>
+</div>
+<div style="display:flex;gap:6px;margin-top:8px">
+<input id="chatInput" class="input" placeholder="Message SIEL AI... like ChatGPT" style="margin:0" onkeydown="if(event.key==='Enter')sendChat()">
+<button class="btn btn-blue" onclick="sendChat()">SEND</button>
 </div>
 </div>
 
+<div class="card"><h3 class="mono">QUESTION DETAIL</h3><div id="detail"><p class="mono" style="opacity:.6">Select a question. Or chat with AI above.</p></div></div>
+</div>
+</div>
+
+<!-- MODALS -->
+<div id="loginModal" class="modal"><div class="modalInner">
+<div style="display:flex;justify-content:space-between"><h2 style="font-size:28px;font-weight:900">Account</h2><button class="btn btn-white" onclick="closeLogin()">X</button></div>
+<p class="mono" style="font-size:12px;margin:10px 0">Create account to post, create groups, join discussions. Like normal forum.</p>
+<input id="authEmail" class="input" placeholder="Email">
+<input id="authPass" type="password" class="input" placeholder="Password (6+ chars)">
+<button class="btn btn-blue" style="width:100%" onclick="signUp()">CREATE ACCOUNT</button>
+<button class="btn btn-white" style="width:100%;margin-top:6px" onclick="signIn()">LOGIN</button>
+<button class="btn btn-yellow" style="width:100%;margin-top:6px" onclick="googleLogin()">LOGIN WITH GOOGLE</button>
+<button class="btn btn-white" style="width:100%;margin-top:6px" onclick="signOut()" id="logoutBtn">LOGOUT</button>
+</div></div>
+
 <div id="askModal" class="modal"><div class="modalInner">
-<div style="display:flex;justify-content:space-between"><h2 style="font-size:32px;font-weight:900">Ask</h2><button class="btn btn-white" onclick="closeAsk()">X</button></div>
+<div style="display:flex;justify-content:space-between"><h2 style="font-size:28px;font-weight:900">Ask Question</h2><button class="btn btn-white" onclick="closeAsk()">X</button></div>
+<p class="mono" style="font-size:11px;opacity:.7">You must login first. Then question saves to Firebase + SIEL AI answers.</p>
 <input id="askTitle" class="input" placeholder="Title — e.g. How does intersection create spacetime?">
 <select id="askCat" class="input"><option>Braid Quantum Gravity</option><option>Old vs New OS</option><option>5 Questions</option><option>Kira ↔ Tokyo</option><option>General</option></select>
-<textarea id="askBody" class="input" placeholder="Explain..."></textarea>
-<input id="askTags" class="input" placeholder="Tags: subjectivity, intersection, braid">
-<input id="askName" class="input" placeholder="Your name">
-<button class="btn btn-blue" style="width:100%" onclick="submitQ()">POST → FIREBASE + TRIGGER AI</button>
+<textarea id="askBody" class="input" placeholder="Details..."></textarea>
+<input id="askTags" class="input" placeholder="Tags: subjectivity, intersection">
+<button class="btn btn-blue" style="width:100%" onclick="submitQ()">POST → FIREBASE + AI</button>
+</div></div>
+
+<div id="groupModal" class="modal"><div class="modalInner">
+<div style="display:flex;justify-content:space-between"><h2 style="font-size:26px;font-weight:900">Create Group</h2><button class="btn btn-white" onclick="closeGroupModal()">X</button></div>
+<input id="groupName" class="input" placeholder="Group name — e.g. Braid QG Lab, Kira-Tokyo Bridge">
+<textarea id="groupDesc" class="input" placeholder="What is this group for?"></textarea>
+<button class="btn btn-green" style="width:100%" onclick="createGroup()">CREATE GROUP</button>
 </div></div>
 
 <script>
-// ===== FIREBASE CONFIG - REAL - YOUR PROJECT subjectivity-intersection =====
+// ===== FIREBASE REAL CONFIG =====
 const firebaseConfig = {
   apiKey: "AIzaSyD5TT7In_Rvn-pmj1HyRKblF9fSYBhPuS8",
   authDomain: "subjectivity-intersection.firebaseapp.com",
@@ -80,141 +132,137 @@ const firebaseConfig = {
   appId: "1:1002806897957:web:d8fb17e389e777f6c17ecc",
   measurementId: "G-L9QMTYK3ML"
 };
-// ===== END CONFIG =====
-
-let db=null;
-try{
 firebase.initializeApp(firebaseConfig);
-db=firebase.firestore();
-document.getElementById('status').textContent='Firebase connected • Realtime ON • subjectivity-intersection';
-document.getElementById('status').style.background='#00c853';document.getElementById('status').style.color='#fff';
-}catch(e){
-document.getElementById('status').textContent='Firebase config error: '+e.message;
-console.log('Firebase not configured', e);
-}
-
-let qs=[]; let activeCat='All'; let selectedId=null;
+const db = firebase.firestore();
+const auth = firebase.auth();
+let currentUser = null;
+let allQs=[]; let activeCat='All'; let activeGroup='All';
 
 const AI_KB = {
-  subjectivity: "Standpoint in Braid QG is not consciousness. It is a typed, source-relative mode of access needed to define an event, relation, or record. From paper DOI 10.5281/zenodo.23047902.",
-  intersection: "Intersection = ordered crossing of braid strands that retains provenance. 8 signed representatives give Born probabilities. V4 Fourier split 1+3 gives diag(-1,+1,+1,+1). Old OS: WORLD→SUBJECTIVITY. New OS: SUBJECTIVE INTERSECTION→WORLD. DOI 23284177.",
-  spacetime: "4D spacetime is NOT assumed. It emerges: retained signed Braid-word gives integer clock, canonical mismatch quotient V4 splits into 1 trivial + 3 nontrivial. Word inversion reverses only clock → signature -+++. Spectrum exact (12/25,52/25,52/25,52/25).",
-  gravity: "5-label source has complementary rank split 3+2. Normalized rank-3 summand gives routing invariant pB=3/5. Glued to continuous metric response on local regular source cylinder → scoped gravitational dynamics, restricted Einstein-type low-energy relation.",
-  einstein: "Toward Einstein: Gμν = 8πG/c⁴ Tμν quantifies curvature with matter-energy, but in this theory it emerges from intersection relationships, not presupposed manifold. Matter does not curve spacetime; gravity emerges from intersecting relationships.",
-  "6pm": "Q1 from poster: Color of 6pm collects standpoint data. Kira 6pm = orange dust, Tokyo 6pm = indigo. Different subjectivities have different 6pm. Shared world emerges when we keep difference fully.",
-  default: "From Subjectivity-Intersection Braid Quantum Gravity (ResearchGate 414975934, DOI 23047902 foundation + 23284177 bridge): Objective world emerges when different subjectivities intersect. Steps: 1.Different Subjectivities 2.Intersection 3.Birth of Objectivity 4.4D Spacetime 5.Gravity 6.Toward Einstein. Old WORLD→SUBJECTIVITY vs New INTERSECTION→WORLD. Invariants: pB=3/5, spectrum 12/25,52/25, diag(-1,1,1,1)."
+  subjectivity:"Standpoint in Braid QG is not consciousness. It is a typed, source-relative mode of access needed to define an event, relation, or record. DOI 23047902.",
+  intersection:"Intersection = ordered crossing of braid strands that retains provenance. 8 signed representatives give Born. V4 Fourier 1+3 gives diag(-1,+1,+1,+1). Old OS WORLD→SUBJECTIVITY. New OS INTERSECTION→WORLD. DOI 23284177.",
+  spacetime:"4D spacetime is NOT assumed. It emerges: integer clock from retained Braid-word + V4 quotient (1 trivial + 3 nontrivial) → signature -+++ . Spectrum exact (12/25,52/25,52/25,52/25).",
+  gravity:"5-label source 3+2 split → pB=3/5 routing invariant. Glued to continuous metric response → scoped gravitational dynamics, Einstein-type low-energy relation emerges, not presupposed.",
+  einstein:"Gμν=8πG/c⁴ Tμν emerges from intersection relationships. Matter does not curve pre-existing spacetime; gravity emerges from intersecting subjectivities.",
+  "6pm":"Q1 poster: Color of 6pm collects standpoint data. Kira 6pm = orange dust, Tokyo = indigo. Different subjectivities, shared world when we keep difference.",
+  default:"From Subjectivity-Intersection Braid QG (ResearchGate 414975934, DOI 23047902 foundation + 23284177 bridge): Objective world emerges when different subjectivities intersect. Steps: Different→Intersection→Objectivity→4D→Gravity→Einstein. Invariants: pB=3/5, spectrum 12/25,52/25, diag(-1,1,1,1)."
 };
-
-function getAIAnswer(title, body){
-const t=(title+" "+body).toLowerCase();
-if(t.includes('subjectivity')) return AI_KB.subjectivity;
-if(t.includes('intersection')) return AI_KB.intersection;
-if(t.includes('spacetime')||t.includes('time')||t.includes('space')||t.includes('4d')) return AI_KB.spacetime;
-if(t.includes('gravity')||t.includes('pb')||t.includes('3/5')) return AI_KB.gravity;
-if(t.includes('einstein')||t.includes('gμν')||t.includes('curvature')) return AI_KB.einstein;
-if(t.includes('6pm')||t.includes('color')) return AI_KB["6pm"];
-return AI_KB.default;
+function getAIAnswer(t){
+  t=t.toLowerCase();
+  if(t.includes('subjectiv')) return AI_KB.subjectivity;
+  if(t.includes('intersect')) return AI_KB.intersection;
+  if(t.includes('spacetime')||t.includes('time')||t.includes('4d')||t.includes('space')) return AI_KB.spacetime;
+  if(t.includes('gravity')||t.includes('pb')||t.includes('3/5')) return AI_KB.gravity;
+  if(t.includes('einstein')||t.includes('gμν')||t.includes('curvature')) return AI_KB.einstein;
+  if(t.includes('6pm')||t.includes('color')) return AI_KB["6pm"];
+  return AI_KB.default;
 }
 
-function openAsk(){document.getElementById('askModal').classList.add('open')}
-function closeAsk(){document.getElementById('askModal').classList.remove('open')}
-
-async function submitQ(){
-const title=document.getElementById('askTitle').value.trim(); if(!title)return alert('Title needed');
-const cat=document.getElementById('askCat').value; const body=document.getElementById('askBody').value.trim();
-const tags=document.getElementById('askTags').value.split(',').map(s=>s.trim()).filter(Boolean);
-const name=document.getElementById('askName').value.trim()||'Anonymous';
-const q={title, cat, body, tags, name, time:Date.now(), up:0, answers:[]};
-const aiText=getAIAnswer(title, body);
-q.answers=[{name:'SIEL AI • Subjectivity-Intersection', text: aiText + " [Sources: DOI 10.5281/zenodo.23047902, DOI 10.5281/zenodo.23284177, ResearchGate 414975934, Poster 6 steps]", time:Date.now(), up:0, isAI:true}];
-if(db){
-await db.collection('questions').add(q);
-}else{
-qs.unshift(q); renderList(filtered());
-}
-closeAsk();
-document.getElementById('askTitle').value='';document.getElementById('askBody').value='';
-}
-
-function renderList(list){
-document.getElementById('qCount').textContent=list.length;
-document.getElementById('qList').innerHTML=list.map(q=>`
-<div class="qitem" onclick="openDetail('${q.id}')">
-<div><span class="tag" style="background:#111;color:#fff">${q.cat}</span>${(q.tags||[]).slice(0,3).map(t=>`<span class="tag">#${t}</span>`).join('')}</div>
-<h4 style="font-size:22px;margin-top:8px">${q.title}</h4>
-<p style="opacity:.7;font-size:14px;margin-top:6px">${(q.body||'').slice(0,120)}</p>
-<div class="mono" style="font-size:12px;opacity:.6;margin-top:8px">${q.name} • ${q.answers?.length||0} answers • ▲ ${q.up||0}</div>
-</div>`).join('');
-}
-
-let allQs=[];
-function setupRealtime(){
-if(!db){
-allQs=[
-{ id:'1', title:'If world emerges from intersection, what was before?', cat:'Old vs New OS', body:'What exists before subjectivity to intersect?', tags:['subjectivity','intersection'], name:'Satoru', time:Date.now()-10000000, up:12, answers:[{name:'SIEL AI • Subjectivity-Intersection', text:AI_KB.intersection, time:Date.now(), up:2, isAI:true}]},
-{ id:'2', title:'How does pB=3/5 appear in daily life?', cat:'Braid Quantum Gravity', body:'Can we feel 3+2 split?', tags:['pB','braid'], name:'Lab', time:Date.now()-8000000, up:9, answers:[{name:'SIEL AI', text:AI_KB.gravity, time:Date.now(), up:1, isAI:true}]}
-];
-renderList(allQs); renderCats(); return;
-}
-db.collection('questions').orderBy('time','desc').onSnapshot(snap=>{
-allQs=snap.docs.map(d=>({id:d.id, ...d.data()}));
-renderList(filtered());
-renderCats();
+// AUTH
+auth.onAuthStateChanged(user=>{
+  currentUser=user;
+  const info=document.getElementById('userInfo');
+  const loginBtn=document.getElementById('loginBtn');
+  if(user){
+    info.innerHTML=`<div class="userBadge"><div class="avatar">${user.email[0].toUpperCase()}</div><span class="mono" style="font-size:12px">${user.email.split('@')[0]}</span></div>`;
+    loginBtn.textContent='ACCOUNT'; loginBtn.className='btn btn-green';
+    document.getElementById('status').textContent=`Logged in • ${user.email} • Firebase ON`;
+  }else{
+    info.innerHTML=''; loginBtn.textContent='LOGIN / SIGN UP'; loginBtn.className='btn btn-white';
+    document.getElementById('status').textContent='Firebase connected • Realtime ON • subjectivity-intersection';
+  }
 });
+function openLogin(){document.getElementById('loginModal').classList.add('open')}
+function closeLogin(){document.getElementById('loginModal').classList.remove('open')}
+async function signUp(){try{await auth.createUserWithEmailAndPassword(authEmail.value, authPass.value); closeLogin();}catch(e){alert(e.message)}}
+async function signIn(){try{await auth.signInWithEmailAndPassword(authEmail.value, authPass.value); closeLogin();}catch(e){alert(e.message)}}
+async function googleLogin(){try{const p=new firebase.auth.GoogleAuthProvider(); await auth.signInWithPopup(p); closeLogin();}catch(e){alert(e.message)}}
+async function signOut(){await auth.signOut(); closeLogin();}
+
+// MODALS
+function openAsk(){if(!currentUser) return openLogin(); document.getElementById('askModal').classList.add('open')}
+function closeAsk(){document.getElementById('askModal').classList.remove('open')}
+function openGroupModal(){if(!currentUser) return openLogin(); document.getElementById('groupModal').classList.add('open')}
+function closeGroupModal(){document.getElementById('groupModal').classList.remove('open')}
+
+// CHATGPT LIKE AI
+function sendChat(){
+  const input=document.getElementById('chatInput'); const text=input.value.trim(); if(!text) return;
+  const box=document.getElementById('chatBox');
+  box.innerHTML+=`<div class="msg user">${text}</div>`;
+  const aiText=getAIAnswer(text);
+  setTimeout(()=>{box.innerHTML+=`<div class="msg ai"><b>SIEL AI:</b> ${aiText} <br><span class="mono" style="font-size:10px;opacity:.6">[Sources: DOI 23047902, 23284177, RG 414975934]</span></div>`; box.scrollTop=box.scrollHeight;},400);
+  input.value=''; box.scrollTop=box.scrollHeight;
 }
 
+// GROUPS
+async function createGroup(){
+  const name=document.getElementById('groupName').value.trim(); if(!name) return alert('Name needed');
+  const desc=document.getElementById('groupDesc').value.trim();
+  await db.collection('groups').add({name, desc, creator: currentUser.email, creatorId: currentUser.uid, members:[currentUser.uid], time:Date.now()});
+  closeGroupModal(); document.getElementById('groupName').value=''; document.getElementById('groupDesc').value='';
+}
+function setupGroups(){
+  db.collection('groups').orderBy('time','desc').onSnapshot(snap=>{
+    const list=snap.docs.map(d=>({id:d.id, ...d.data()}));
+    document.getElementById('groupList').innerHTML = list.length? list.map(g=>`<div class="qitem" style="padding:10px" onclick="setActiveGroup('${g.id}','${g.name}')"><b>${g.name}</b><br><span class="mono" style="font-size:11px;opacity:.7">${g.desc||''}<br>by ${g.creator} • ${g.members?.length||1} members</span><br><button class="tag" style="margin-top:4px" onclick="event.stopPropagation(); joinGroup('${g.id}')">JOIN GROUP</button></div>`).join('') : '<p class="mono" style="font-size:12px;opacity:.6">No groups yet. Be first to create!</p>';
+  });
+}
+async function joinGroup(id){
+  if(!currentUser) return openLogin();
+  const ref=db.collection('groups').doc(id); const doc=await ref.get(); const data=doc.data();
+  if(!data.members.includes(currentUser.uid)){ await ref.update({members: firebase.firestore.FieldValue.arrayUnion(currentUser.uid)}); alert('Joined!'); }
+  else alert('Already member');
+}
+function setActiveGroup(id,name){activeGroup=id; document.getElementById('search').value=name; renderList(filtered());}
+
+// QUESTIONS
+async function submitQ(){
+  const title=document.getElementById('askTitle').value.trim(); if(!title) return alert('Title needed');
+  const cat=document.getElementById('askCat').value; const body=document.getElementById('askBody').value.trim();
+  const tags=document.getElementById('askTags').value.split(',').map(s=>s.trim()).filter(Boolean);
+  const aiText=getAIAnswer(title+' '+body);
+  const q={title, cat, body, tags, name: currentUser.email, uid: currentUser.uid, group: activeGroup, time:Date.now(), up:0, answers:[{name:'SIEL AI • Subjectivity-Intersection', text: aiText + " [Sources: DOI 23047902, 23284177, ResearchGate 414975934]", time:Date.now(), up:0, isAI:true}]};
+  await db.collection('questions').add(q);
+  closeAsk(); document.getElementById('askTitle').value=''; document.getElementById('askBody').value='';
+}
+function setupQuestions(){
+  db.collection('questions').orderBy('time','desc').onSnapshot(snap=>{
+    allQs=snap.docs.map(d=>({id:d.id, ...d.data()}));
+    renderList(filtered()); renderCats();
+    document.getElementById('status').style.background='#00c853'; document.getElementById('status').style.color='#fff';
+  });
+}
 function filtered(){
-const s=document.getElementById('search').value.toLowerCase();
-let list=[...allQs];
-if(activeCat!=='All') list=list.filter(q=>q.cat===activeCat);
-if(s) list=list.filter(q=> (q.title+q.body+(q.tags||[]).join(' ')).toLowerCase().includes(s));
-return list;
+  const s=document.getElementById('search').value.toLowerCase(); let list=[...allQs];
+  if(activeCat!=='All') list=list.filter(q=>q.cat===activeCat);
+  if(activeGroup!=='All') list=list.filter(q=>q.group===activeGroup);
+  if(s) list=list.filter(q=> (q.title+q.body+(q.tags||[]).join(' ')+(q.group||'')).toLowerCase().includes(s));
+  return list;
 }
-
+function renderList(list){
+  document.getElementById('qCount').textContent=list.length;
+  document.getElementById('qList').innerHTML=list.map(q=>`<div class="qitem" onclick="openDetail('${q.id}')"><div><span class="tag" style="background:#111;color:#fff">${q.cat}</span>${(q.tags||[]).slice(0,2).map(t=>`<span class="tag">#${t}</span>`).join('')}${q.group && q.group!=='All'?`<span class="tag" style="background:#00c853;color:#fff">Group</span>`:''}</div><h4 style="font-size:18px;margin-top:6px">${q.title}</h4><p style="opacity:.7;font-size:13px;margin-top:4px">${(q.body||'').slice(0,100)}</p><div class="mono" style="font-size:11px;opacity:.6;margin-top:6px">${q.name} • ${q.answers?.length||0} answers • ▲ ${q.up||0}</div></div>`).join('');
+}
 function renderCats(){
-const cats=['All','Braid Quantum Gravity','Old vs New OS','5 Questions','Kira ↔ Tokyo','General'];
-document.getElementById('cats').innerHTML=cats.map(c=>`<button class="tag ${activeCat===c?'active':''}" style="width:100%;text-align:left;padding:12px" onclick="setCat('${c}')">${c}</button>`).join('');
+  const cats=['All','Braid Quantum Gravity','Old vs New OS','5 Questions','Kira ↔ Tokyo','General'];
+  document.getElementById('cats').innerHTML=cats.map(c=>`<button class="tag" style="width:100%;text-align:left;padding:10px;background:${activeCat===c?'#111;color:#fff':'#fff'}" onclick="setCat('${c}')">${c}</button>`).join('');
 }
-function setCat(c){activeCat=c; renderList(filtered()); renderCats();}
-
+function setCat(c){activeCat=c; renderList(filtered()); renderCats(); if(c!=='All') document.getElementById('search').value='';}
 async function openDetail(id){
-let q=allQs.find(x=>x.id==id); if(!q)return;
-selectedId=id;
-const d=document.getElementById('detail');
-d.innerHTML=`
-<div style="border:4px solid #111;border-radius:20px;padding:18px;background:#fff">
-<span class="tag" style="background:#111;color:#fff">${q.cat}</span>
-<h3 style="font-size:24px;margin-top:10px">${q.title}</h3>
-<p style="margin-top:10px">${q.body}</p>
-<div class="mono" style="font-size:12px;opacity:.6;margin-top:8px">${q.name} • ${new Date(q.time).toLocaleString()}</div>
-</div>
-<div style="margin-top:12px">
-${(q.answers||[]).map((a,i)=>`<div class="ans ${a.isAI?'ai':''}"><div class="mono" style="font-size:12px">${a.name} • ${new Date(a.time).toLocaleString()}</div><p style="margin-top:8px;font-size:16px;line-height:1.5">${a.text}</p><div style="margin-top:8px"><button class="tag" onclick="upvoteAns('${q.id}',${i})">▲ ${a.up||0} Upvote</button></div></div>`).join('')||'<p class="mono">No answers yet</p>'}
-<div style="border:4px solid #111;border-radius:18px;padding:14px;background:#fff;margin-top:10px;display:grid;gap:8px">
-<input id="ansName" class="input" placeholder="Your name" style="margin:0">
-<textarea id="ansInput" class="input" placeholder="Write answer... AI will assist but human answers valued" style="margin:0"></textarea>
-<button class="btn btn-blue" onclick="postAns('${q.id}')">POST ANSWER</button>
-</div>
-</div>`;
+  let q=allQs.find(x=>x.id==id); if(!q) return;
+  const d=document.getElementById('detail');
+  d.innerHTML=`<div style="border:4px solid #111;border-radius:16px;padding:14px;background:#fff"><span class="tag" style="background:#111;color:#fff">${q.cat}</span><h3 style="font-size:18px;margin-top:8px">${q.title}</h3><p style="margin-top:8px;font-size:14px">${q.body}</p><div class="mono" style="font-size:11px;opacity:.6;margin-top:6px">${q.name}</div></div><div style="margin-top:10px">${(q.answers||[]).map(a=>`<div class="ans ${a.isAI?'ai':''}"><div class="mono" style="font-size:11px">${a.name}</div><p style="margin-top:6px;font-size:14px;line-height:1.4">${a.text}</p></div>`).join('')}<div style="border:4px solid #111;border-radius:16px;padding:12px;background:#fff;margin-top:8px;display:grid;gap:6px"><textarea id="ansInput" class="input" placeholder="Write answer (login required)"></textarea><button class="btn btn-blue" onclick="postAns('${q.id}')">POST ANSWER</button></div></div>`;
 }
-
 async function postAns(qid){
-const text=document.getElementById('ansInput').value.trim(); if(!text)return;
-const name=document.getElementById('ansName').value.trim()||'Anonymous';
-if(db){
-const ref=db.collection('questions').doc(qid);
-const doc=await ref.get(); const data=doc.data();
-const ans=[...(data.answers||[]), {name, text, time:Date.now(), up:0}];
-await ref.update({answers:ans});
-}else{
-const q=allQs.find(x=>x.id==qid); q.answers.push({name,text,time:Date.now(),up:0}); renderList(filtered()); openDetail(qid);
+  if(!currentUser) return openLogin();
+  const text=document.getElementById('ansInput').value.trim(); if(!text) return;
+  const ref=db.collection('questions').doc(qid); const doc=await ref.get(); const data=doc.data();
+  const ans=[...(data.answers||[]), {name: currentUser.email, text, time:Date.now(), up:0}];
+  await ref.update({answers:ans});
 }
-}
-
-function upvoteAns(qid, idx){ }
-
 document.getElementById('search').addEventListener('input',()=>renderList(filtered()));
-setupRealtime();
+setupQuestions(); setupGroups();
 </script>
 </body>
 </html>
