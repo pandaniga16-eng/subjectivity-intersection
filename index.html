@@ -40,6 +40,10 @@ canvas#orb{position:fixed;inset:0;z-index:-1;pointer-events:none}
 .vote button.activeUp{background:#2d6ff7;border-color:#2d6ff7;box-shadow:0 0 12px rgba(45,111,247,0.6)}
 .vote button.activeDown{background:#ff4d6d;border-color:#ff4d6d;box-shadow:0 0 12px rgba(255,87,109,0.6)}
 .ans{margin-top:8px;background:rgba(0,0,0,0.32);border:1px solid rgba(255,255,255,0.08);padding:10px 12px;border-radius:14px}
+.pic{max-width:100%;border-radius:14px;border:1px solid rgba(255,255,255,0.12);margin-top:8px;display:block}
+.fileLabel{display:inline-block;padding:8px 14px;border-radius:999px;background:rgba(255,255,255,0.08);border:1px dashed rgba(255,255,255,0.2);font-size:12px;cursor:pointer;margin-top:6px}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(10px);z-index:50;display:none;align-items:center;justify-content:center;padding:16px}
+.modalBox{width:100%;max-width:420px;background:#111827;border:1px solid rgba(255,255,255,0.14);border-radius:20px;padding:16px}
 </style>
 </head>
 <body>
@@ -98,13 +102,27 @@ canvas#orb{position:fixed;inset:0;z-index:-1;pointer-events:none}
 </div>
 
 <div class="card" id="forum" style="margin-top:14px">
-<h3>Forum — Q&A</h3>
+<h3>Forum — Q&A with Pics</h3>
 <input id="qTitle" class="input" placeholder="">
 <textarea id="qBody" class="input" placeholder=""></textarea>
-<button class="btn" onclick="postQ()">Post Question</button>
+<label class="fileLabel">📷 Add Pic to Question <input type="file" id="qImage" accept="image/*" hidden></label>
+<div id="qPreview"></div>
+<button class="btn" style="margin-top:8px" onclick="postQ()">Post Question</button>
 <div style="margin-top:14px;display:flex;justify-content:space-between"><b>Discussions</b><span id="qCount" class="mono" style="font-size:11px;color:#8ea0c0"></span></div>
 <div id="qList"></div>
 </div>
+</div>
+</div>
+
+<!-- ANSWER MODAL WITH PIC -->
+<div id="ansModal" class="modal">
+<div class="modalBox">
+<h3>Answer with Pic</h3>
+<input id="aName" class="input" placeholder="Your name">
+<textarea id="aText" class="input" placeholder=""></textarea>
+<label class="fileLabel">📷 Add Pic to Answer <input type="file" id="aImage" accept="image/*" hidden></label>
+<div id="aPreview"></div>
+<div style="display:flex;gap:8px;margin-top:10px"><button class="btn" onclick="submitAns()">Post Answer</button><button class="btn btn2" onclick="closeAns()">Cancel</button></div>
 </div>
 </div>
 
@@ -125,8 +143,7 @@ function drawBG(){
    const y=bg.height*0.5 + Math.sin(x*0.008 + t*1.2 + k*0.9)* (80+k*14) + Math.cos(t*0.5 + k)*28;
    if(x===0)bctx.moveTo(x,y); else bctx.lineTo(x,y);
   }
-  bctx.stroke();
-  bctx.shadowBlur=20; bctx.shadowColor=`hsla(${220+k*14},90%,62%,0.85)`;
+  bctx.stroke(); bctx.shadowBlur=20; bctx.shadowColor=`hsla(${220+k*14},90%,62%,0.85)`;
   bctx.stroke(); bctx.shadowBlur=0;
  }
  octx.clearRect(0,0,orb.width,orb.height);
@@ -145,20 +162,35 @@ myNote.value=localStorage.getItem('sielNote')||'';
 function saveNote(){localStorage.setItem('sielNote',myNote.value); alert('Note saved');}
 
 let qs=JSON.parse(localStorage.getItem('sielQsV2')||'[]');
+let pendingQImg=null, pendingAImg=null, curAnsIndex=null;
+
+qImage.addEventListener('change',e=>{
+ const f=e.target.files[0]; if(!f)return;
+ const r=new FileReader(); r.onload=ev=>{pendingQImg=ev.target.result; qPreview.innerHTML=`<img src="${pendingQImg}" class="pic"><button class="btn2 btn" style="margin-top:6px" onclick="clearQImg()">Remove Pic</button>`}; r.readAsDataURL(f);
+});
+function clearQImg(){pendingQImg=null; qImage.value=''; qPreview.innerHTML='';}
+
+aImage.addEventListener('change',e=>{
+ const f=e.target.files[0]; if(!f)return;
+ const r=new FileReader(); r.onload=ev=>{pendingAImg=ev.target.result; aPreview.innerHTML=`<img src="${pendingAImg}" class="pic">`}; r.readAsDataURL(f);
+});
+
 function render(){
  qCount.textContent=qs.length+' posts';
  qList.innerHTML=qs.map((q,qi)=>`
   <div class="q">
    <b style="font-size:15px;line-height:1.3">${q.title}</b>
    <div style="font-size:13px;color:#c2d0e8;margin:6px 0;white-space:pre-wrap;line-height:1.6">${q.body}</div>
+   ${q.image?`<img src="${q.image}" class="pic">`:''}
    <div class="vote">
     <button class="${q.myVote==='up'?'activeUp':''}" onclick="voteQ(${qi},'up')">👍 ${q.likes} Like</button>
     <button class="${q.myVote==='down'?'activeDown':''}" onclick="voteQ(${qi},'down')">👎 ${q.dislikes} Dislike</button>
-    <button onclick="ans(${qi})">💬 Answer</button>
+    <button onclick="openAns(${qi})">💬 Answer + Pic</button>
    </div>
    <div>${q.answers.map((a,ai)=>`
     <div class="ans">
      <div style="font-size:13px;line-height:1.5"><b>${a.name}:</b> ${a.text}</div>
+     ${a.image?`<img src="${a.image}" class="pic">`:''}
      <div class="vote">
       <button class="${a.myVote==='up'?'activeUp':''}" onclick="voteA(${qi},${ai},'up')">👍 ${a.likes}</button>
       <button class="${a.myVote==='down'?'activeDown':''}" onclick="voteA(${qi},${ai},'down')">👎 ${a.dislikes}</button>
@@ -170,7 +202,7 @@ function render(){
 }
 function postQ(){
  const title=qTitle.value.trim(); const body=qBody.value.trim(); if(title.length<2)return alert('Write question');
- qs.unshift({title,body,time:Date.now(),likes:0,dislikes:0,myVote:null,answers:[]}); save(); qTitle.value=''; qBody.value='';
+ qs.unshift({title,body,image:pendingQImg,time:Date.now(),likes:0,dislikes:0,myVote:null,answers:[]}); save(); qTitle.value=''; qBody.value=''; clearQImg();
 }
 function voteQ(i,type){
  const q=qs[i];
@@ -178,9 +210,11 @@ function voteQ(i,type){
  else { if(q.myVote==='up')q.likes--; if(q.myVote==='down')q.dislikes--; if(type==='up')q.likes++; else q.dislikes++; q.myVote=type; }
  save();
 }
-function ans(i){
- const name=prompt('Your name?')||'Guest'; const text=prompt('Write clear answer:'); if(!text)return;
- qs[i].answers.push({name,text,likes:0,dislikes:0,myVote:null}); save();
+function openAns(i){curAnsIndex=i; pendingAImg=null; aImage.value=''; aPreview.innerHTML=''; aName.value=''; aText.value=''; ansModal.style.display='flex';}
+function closeAns(){ansModal.style.display='none';}
+function submitAns(){
+ const name=aName.value.trim()||'Guest'; const text=aText.value.trim(); if(!text)return alert('Write answer');
+ qs[curAnsIndex].answers.push({name,text,image:pendingAImg,likes:0,dislikes:0,myVote:null}); save(); closeAns();
 }
 function voteA(qi,ai,type){
  const a=qs[qi].answers[ai];
