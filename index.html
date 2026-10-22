@@ -48,12 +48,20 @@ canvas#orb{position:fixed;inset:0;z-index:-1;pointer-events:none}
 .rec.recording{animation:pulse 1s infinite}
 @keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.15)}100%{transform:scale(1)}}
 audio{width:100%;margin-top:8px;height:36px}
-.bigSubject{height:620px;border-radius:24px;position:relative;overflow:hidden;background:radial-gradient(600px 400px at 50% 0%, rgba(110,168,255,0.35), transparent), radial-gradient(500px 400px at 80% 80%, rgba(255,122,182,0.25), transparent), rgba(0,0,0,0.5);border:1px solid rgba(255,255,255,0.14);display:flex;align-items:center;justify-content:center}
 .wave{display:flex;gap:4px;align-items:center;margin-top:8px}
 .bar{width:3px;background:#6ea8ff;border-radius:99px;animation:waveBar 0.8s ease-in-out infinite}
 @keyframes waveBar{0%,100%{height:8px}50%{height:22px}}
 .voiceBox{display:flex;align-items:center;gap:10px;background:rgba(0,0,0,0.4);border:1px solid rgba(255,255,255,0.12);border-radius:999px;padding:8px 14px;margin-top:8px}
-.chan{padding:10px 12px;border-radius:14px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);margin:6px 0;display:flex;justify-content:space-between;align-items:center}
+.chan{padding:12px 14px;border-radius:16px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);margin:8px 0;display:flex;justify-content:space-between;align-items:center}
+/* WhatsApp group style */
+.wa-group{background:#111b21;border:1px solid rgba(255,255,255,0.12);border-radius:18px;overflow:hidden}
+.wa-header{background:#202c33;padding:12px 14px;display:flex;align-items:center;gap:10px}
+.wa-avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#25D366,#128C7E);display:flex;align-items:center;justify-content:center;font-weight:900}
+.wa-name{font-weight:700;font-size:14px}
+.wa-sub{font-size:11px;color:#8696a0}
+.wa-msg{padding:10px 12px;display:flex;gap:10px;align-items:center;border-top:1px solid rgba(255,255,255,0.06)}
+.wa-msg .wa-avatar{width:32px;height:32px;font-size:12px}
+.wa-bubble{background:#202c33;padding:8px 12px;border-radius:12px;border-top-left-radius:2px;flex:1}
 </style>
 </head>
 <body>
@@ -68,12 +76,13 @@ audio{width:100%;margin-top:8px;height:36px}
 
 <div class="wrap">
 <div>
-<!-- CHANGED: First page now uses IMG_2781.jpeg, No viewpoint No event removed, channel as conversation platform -->
+
+<!-- FIRST PAGE - IMG_2781.jpeg - Conversation platform -->
 <div class="card" style="padding:0;overflow:hidden">
 <img src="IMG_2781.jpeg" style="width:100%;display:block;border-radius:22px" alt="A platform where you can have conversations - skiii">
 <div style="padding:14px 16px;background:linear-gradient(180deg, #fef6ec, #fff8ef);color:#3d3a36;border-radius:0 0 22px 22px">
 <div style="font-weight:900;font-size:20px;letter-spacing:-0.02em">skiii — A platform where you can have conversations</div>
-<div class="mono" style="font-size:11px;color:#6b6560;margin-top:6px;line-height:1.5">Connect, share, and grow together — Channel is also another platform where you can have conversations. This picture replaces the first page.</div>
+<div class="mono" style="font-size:11px;color:#6b6560;margin-top:6px;line-height:1.5">Connect, share, and grow together — Channel is also another platform where you can have conversations.</div>
 </div>
 </div>
 
@@ -87,10 +96,10 @@ audio{width:100%;margin-top:8px;height:36px}
 </div>
 
 <div class="card" style="margin-top:14px">
-<h3>📢 Channels — Create & Follow</h3>
-<p class="mono" style="font-size:11px;color:#b8c6e0;margin:6px 0">Channel is also another platform where you can have conversations — not viewpoint, not event.</p>
+<h3>📢 Channels — WhatsApp Group Style</h3>
+<p class="mono" style="font-size:11px;color:#b8c6e0;margin:6px 0">Channel is also another platform where you can have conversations — like a WhatsApp group.</p>
 <input id="chanName" class="input" placeholder="Channel name e.g. Braid Beginners">
-<button class="btn" onclick="createChan()">Create Channel</button>
+<button class="btn" onclick="createChan()">Create WhatsApp Group</button>
 <div id="chanList" style="margin-top:10px"></div>
 </div>
 </div>
@@ -119,7 +128,7 @@ audio{width:100%;margin-top:8px;height:36px}
 </div>
 
 <div class="card" id="forum" style="margin-top:14px">
-<h3>Forum — Q&A</h3>
+<h3>Forum — Q&A (First comes before second)</h3>
 <input id="qTitle" class="input" placeholder="Question title...">
 <textarea id="qBody" class="input" placeholder="Ask in detail..."></textarea>
 <div style="display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:4px">
@@ -130,7 +139,7 @@ audio{width:100%;margin-top:8px;height:36px}
 <div id="qPreview"></div>
 <div id="qAudioPreview"></div>
 <button class="btn" style="margin-top:8px" onclick="postQ()">Post Question</button>
-<div style="margin-top:14px;display:flex;justify-content:space-between"><b>Discussions</b><span id="qCount" class="mono" style="font-size:11px;color:#8ea0c0"></span></div>
+<div style="margin-top:14px;display:flex;justify-content:space-between"><b>Discussions — Oldest first</b><span id="qCount" class="mono" style="font-size:11px;color:#8ea0c0"></span></div>
 <div id="qList"></div>
 </div>
 </div>
@@ -154,7 +163,7 @@ audio{width:100%;margin-top:8px;height:36px}
 
 <script>
 const bg=document.getElementById('main'); const bctx=bg.getContext('2d');
-function rsize(){bg.width=innerWidth; bg.height=innerHeight; orb.width=innerWidth; orb.height=innerHeight; const sc=document.getElementById('subjectCanvas'); if(sc){sc.width=sc.offsetWidth*2; sc.height=sc.offsetHeight*2;}} 
+function rsize(){bg.width=innerWidth; bg.height=innerHeight; orb.width=innerWidth; orb.height=innerHeight;} 
 const orb=document.getElementById('orb'); const octx=orb.getContext('2d');
 rsize(); addEventListener('resize',rsize);
 let t=0;
@@ -213,18 +222,22 @@ async function toggleRec(type){
 function clearQAudio(){ pendingQAudio=null; document.getElementById('qAudioPreview').innerHTML=''; }
 
 function render(){
- qCount.textContent=qs.length+' posts';
- qList.innerHTML=qs.map((q,qi)=>`
+ qCount.textContent=qs.length+' posts - oldest first';
+ // First question before second = sort oldest first
+ let sorted = [...qs].sort((a,b)=>a.time-b.time);
+ qList.innerHTML=sorted.map((q,qi)=>{
+  let originalIndex = qs.indexOf(q);
+  return `
   <div class="q">
-   <div style="display:flex;justify-content:space-between"><b style="font-size:14px" class="mono">Q${qs.length-qi}: ${q.title}</b><span class="mono" style="font-size:10px;color:#8ea0c0">${new Date(q.time).toLocaleTimeString()}</span></div>
+   <div style="display:flex;justify-content:space-between"><b style="font-size:14px" class="mono">Q${qi+1}: ${q.title}</b><span class="mono" style="font-size:10px;color:#8ea0c0">${new Date(q.time).toLocaleTimeString()}</span></div>
    <div style="font-size:13px;color:#c2d0e8;margin:6px 0;white-space:pre-wrap;line-height:1.6">${q.body}</div>
    ${q.image?`<img src="${q.image}" class="pic">`:''}
    ${q.audio?`<div class="voiceBox"><button class="rec" style="width:32px;height:32px" onclick="new Audio('${q.audio}').play()">▶</button><div class="wave"><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div></div><audio controls src="${q.audio}"></audio></div>`:''}
    <div class="vote">
-    <button class="${q.myVote==='up'?'activeUp':''}" onclick="voteQ(${qi},'up')">👍 ${q.likes}</button>
-    <button class="${q.myVote==='down'?'activeDown':''}" onclick="voteQ(${qi},'down')">👎 ${q.dislikes}</button>
-    <button onclick="openAns(${qi})">💬 Reply</button>
-    <button onclick="editQ(${qi})">✏️ Edit</button>
+    <button class="${q.myVote==='up'?'activeUp':''}" onclick="voteQ(${originalIndex},'up')">👍 ${q.likes}</button>
+    <button class="${q.myVote==='down'?'activeDown':''}" onclick="voteQ(${originalIndex},'down')">👎 ${q.dislikes}</button>
+    <button onclick="openAns(${originalIndex})">💬 Reply</button>
+    <button onclick="editQ(${originalIndex})">✏️ Edit</button>
    </div>
    ${q.answers.length?`<div style="margin-top:10px"><b class="mono" style="font-size:11px">Answers:</b><ul style="list-style:none;padding:0">${q.answers.map((a,ai)=>`
     <li class="ans">
@@ -232,20 +245,21 @@ function render(){
      ${a.image?`<img src="${a.image}" class="pic">`:''}
      ${a.audio?`<div class="voiceBox"><button class="rec" style="width:28px;height:28px;font-size:14px" onclick="new Audio('${a.audio}').play()">▶</button><audio controls src="${a.audio}" style="height:28px"></audio></div>`:''}
      <div class="vote">
-      <button class="${a.myVote==='up'?'activeUp':''}" onclick="voteA(${qi},${ai},'up')">👍 ${a.likes}</button>
-      <button class="${a.myVote==='down'?'activeDown':''}" onclick="voteA(${qi},${ai},'down')">👎 ${a.dislikes}</button>
-      <button onclick="editA(${qi},${ai})">✏️ Edit</button>
+      <button class="${a.myVote==='up'?'activeUp':''}" onclick="voteA(${originalIndex},${ai},'up')">👍 ${a.likes}</button>
+      <button class="${a.myVote==='down'?'activeDown':''}" onclick="voteA(${originalIndex},${ai},'down')">👎 ${a.dislikes}</button>
+      <button onclick="editA(${originalIndex},${ai})">✏️ Edit</button>
      </div>
     </li>
    `).join('')}</ul></div>`:''}
   </div>
- `).join('')||'<div style="text-align:center;color:#8ea0c0;font-size:13px;padding:14px">No questions yet. Be first!</div>';
+ `}).join('')||'<div style="text-align:center;color:#8ea0c0;font-size:13px;padding:14px">No questions yet. Be first!</div>';
  renderChans();
 }
 function postQ(){
  const title=qTitle.value.trim(); const body=qBody.value.trim(); if(title.length<1 && !body && !pendingQImg && !pendingQAudio) return alert('Write something');
  if(editTarget && editTarget.type==='q'){ qs[editTarget.index].title=title||qs[editTarget.index].title; qs[editTarget.index].body=body||qs[editTarget.index].body; if(pendingQImg) qs[editTarget.index].image=pendingQImg; if(pendingQAudio) qs[editTarget.index].audio=pendingQAudio; editTarget=null; qTitle.value=''; qBody.value=''; clearQImg(); clearQAudio(); document.querySelector('#forum .btn').textContent='Post Question'; save(); return; }
- qs.unshift({title:title||'Question',body,image:pendingQImg,audio:pendingQAudio,time:Date.now(),likes:0,dislikes:0,myVote:null,answers:[]}); save(); qTitle.value=''; qBody.value=''; clearQImg(); clearQAudio();
+ // push so first stays first
+ qs.push({title:title||'Question',body,image:pendingQImg,audio:pendingQAudio,time:Date.now(),likes:0,dislikes:0,myVote:null,answers:[]}); save(); qTitle.value=''; qBody.value=''; clearQImg(); clearQAudio();
 }
 function editQ(i){ qTitle.value=qs[i].title; qBody.value=qs[i].body; editTarget={type:'q',index:i}; document.querySelector('#forum .btn').textContent='Update Question'; window.scrollTo({top:document.getElementById('forum').offsetTop-80,behavior:'smooth'}); }
 function editA(qi,ai){ const a=qs[qi].answers[ai]; const newText=prompt('Edit answer:',a.text); if(newText!==null){ a.text=newText; save(); } }
@@ -255,11 +269,29 @@ function closeAns(){ansModal.style.display='none';}
 function submitAns(){ const name=aName.value.trim()||'Guest'; const text=aText.value.trim(); if(!text && !pendingAImg && !pendingAAudio) return alert('Add text, pic or voice'); qs[curAnsIndex].answers.push({name,text,image:pendingAImg,audio:pendingAAudio,likes:0,dislikes:0,myVote:null}); save(); closeAns(); }
 function voteA(qi,ai,type){ const a=qs[qi].answers[ai]; if(a.myVote===type){ if(type==='up')a.likes--; else a.dislikes--; a.myVote=null; } else { if(a.myVote==='up')a.likes--; if(a.myVote==='down')a.dislikes--; if(type==='up')a.likes++; else a.dislikes++; a.myVote=type; } save(); }
 function save(){localStorage.setItem('sielQsV2',JSON.stringify(qs)); render();}
-function createChan(){ const n=chanName.value.trim(); if(!n) return alert('Enter channel name'); chans.push({name:n,followers:0,followed:false}); chanName.value=''; localStorage.setItem('sielChans',JSON.stringify(chans)); renderChans(); }
-function renderChans(){ chanList.innerHTML=chans.map((c,i)=>`<div class="chan"><span>📢 ${c.name}</span><div><span class="mono" style="font-size:11px">${c.followers} followers</span> <button class="btn ${c.followed?'':'btn2'}" style="padding:4px 10px;font-size:11px" onclick="toggleFollow(${i})">${c.followed?'Following':'Follow'}</button></div></div>`).join('')||'<div class="mono" style="font-size:11px;color:#8ea0c0">No channels yet</div>'; }
+function createChan(){ const n=chanName.value.trim(); if(!n) return alert('Enter channel name'); chans.push({name:n,followers:Math.floor(Math.random()*20)+1,followed:true,lastMsg:'Group created — tap to chat',time:'now'}); chanName.value=''; localStorage.setItem('sielChans',JSON.stringify(chans)); renderChans(); }
+function renderChans(){
+ if(chans.length===0){chanList.innerHTML='<div class="mono" style="font-size:11px;color:#8ea0c0">No WhatsApp groups yet - Create one!</div>'; return;}
+ chanList.innerHTML=`
+ <div class="wa-group">
+   <div class="wa-header">
+     <div class="wa-avatar">WA</div>
+     <div><div class="wa-name">My Channels — WhatsApp Groups</div><div class="wa-sub">${chans.length} groups • Channel is a platform for conversations</div></div>
+   </div>
+   ${chans.map((c,i)=>`
+     <div class="wa-msg">
+       <div class="wa-avatar" style="background:linear-gradient(135deg,#${Math.floor(Math.random()*900+100)},#128C7E)">${c.name[0].toUpperCase()}</div>
+       <div class="wa-bubble" style="flex:1">
+         <div style="font-weight:700;font-size:13px;display:flex;justify-content:space-between"><span>📢 ${c.name}</span><span class="mono" style="font-size:10px;color:#8696a0">${c.time}</span></div>
+         <div class="mono" style="font-size:11px;color:#8696a0;margin-top:2px">${c.lastMsg} • ${c.followers} members</div>
+       </div>
+       <button class="btn ${c.followed?'':'btn2'}" style="padding:4px 10px;font-size:11px" onclick="toggleFollow(${i})">${c.followed?'✓':'Follow'}</button>
+     </div>
+   `).join('')}
+ </div>`;
+}
 function toggleFollow(i){ chans[i].followed=!chans[i].followed; chans[i].followers+=chans[i].followed?1:-1; localStorage.setItem('sielChans',JSON.stringify(chans)); renderChans(); }
 render();
 </script>
 </body>
 </html>
-
