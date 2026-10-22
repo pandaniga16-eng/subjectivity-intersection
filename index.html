@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The World Begins with Subjectivity Intersection</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&family=Noto+Sans+JP:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fafaf8;--ink:#111;--accent:#ff4d5a;--accent2:#4d5aff;--paper:#fff}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:'Inter','Noto Sans JP',sans-serif;line-height:1.7}
+header{padding:56px 24px 20px;text-align:center}
+h1{font-size:clamp(28px,6vw,48px);font-weight:700;line-height:1.15;letter-spacing:-0.03em}
+.subtitle{opacity:.6;margin-top:12px;font-size:15px}
+.lang{position:fixed;top:16px;right:16px;z-index:99;background:#111;color:#fff;border:0;padding:8px 16px;border-radius:999px;cursor:pointer;font-size:13px}
+.research{max-width:740px;margin:28px auto;background:var(--paper);border:2px solid #111;border-radius:16px;padding:20px;display:flex;gap:18px;align-items:center;box-shadow:6px 6px 0 #111}
+.research a{color:var(--accent2);font-weight:700;word-break:break-all;text-decoration:none;border-bottom:2px solid var(--accent2)}
+.qr{width:110px;height:110px;flex-shrink:0;background:#fff;border-radius:8px;overflow:hidden;border:1px solid #eee}
+.qr img{width:100%;height:100%}
+canvas#braid{width:100%;height:220px;display:block}
+section{max-width:800px;margin:0 auto;padding:28px 20px}
+.qs{display:grid;gap:12px;margin-top:18px}
+.q-card{background:#fff;border:1.5px solid #111;border-radius:12px;padding:16px 18px;box-shadow:3px 3px 0 #111}
+.garden{margin-top:32px;background:#111;color:#fafaf8;border-radius:20px;padding:22px}
+.input{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}
+.input input{flex:1;min-width:200px;background:#222;color:#fff;border:1px solid #444;border-radius:999px;padding:12px 16px}
+.input button{background:var(--accent);color:#fff;border:0;border-radius:999px;padding:12px 20px;font-weight:700;cursor:pointer}
+#entries{display:grid;gap:8px;max-height:420px;overflow:auto}
+.entry{background:#1e1e1e;border-radius:12px;padding:10px 12px;font-size:14px;display:flex;justify-content:space-between;gap:10px}
+.tag{font-size:10px;background:#333;padding:2px 8px;border-radius:999px;opacity:.8}
+footer{text-align:center;padding:40px 20px;opacity:.5;font-size:11px}
+.ja{display:none}body.is-ja .en{display:none}body.is-ja .ja{display:block}body.is-ja .ja-i{display:inline}.en-i{display:inline}body.is-ja .en-i{display:none}
+@media(max-width:600px){.research{flex-direction:column;text-align:center}}
+</style>
+</head>
+<body>
+<button class="lang" id="langBtn" onclick="toggleLang()">日本語</button>
+<header>
+<h1 class="en-i">The World Begins with Subjectivity Intersection</h1>
+<h1 class="ja-i">世界は主観の交差から始まる</h1>
+<p class="en subtitle">Poster #670 • Satoru • satoru@siel.global • DOI: 10.5281/zenodo.23284177</p>
+<p class="ja subtitle">ポスター #670 • 悟 • 研究の交差による創発の実験</p>
+</header>
+
+<div class="research">
+<div class="qr"><img src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=https://doi.org/10.5281/zenodo.23284177" alt="QR to DOI"></div>
+<div>
+<div style="font-weight:700;font-size:12px;letter-spacing:.1em;opacity:.5">RESEARCH LINK / 研究リンク</div>
+<a href="https://doi.org/10.5281/zenodo.23284177" target="_blank">https://doi.org/10.5281/zenodo.23284177</a>
+<p class="en" style="font-size:13px;margin-top:8px">Paper: <em>The World Begins with Subjectivity Intersection v1.1</em><br>QR decoded from your poster. Tap to read.</p>
+<p class="ja" style="font-size:13px;margin-top:8px">論文: <em>世界は主観の交差から始まる v1.1</em><br>ポスターのQRからデコード。タップして読む。</p>
+</div>
+</div>
+
+<canvas id="braid"></canvas>
+
+<section>
+<h2 class="en">5 Questions - Where Our Worlds Meet</h2>
+<h2 class="ja">5つの問い - 私たちの世界が出会う場所</h2>
+<div class="qs">
+<div class="q-card"><b style="color:var(--accent)">Q1</b> <span class="en-i">For you, what color is 6pm?</span><span class="ja-i">あなたにとって、午後6時は何色ですか？</span></div>
+<div class="q-card"><b style="color:var(--accent)">Q2</b> <span class="en-i">When does a sound become a word for you?</span><span class="ja-i">あなたにとって、いつ音が言葉になりますか？</span></div>
+<div class="q-card"><b style="color:var(--accent)">Q3</b> <span class="en-i">What is a border you carry inside you?</span><span class="ja-i">あなたが内側に持っている境界線は何ですか？</span></div>
+<div class="q-card"><b style="color:var(--accent)">Q4</b> <span class="en-i">How do you know you are seen by someone else?</span><span class="ja-i">他者に見られていると、どうやって分かりますか？</span></div>
+<div class="q-card"><b style="color:var(--accent)">Q5</b> <span class="en-i">If subjectivity intersects, what emerges between us?</span><span class="ja-i">主観が交差するとき、私たちの間に何が立ち現れますか？</span></div>
+</div>
+
+<div class="garden">
+<h2 class="en">Live Emergence Garden</h2>
+<h2 class="ja">ライブ創発の庭 - リアル共有DB</h2>
+<p class="en" style="opacity:.6;font-size:12px;margin-top:6px">Real-time shared. Uganda + Japan see each other instantly. This is Intersection → Emergence.</p>
+<p class="ja" style="opacity:.6;font-size:12px;margin-top:6px">リアルタイム共有。ウガンダと日本が即時に出会います。これが交差→創発。</p>
+<div class="input"><input id="inp" placeholder="For me, 6pm is... / 私にとって夕方は..."><button onclick="add()">Share / 共有</button></div>
+<div id="entries">Loading / 読み込み中...</div>
+</div>
+</section>
+
+<footer>skiii × Satoru — subjectivity-intersection — Poster #670 — satoru@siel.global</footer>
+
+<script type="module">
+const toggleLang=()=>{document.body.classList.toggle('is-ja');document.getElementById('langBtn').textContent=document.body.classList.contains('is-ja')?'English':'日本語';localStorage.setItem('lang',document.body.classList.contains('is-ja')?'ja':'en')};if(localStorage.getItem('lang')==='ja'){document.body.classList.add('is-ja');document.getElementById('langBtn').textContent='English'}window.toggleLang=toggleLang;
+const c=document.getElementById('braid'),x=c.getContext('2d');function rs(){c.width=c.clientWidth*2;c.height=c.clientHeight*2}rs();addEventListener('resize',rs);let t=0;(function dr(){t+=0.015;x.clearRect(0,0,c.width,c.height);const H=c.height/2,W=c.width;for(let k=0;k<2;k++){x.beginPath();x.strokeStyle=k?'#4d5aff':'#ff4d5a';x.lineWidth=4;for(let i=0;i<W;i+=4){let y=H+Math.sin(i*0.008+t+k*Math.PI)*60;if(i==0)x.moveTo(i,y);else x.lineTo(i,y)}x.stroke()}requestAnimationFrame(dr)})();
+
+const FIREBASE_CONFIG={apiKey:"DEMO_MODE_NO_KEY",authDomain:"subjectivity-intersection.firebaseapp.com",projectId:"subjectivity-intersection",storageBucket:"subjectivity-intersection.appspot.com",messagingSenderId:"0000000000",appId:"1:0000000000:web:demo"};
+let isDemo=FIREBASE_CONFIG.apiKey==="DEMO_MODE_NO_KEY",db=null;
+async function init(){
+if(isDemo){render(JSON.parse(localStorage.getItem('emergence_demo')||'[]'));return}
+const {initializeApp}=await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
+const {getFirestore,collection,addDoc,onSnapshot,query,orderBy,serverTimestamp}=await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+const app=initializeApp(FIREBASE_CONFIG);db=getFirestore(app);window._f={collection,addDoc,query,orderBy,serverTimestamp};
+onSnapshot(query(collection(db,'emergences'),orderBy('createdAt','desc')),s=>{let a=[];s.forEach(d=>a.push({...d.data(),id:d.id}));render(a)});
+}init();
+function detect(s){return /[\u3040-\u30ff\u4e00-\u9faf]/.test(s)?'ja':'en'}
+async function add(){let i=document.getElementById('inp'),txt=i.value.trim();if(!txt)return;let e={text:txt,lang:detect(txt),createdAt:new Date().toISOString()};if(isDemo){let arr=JSON.parse(localStorage.getItem('emergence_demo')||'[]');arr.unshift(e);localStorage.setItem('emergence_demo',JSON.stringify(arr.slice(0,100)));render(arr)}else{let {collection,addDoc,serverTimestamp}=window._f;await addDoc(collection(db,'emergences'),{...e,createdAt:serverTimestamp()})}i.value=''}window.add=add;
+document.getElementById('inp').addEventListener('keydown',ev=>{if(ev.key==='Enter')add()});
+function render(list){let el=document.getElementById('entries');if(!list.length){el.innerHTML='<div style=opacity:.5>No emergence yet. Be first.</div>';return}el.innerHTML=list.map(v=>`<div class=entry><span>${esc(v.text)}</span><span style="display:flex;gap:6px;align-items:center"><span class=tag>[${v.lang||'en'}]</span><span style="font-size:10px;opacity:.4">${(v.createdAt?.toDate?v.createdAt.toDate().toLocaleString():String(v.createdAt).slice(0,16))}</span></span></div>`).join('')}
+function esc(s){return s.replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]))}
+</script>
+</body>
+</html>
