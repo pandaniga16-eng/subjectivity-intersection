@@ -1,217 +1,138 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Subjectivity Intersection Forum</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<title>Subjectivity-Intersection | Braid Quantum Gravity</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
 <style>
-*{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter,sans-serif;background:#f2f4f7;color:#222}
-header{height:56px;background:#1e2226;color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 14px;position:sticky;top:0;z-index:30}
-.logo{font-weight:900;display:flex;gap:8px;align-items:center} .logo span{background:#2d6ff7;padding:6px 8px;border-radius:6px}
-.h-right{display:flex;gap:10px;align-items:center}
-.search{display:flex;gap:6px;background:#2f3439;padding:7px 10px;border-radius:6px;width:220px} .search input{background:transparent;border:0;color:#fff;width:100%;outline:none}
-.layout{max-width:1360px;margin:auto;display:grid;grid-template-columns:220px 1fr 320px;gap:14px;padding:14px}
-@media(max-width:1000px){.layout{grid-template-columns:1fr} .side{display:none}}
-.card{background:#fff;border:1px solid #e3e6ea;border-radius:10px;overflow:hidden}
-.menu a{display:flex;gap:10px;padding:11px 12px;font-size:13px;color:#444;border-radius:8px} .menu a:hover,.menu a.active{background:#eef3ff;color:#2d6ff7;font-weight:700}
-.tabs{display:flex;gap:16px;padding:12px 14px;border-bottom:1px solid #eee;font-size:13px;overflow:auto} .tabs b{border-bottom:2px solid #2d6ff7;padding-bottom:12px;margin-bottom:-13px}
-.q{display:grid;grid-template-columns:42px 1fr;gap:10px;padding:14px;border-bottom:1px solid #eef0f3}
-.vote{text-align:center} .vote button{width:28px;height:26px;border:1px solid #ddd;background:#fff;border-radius:6px;cursor:pointer}
-.qTitle{font-weight:700;font-size:15px;margin:4px 0} .qBody{font-size:13px;color:#555;line-height:1.5}
-.foot{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap} .tag{font-size:11px;background:#f1f3f5;padding:4px 8px;border-radius:4px}
-.btn{background:#2d6ff7;color:#fff;border:0;padding:9px 14px;border-radius:6px;font-weight:700;cursor:pointer}
-.btnDark{background:#111;color:#fff} .btnFull{width:100%}
-.right{position:sticky;top:70px;height:fit-content;display:grid;gap:14px}
-.statGrid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:#e3e6ea} .stat{background:#fff;padding:12px;text-align:center} .stat b{font-size:18px;display:block}
-.chat{height:300px;overflow:auto;padding:10px;display:flex;flex-direction:column;gap:8px;background:#f8fbff}
-.msg{padding:8px 12px;border-radius:14px;max-width:85%;font-size:13px} .msg.ai{background:#fff;border:1px solid #dbe6ff} .msg.user{background:#2d6ff7;color:#fff;align-self:flex-end}
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;z-index:99;padding:12px} .modal.open{display:flex}
-.modalInner{background:#fff;width:100%;max-width:460px;border-radius:12px;padding:16px}
-.input{width:100%;border:1px solid #ddd;border-radius:8px;padding:10px;margin:6px 0}
-.list{padding:10px;display:grid;gap:10px}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Inter,sans-serif;background:#05070a;color:#e8ecf2;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+
+/* ANIMATED BACKGROUND */
+.bg{position:fixed;inset:0;z-index:-2;background:radial-gradient(ellipse at 20% 20%, #1a2a5a 0%, transparent 60%), radial-gradient(ellipse at 80% 80%, #2a1a5a 0%, transparent 60%), #05070a}
+canvas#braids{position:fixed;inset:0;z-index:-1;opacity:0.6}
+
+header{position:sticky;top:0;z-index:20;display:flex;justify-content:space-between;align-items:center;padding:14px 18px;background:rgba(10,12,18,0.8);backdrop-filter:blur(12px);border-bottom:1px solid #1e2635}
+.logo{font-weight:900;letter-spacing:-0.02em}
+.logo span{color:#6ea8ff}
+.btn{background:#2d6ff7;color:#fff;border:0;padding:10px 16px;border-radius:999px;font-weight:700;cursor:pointer}
+.btn-ghost{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.14)}
+
+.hero{max-width:1100px;margin:40px auto;padding:0 18px;display:grid;grid-template-columns:1.2fr 0.8fr;gap:20px}
+@media(max-width:900px){.hero{grid-template-columns:1fr}}
+.card{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:18px;padding:18px;backdrop-filter:blur(10px)}
+.card h2{font-size:22px;line-height:1.2;margin-bottom:10px}
+.pill{display:inline-block;padding:4px 10px;border-radius:999px;background:rgba(110,168,255,0.18);border:1px solid rgba(110,168,255,0.3);font-size:11px;letter-spacing:0.06em;margin-right:6px}
+.mono{font-family:JetBrains Mono,monospace}
+.bigNum{font-size:38px;font-weight:900;line-height:1;letter-spacing:-0.03em}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.note{padding:12px;border-left:3px solid #2d6ff7;background:rgba(45,111,247,0.08);border-radius:0 12px 12px 0;margin:10px 0;font-size:14px;line-height:1.6}
+.animBox{height:220px;border-radius:14px;overflow:hidden;position:relative;background:linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));border:1px solid rgba(255,255,255,0.12);display:flex;align-items:center;justify-content:center}
+.dot{position:absolute;width:8px;height:8px;border-radius:50%;background:#6ea8ff;box-shadow:0 0 18px #6ea8ff;animation:orbit 6s linear infinite}
+@keyframes orbit{0%{transform:rotate(0deg) translateX(70px) rotate(0deg)}100%{transform:rotate(360deg) translateX(70px) rotate(-360deg)}}
+.braidLine{position:absolute;width:2px;height:120px;background:linear-gradient(#6ea8ff, #a78bfa);animation:braidMove 3s ease-in-out infinite alternate;transform-origin:top}
+@keyframes braidMove{0%{transform:rotate(-20deg) translateY(0)}100%{transform:rotate(20deg) translateY(20px)}}
+.input{width:100%;background:rgba(0,0,0,0.4);border:1px solid rgba(255,255,255,0.14);border-radius:10px;padding:11px;color:#fff;margin:6px 0}
+.q{padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.08)}
 </style>
 </head>
 <body>
+<div class="bg"></div>
+<canvas id="braids"></canvas>
+
 <header>
-<div class="logo"><span>◈</span> Subjectivity Intersection Forum</div>
-<div class="h-right">
-<div class="search"><input id="searchBox" placeholder="Type Search Words"><span>🔍</span></div>
-<div id="userBox" style="font-size:13px;cursor:pointer" onclick="openAuth()">Guest • Login</div>
-</div>
+<div class="logo">SIEL <span>◈ Subjectivity Intersection</span></div>
+<div style="display:flex;gap:8px"><a class="btn-ghost btn" href="https://www.researchgate.net/publication/414975934_Subjectivity-Intersection_Braid_Quantum_Gravity_From_a_Finite_Pointed-Braid_Source_to_Quantum_Structure_Lorentz_Geometry_and_Strong-Curvature_Spacetime_A_Constructive_Refutation_of_Objectivist_Primacy" target="_blank">ResearchGate</a><a class="btn" href="#forum">Enter Forum</a></div>
 </header>
 
-<div class="layout">
-<div class="side">
-<div class="card" style="padding:10px">
-<div class="menu">
-<a class="active">🏠 Home</a>
-<a onclick="openGroupModal()">➕ Add group</a>
-<a onclick="filterCat('All')">🌐 Groups page</a>
-<a>📰 Feed</a>
-<a onclick="openAuth()">👤 User Profile</a>
-<a>📁 Communities</a>
-<a class="active">📚 Questions</a>
-<a style="padding-left:28px" onclick="filterCat('school')">• school</a>
-<a style="padding-left:28px" onclick="filterCat('technology')">• technology</a>
-<a style="padding-left:28px" onclick="filterCat('entertainment')">• entertainment</a>
-<a style="padding-left:28px" onclick="filterCat('business')">• business</a>
-<a style="padding-left:28px" onclick="filterCat('Braid Quantum Gravity')">• Braid QG</a>
-<a style="padding-left:28px" onclick="filterCat('Kira ↔ Tokyo')">• Kira ↔ Tokyo</a>
+<div class="hero">
+<div>
+<div class="card">
+<div><span class="pill">VERSION 1.1 — 7 OCT 2026</span><span class="pill">DOI: 10.5281/zenodo.23047902</span></div>
+<h2 style="margin-top:12px">Subjectivity-Intersection Braid Quantum Gravity<br>From a Finite Pointed-Braid Source to Quantum Structure, Lorentz Geometry and Spacetime</h2>
+<p style="font-size:14px;line-height:1.7;color:#b8c0d0;margin-top:8px">
+A standpoint is not a human observer. It is a typed, source-relative mode of access needed to define an event. 
+From 8 signed braid representatives, this paper derives: finite complex carrier, Born-type probabilities, CPTP collision parent, integer clock, and a Lorentz signature carrier <span class="mono">diag(-1,+1,+1,+1)</span> with exact spectrum <span class="mono">(12/25,52/25,52/25,52/25)</span>. No spacetime manifold is assumed in advance.
+</p>
+<div class="grid2" style="margin-top:14px">
+<div class="card" style="padding:12px"><div class="mono" style="font-size:11px;color:#8aa0c0">LORENTZ SIGNATURE</div><div class="bigNum">-+++</div><div style="font-size:12px;color:#8aa0c0">from word inversion</div></div>
+<div class="card" style="padding:12px"><div class="mono" style="font-size:11px;color:#8aa0c0">ROUTING INVARIANT</div><div class="bigNum">3/5</div><div style="font-size:12px;color:#8aa0c0">rank 3+2 split</div></div>
 </div>
+</div>
+
+<div class="card">
+<h2>Notes — Readable Explanation</h2>
+<div class="note"><b>1. The Core Idea:</b> World does not start with space. It starts with intersection of standpoints. Braids keep provenance — who crossed what, in which order.</div>
+<div class="note"><b>2. Clock + Space:</b> Braid word gives integer clock. Mismatch quotient gives V4. Fourier split gives 1 time + 3 space directions. Inversion flips only clock → Lorentz signature.</div>
+<div class="note"><b>3. Quantum from Braid:</b> 8 braid sources → 4 outcome probabilities (same public record) but different internal records. This is how subjectivity leaves trace.</div>
+<div class="note"><b>4. Your Question Matters:</b> Ask below in simple words. Good question = what is source, what is standpoint, what is retained?</div>
+<textarea id="userNote" class="input" style="height:70px" placeholder="Write your personal note here (saved on your phone)..."></textarea>
+<button class="btn" onclick="saveNote()">Save My Note</button>
 </div>
 </div>
 
 <div>
-<div class="card" style="margin-bottom:14px"><img src="23de654b-9e60-483f-825d-b76250152f61.jpeg" style="width:100%;display:block"><div style="padding:10px;font-size:13px"><b>Pinned:</b> World emerges when subjectivities intersect • pB=3/5 • SPEC 12/25,52/25 • DOI 23047902 + 23284177</div></div>
 <div class="card">
-<div class="tabs"><b id="tabAll">Recent Questions</b><span onclick="sortBy('answers')">Most Answered</span><span onclick="sortBy('likes')">Most Liked</span><span id="qCount">0</span></div>
-<div id="qList"></div>
+<h2>Live Visualization</h2>
+<div class="animBox" id="animBox">
+<div class="braidLine" style="left:40%;animation-delay:0s"></div>
+<div class="braidLine" style="left:50%;animation-delay:0.3s;background:linear-gradient(#ff7ab6,#6ea8ff)"></div>
+<div class="braidLine" style="left:60%;animation-delay:0.6s;background:linear-gradient(#7affb6,#6ea8ff)"></div>
+<div class="dot" style="animation-duration:4s"></div>
+<div class="dot" style="animation-duration:6s;animation-delay:1s;background:#a78bfa;box-shadow:0 0 18px #a78bfa"></div>
+<div class="dot" style="animation-duration:5s;animation-delay:0.5s;background:#7affb6;box-shadow:0 0 18px #7affb6"></div>
+<div style="position:absolute;bottom:8px;left:10px;font-size:11px" class="mono">BRAID WORD → CLOCK → LORENTZ</div>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px">
+<img src="https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=400" style="width:100%;height:80px;object-fit:cover;border-radius:10px;border:1px solid rgba(255,255,255,0.12)" alt="space">
+<img src="https://images.unsplash.com/photo-1516331138075-f3adc1e149cd?w=400" style="width:100%;height:80px;object-fit:cover;border-radius:10px;border:1px solid rgba(255,255,255,0.12)" alt="braid">
 </div>
 </div>
 
-<div class="right">
-<button class="btn btnFull" onclick="openAsk()">Ask A Question</button>
-
-<div class="card"><div class="statGrid">
-<div class="stat"><small>Questions</small><b id="sQ">0</b></div>
-<div class="stat"><small>Answers</small><b id="sA">0</b></div>
-<div class="stat"><small>Best Answers</small><b>0</b></div>
-<div class="stat"><small>Users</small><b id="sU">0</b></div>
-</div></div>
-
-<div class="card"><div style="padding:12px"><b>Search & Categories</b><br><small>school, technology, entertainment, business, Braid QG</small><br>
-<div style="margin-top:8px;display:flex;flex-wrap:wrap;gap:6px">
-<button class="tag" onclick="filterCat('All')">All</button>
-<button class="tag" onclick="filterCat('school')">school</button>
-<button class="tag" onclick="filterCat('technology')">technology</button>
-<button class="tag" onclick="filterCat('entertainment')">entertainment</button>
-<button class="tag" onclick="filterCat('business')">business</button>
-</div>
-</div></div>
-
-<div class="card">
-<div style="padding:10px;font-weight:700">SIEL AI • ChatGPT Mode</div>
-<div class="chat" id="chatBox"><div class="msg ai"><b>SIEL AI:</b> I answer only from your papers. Ask about subjectivity, intersection, 4D, gravity. Like ChatGPT but grounded.</div></div>
-<div style="display:flex;gap:6px;padding:8px"><input id="chatInput" class="input" placeholder="Message SIEL AI..." style="margin:0"><button class="btn" onclick="sendChat()">Send</button></div>
-</div>
-
-<div class="card"><div style="padding:10px;font-weight:700">Groups</div><div class="list" id="groupList"></div></div>
+<div class="card" id="forum">
+<h2>Forum — Questions & Answers</h2>
+<p style="font-size:12px;color:#8aa0c0">Simple, readable. No categories. Just ask about the paper.</p>
+<input id="qTitle" class="input" placeholder="Your question, e.g. What is pointed-braid source?">
+<textarea id="qBody" class="input" placeholder="Explain in simple words..."></textarea>
+<button class="btn" onclick="postQ()">Ask Question</button>
+<div style="margin-top:12px"><b>Discussions</b> <span id="qCount" style="font-size:12px;color:#8aa0c0"></span><div id="qList" style="margin-top:8px"></div></div>
 </div>
 </div>
-
-<div id="authModal" class="modal"><div class="modalInner">
-<h3>User Accounts — Register / Login</h3>
-<input id="email" class="input" placeholder="Email">
-<input id="pass" type="password" class="input" placeholder="Password">
-<button class="btn btnFull" onclick="doSignUp()">Create Account</button>
-<button class="btn btnFull" style="background:#111;margin-top:6px" onclick="doSignIn()">Login</button>
-<button class="btn btnFull" style="background:#fff;color:#111;border:1px solid #ddd;margin-top:6px" onclick="doGoogle()">Login with Google</button>
-<button class="btn btnFull btnDark" style="margin-top:10px" onclick="doSignOut()">Logout</button>
-<button class="btn" style="background:#eee;color:#111;margin-top:10px" onclick="closeAuth()">Close</button>
-</div></div>
-
-<div id="askModal" class="modal"><div class="modalInner">
-<h3>Ask Question / Create Topic</h3>
-<input id="qTitle" class="input" placeholder="Title">
-<select id="qCat" class="input"><option>school</option><option>technology</option><option>entertainment</option><option>business</option><option>Braid Quantum Gravity</option><option>Kira ↔ Tokyo</option><option>General</option></select>
-<textarea id="qBody" class="input" placeholder="Write your question..."></textarea>
-<button class="btn btnFull" onclick="doPostQ()">POST + SIEL AI Answers</button>
-<button class="btn" style="background:#eee;color:#111;margin-top:6px" onclick="closeAsk()">Cancel</button>
-</div></div>
-
-<div id="groupModal" class="modal"><div class="modalInner">
-<h3>Create Group for Discussion</h3>
-<input id="gName" class="input" placeholder="Group name e.g. Kira-Tokyo Lab">
-<textarea id="gDesc" class="input" placeholder="Purpose"></textarea>
-<button class="btn btnFull" onclick="doCreateGroup()">CREATE GROUP</button>
-<button class="btn" style="background:#eee;color:#111;margin-top:6px" onclick="closeGroupModal()">Cancel</button>
-</div></div>
-
-<div id="ansModal" class="modal"><div class="modalInner">
-<h3 id="ansTitle">Answers</h3>
-<div id="ansList" style="max-height:300px;overflow:auto;display:grid;gap:8px;margin:10px 0"></div>
-<textarea id="ansInput" class="input" placeholder="Write answer / comment..."></textarea>
-<button class="btn btnFull" onclick="doPostAns()">Post Answer</button>
-<button class="btn" style="background:#eee;color:#111;margin-top:6px" onclick="closeAns()">Close</button>
-</div></div>
+</div>
 
 <script>
-const firebaseConfig = {
-  apiKey: "AIzaSyD5TT7In_Rvn-pmj1HyRKblF9fSYBhPuS8",
-  authDomain: "subjectivity-intersection.firebaseapp.com",
-  projectId: "subjectivity-intersection",
-  storageBucket: "subjectivity-intersection.firebasestorage.app",
-  messagingSenderId: "1002806897957",
-  appId: "1:1002806897957:web:d8fb17e389e777f6c17ecc"
-};
-firebase.initializeApp(firebaseConfig);
-const db=firebase.firestore(), auth=firebase.auth();
-let me=null, allQs=[], currentFilter='All', currentSort='recent', openQ=null;
+// animated braids canvas
+const c=document.getElementById('braids'); const ctx=c.getContext('2d');
+function resize(){c.width=innerWidth; c.height=innerHeight} resize(); addEventListener('resize',resize);
+let t=0; function draw(){
+ t+=0.01; ctx.clearRect(0,0,c.width,c.height);
+ for(let i=0;i<5;i++){
+  ctx.beginPath(); ctx.strokeStyle=`hsla(${210+i*20},80%,60%,0.25)`; ctx.lineWidth=1.5;
+  for(let x=0;x<c.width;x+=8){
+   const y=c.height*0.5 + Math.sin(x*0.01 + t + i)*80 + i*20 -60;
+   if(x==0)ctx.moveTo(x,y); else ctx.lineTo(x,y);
+  } ctx.stroke();
+ }
+ requestAnimationFrame(draw);
+} draw();
 
-function getAI(t){t=t.toLowerCase(); if(t.includes('subjectiv'))return 'Subjectivity = typed, source-relative mode of access to define event. DOI 23047902'; if(t.includes('intersect'))return 'Intersection = ordered braid crossing retaining provenance. 8 reps → Born, V4 1+3 → diag(-1,1,1,1). New OS INTERSECTION→WORLD'; if(t.includes('spacetime')||t.includes('4d'))return '4D emerges: integer clock + V4 split → -+++ . Spectrum 12/25,52/25'; if(t.includes('gravity')||t.includes('pb'))return '5-label 3+2 split → pB=3/5 routing invariant → scoped gravity'; return 'Objective world emerges when different subjectivities intersect. Steps: Different→Intersection→Objectivity→4D→Gravity→Einstein. pB=3/5, 12/25,52/25';}
+let notes=localStorage.getItem('sielNote')||''; document.getElementById('userNote').value=notes;
+function saveNote(){localStorage.setItem('sielNote',userNote.value); alert('Note saved on this phone');}
 
-auth.onAuthStateChanged(u=>{me=u; document.getElementById('userBox').textContent=u? u.email.split('@')[0]+' • Logout' : 'Guest • Login';});
-
-function openAuth(){document.getElementById('authModal').classList.add('open')} function closeAuth(){document.getElementById('authModal').classList.remove('open')}
-function openAsk(){if(!me)return openAuth(); document.getElementById('askModal').classList.add('open')} function closeAsk(){document.getElementById('askModal').classList.remove('open')}
-function openGroupModal(){if(!me)return openAuth(); document.getElementById('groupModal').classList.add('open')} function closeGroupModal(){document.getElementById('groupModal').classList.remove('open')}
-function closeAns(){document.getElementById('ansModal').classList.remove('open')}
-async function doSignUp(){try{await auth.createUserWithEmailAndPassword(email.value,pass.value); closeAuth();}catch(e){alert(e.message)}}
-async function doSignIn(){try{await auth.signInWithEmailAndPassword(email.value,pass.value); closeAuth();}catch(e){alert(e.message)}}
-async function doGoogle(){try{await auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()); closeAuth();}catch(e){alert(e.message)}}
-async function doSignOut(){await auth.signOut(); closeAuth();}
-function sendChat(){const i=document.getElementById('chatInput'); const t=i.value.trim(); if(!t)return; const b=document.getElementById('chatBox'); b.innerHTML+=`<div class="msg user">${t}</div><div class="msg ai"><b>SIEL AI:</b> ${getAI(t)}</div>`; i.value=''; b.scrollTop=b.scrollHeight;}
-
-async function doPostQ(){
-const title=qTitle.value.trim(); if(!title)return alert('Title'); const cat=qCat.value; const body=qBody.value.trim();
-const ai=getAI(title+' '+body);
-await db.collection('questions').add({title,cat,body,tags:[cat.toLowerCase()],name:me.email,uid:me.uid,likes:0,up:0,time:Date.now(),answers:[{name:'SIEL AI',text:ai+' [DOI 23047902,23284177]',time:Date.now(),isAI:true}],comments:[]});
-closeAsk(); qTitle.value=''; qBody.value='';
+let qs=JSON.parse(localStorage.getItem('sielQs')||'[]');
+function renderQ(){
+ qCount.textContent=qs.length+' posts';
+ qList.innerHTML=qs.map((q,i)=>`<div class="q"><b style="display:block">${q.title}</b><div style="font-size:13px;color:#b8c0d0;margin:4px 0;white-space:pre-wrap;line-height:1.5">${q.body}</div><div style="display:flex;gap:6px;margin-top:6px"><button onclick="likeQ(${i})" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);color:#fff;padding:5px 10px;border-radius:999px;font-size:12px">👍 ${q.likes}</button><button onclick="ansQ(${i})" style="background:#fff;color:#000;padding:5px 10px;border-radius:999px;font-size:12px;border:0">💬 ${q.answers.length} Answer</button></div><div>${q.answers.map(a=>`<div style="margin-top:6px;background:rgba(255,255,255,0.06);padding:8px;border-radius:10px;font-size:13px;line-height:1.5"><b>${a.name}:</b> ${a.text}</div>`).join('')}</div></div>`).join('')||'<div style="color:#8aa0c0;font-size:13px;padding:10px;text-align:center">No questions yet. Be first to ask about the paper!</div>';
 }
-async function doCreateGroup(){const n=gName.value.trim(); if(!n)return alert('name'); await db.collection('groups').add({name:n,desc:gDesc.value,creator:me.email,uid:me.uid,members:[me.uid],time:Date.now()}); closeGroupModal(); gName.value=''; gDesc.value='';}
-function filterCat(c){currentFilter=c; render()} function sortBy(s){currentSort=s; render()}
-function render(){
-let list=[...allQs]; if(currentFilter!=='All') list=list.filter(q=>q.cat===currentFilter || (q.tags||[]).includes(currentFilter.toLowerCase()));
-if(currentSort==='answers') list.sort((a,b)=>(b.answers?.length||0)-(a.answers?.length||0)); if(currentSort==='likes') list.sort((a,b)=>(b.likes||0)-(a.likes||0));
-document.getElementById('qCount').textContent=list.length+' Questions'; document.getElementById('sQ').textContent=allQs.length; document.getElementById('sA').textContent=allQs.reduce((s,q)=>s+(q.answers?.length||0),0); document.getElementById('sU').textContent=new Set(allQs.map(q=>q.uid)).size;
-document.getElementById('qList').innerHTML=list.map(q=>`
-<div class="q">
-<div class="vote"><button onclick="likeQ('${q.id}')">▲</button><div style="margin:4px 0;font-weight:700">${q.likes||0}</div><button>💬</button></div>
-<div>
-<div style="font-size:12px;color:#666">${q.name} • ${new Date(q.time).toLocaleDateString()} • <span style="background:#eef3ff;color:#2d6ff7;padding:2px 6px;border-radius:4px">${q.cat}</span></div>
-<div class="qTitle">${q.title}</div>
-<div class="qBody">${(q.body||'').slice(0,120)}</div>
-<div class="foot">
-<span class="tag">#${(q.tags||[q.cat])[0]}</span>
-<span class="tag">💬 ${q.answers?.length||0} Answers</span>
-<span class="tag">👁️ ${((q.likes||0)*23+100)} Views</span>
-<button class="tag" style="background:#111;color:#fff" onclick="openAnswers('${q.id}')">Answer / Comments</button>
-<button class="tag" onclick="likeQ('${q.id}')">👍 Like (${q.likes||0})</button>
-</div>
-</div>
-</div>`).join('');
+function postQ(){
+ const title=qTitle.value.trim(); const body=qBody.value.trim(); if(title.length<3)return alert('Write question');
+ qs.unshift({title,body,time:Date.now(),likes:0,answers:[]}); localStorage.setItem('sielQs',JSON.stringify(qs)); qTitle.value=''; qBody.value=''; renderQ();
 }
-async function likeQ(id){if(!me)return openAuth(); const ref=db.collection('questions').doc(id); const d=await ref.get(); await ref.update({likes:(d.data().likes||0)+1});}
-function openAnswers(id){
-openQ=allQs.find(x=>x.id===id); if(!openQ)return;
-document.getElementById('ansTitle').textContent=openQ.title;
-document.getElementById('ansList').innerHTML=(openQ.answers||[]).map(a=>`<div class="card" style="padding:8px"><b style="font-size:12px">${a.name}</b><div style="font-size:13px;margin-top:4px">${a.text}</div><div style="font-size:11px;color:#888;margin-top:4px"><button class="tag" onclick="likeAns('${openQ.id}','${a.time}')">👍 Like</button> • ${new Date(a.time).toLocaleString()}</div></div>`).join('')+(openQ.comments||[]).map(c=>`<div style="font-size:12px;background:#f6f6f6;padding:6px;border-radius:6px">💬 ${c.name}: ${c.text}</div>`).join('');
-document.getElementById('ansModal').classList.add('open');
-}
-async function doPostAns(){
-if(!me)return openAuth(); const t=document.getElementById('ansInput').value.trim(); if(!t)return;
-const ref=db.collection('questions').doc(openQ.id); const doc=await ref.get(); const ans=[...(doc.data().answers||[]),{name:me.email,text:t,time:Date.now()}]; await ref.update({answers:ans}); document.getElementById('ansInput').value=''; openAnswers(openQ.id);
-}
-db.collection('questions').orderBy('time','desc').onSnapshot(s=>{allQs=s.docs.map(d=>({id:d.id,...d.data()})); render();});
-db.collection('groups').orderBy('time','desc').onSnapshot(s=>{document.getElementById('groupList').innerHTML=s.docs.map(d=>{const g=d.data(); return `<div style="font-size:13px"><b>${g.name}</b><br><small>${g.desc||''} • ${g.members?.length||1} members</small><br><button class="tag" style="margin-top:4px" onclick="joinGroup('${d.id}')">Join</button></div>`}).join('')||'No groups yet';});
-async function joinGroup(id){if(!me)return openAuth(); const ref=db.collection('groups').doc(id); const doc=await ref.get(); if(!doc.data().members.includes(me.uid)) await ref.update({members:firebase.firestore.FieldValue.arrayUnion(me.uid)}); alert('Joined!');}
-document.getElementById('searchBox').addEventListener('input',e=>{const s=e.target.value.toLowerCase(); if(!s)return render(); const f=allQs.filter(q=>(q.title+q.body).toLowerCase().includes(s)); document.getElementById('qList').innerHTML=f.map(q=>`<div class="q"><div class="qTitle">${q.title}</div></div>`).join('');});
-document.getElementById('chatInput').addEventListener('keydown',e=>{if(e.key==='Enter')sendChat();});
+function likeQ(i){qs[i].likes++; localStorage.setItem('sielQs',JSON.stringify(qs)); renderQ();}
+function ansQ(i){const name=prompt('Your name?')||'Guest'; const text=prompt('Your clear answer:'); if(!text)return; qs[i].answers.push({name,text}); localStorage.setItem('sielQs',JSON.stringify(qs)); renderQ();}
+renderQ();
 </script>
 </body>
 </html>
