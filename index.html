@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>SIEL — Braid QG Lab Forum</title>
+<title>SIEL — Braid Quantum Gravity</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:Inter,sans-serif;background:#04060a;color:#eaf0ff;overflow-x:hidden}
 .mono{font-family:JetBrains Mono,monospace}
-header{position:fixed;top:0;left:0;right:0;z-index:30;display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:rgba(8,10,16,0.85);backdrop-filter:blur(18px);border-bottom:1px solid rgba(255,255,255,0.1)}
+header{position:fixed;top:0;left:0;right:0;z-index:30;display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:rgba(8,10,16,0.75);backdrop-filter:blur(18px);border-bottom:1px solid rgba(255,255,255,0.1)}
 .logo{font-weight:900;letter-spacing:-0.03em;font-size:16px}.logo span{color:#6ea8ff;font-weight:600}
 .btn{border:0;padding:10px 18px;border-radius:999px;font-weight:700;cursor:pointer;background:#2d6ff7;color:#fff;box-shadow:0 8px 24px rgba(45,111,247,0.35);transition:0.2s}
 .btn:active{transform:scale(0.97)}
@@ -17,23 +17,37 @@ header{position:fixed;top:0;left:0;right:0;z-index:30;display:flex;justify-conte
 .bg{position:fixed;inset:0;z-index:-3;background:radial-gradient(1200px 600px at 20% 10%, #142a6a 0%, transparent 60%),radial-gradient(1000px 600px at 90% 90%, #3a1a6a 0%, transparent 60%),#04060a}
 canvas#main{position:fixed;inset:0;z-index:-2}
 canvas#orb{position:fixed;inset:0;z-index:-1;pointer-events:none}
-.wrap{max-width:760px;margin:80px auto 30px;padding:0 12px}
-.card{background:linear-gradient(180deg, rgba(255,255,255,0.09), rgba(255,255,255,0.04));border:1px solid rgba(255,255,255,0.12);border-radius:22px;padding:16px;backdrop-filter:blur(16px);box-shadow:0 20px 60px rgba(0,0,0,0.4)}
+.wrap{max-width:1150px;margin:96px auto 30px;padding:0 16px;display:grid;grid-template-columns:1.2fr 0.8fr;gap:16px}
+@media(max-width:980px){.wrap{grid-template-columns:1fr}}
+.card{background:linear-gradient(180deg, rgba(255,255,255,0.09), rgba(255,255,255,0.04));border:1px solid rgba(255,255,255,0.12);border-radius:22px;padding:18px;backdrop-filter:blur(16px);box-shadow:0 20px 60px rgba(0,0,0,0.4)}
+.heroTitle{font-size:34px;line-height:0.95;letter-spacing:-0.04em;font-weight:900}
+@media(max-width:600px){.heroTitle{font-size:26px}}
+.pill{display:inline-block;padding:5px 10px;border-radius:999px;background:rgba(110,168,255,0.16);border:1px solid rgba(110,168,255,0.28);font-size:10px;letter-spacing:0.08em}
+.big{display:flex;gap:12px;margin-top:14px}
+.bigBox{flex:1;padding:12px;border-radius:16px;background:rgba(0,0,0,0.35);border:1px solid rgba(255,255,255,0.12)}
+.bigNum{font-size:32px;font-weight:900;letter-spacing:-0.03em}
+.note{padding:12px;border-left:3px solid #2d6ff7;background:rgba(45,111,247,0.1);border-radius:0 14px 14px 0;margin:10px 0;font-size:13.5px;line-height:1.6}
+.animStage{height:520px;border-radius:18px;overflow:hidden;position:relative;background:radial-gradient(500px 250px at 50% 0%, rgba(110,168,255,0.28), transparent), rgba(0,0,0,0.35);border:1px solid rgba(255,255,255,0.12);display:flex;align-items:center;justify-content:center}
+.profLine{position:absolute;width:4px;height:300px;border-radius:4px;background:linear-gradient(180deg,#6ea8ff,#a78bfa,#ff7ab6);box-shadow:0 0 22px currentColor;animation:braid 3.2s ease-in-out infinite alternate}
+@keyframes braid{0%{transform:translateY(-40px) rotate(-18deg) scaleY(0.9)}100%{transform:translateY(40px) rotate(18deg) scaleY(1.2)}}
+.bubble{position:absolute;width:16px;height:16px;border-radius:50%;background:radial-gradient(circle at 30% 30%, #fff, #6ea8ff 60%, transparent);box-shadow:0 0 24px #6ea8ff, 0 0 48px #6ea8ff;animation:float 7s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translate(0,0)}50%{transform:translate(30px,-70px)}}
 .input{width:100%;background:rgba(0,0,0,0.45);border:1px solid rgba(255,255,255,0.14);border-radius:12px;padding:12px;color:#fff;margin:6px 0;font-size:14px}
-.q{padding:16px;margin-top:14px;border-radius:20px;background:linear-gradient(180deg,rgba(255,255,255,0.10),rgba(255,255,255,0.05));border:1px solid rgba(255,255,255,0.12)}
-.ans{margin-top:10px;margin-left:12px;padding:12px;border-radius:18px;background:rgba(45,111,247,0.10);border:1px solid rgba(110,168,255,0.18)}
+.q{padding:14px 0;border-bottom:1px solid rgba(255,255,255,0.08)}
+.vote{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+.vote button{border:1px solid rgba(255,255,255,0.14);background:rgba(255,255,255,0.06);color:#fff;padding:6px 12px;border-radius:999px;font-size:12px;cursor:pointer;transition:0.15s}
+.vote button:hover{background:rgba(255,255,255,0.12)}
+.vote button.activeUp{background:#2d6ff7;border-color:#2d6ff7;box-shadow:0 0 12px rgba(45,111,247,0.6)}
+.vote button.activeDown{background:#ff4d6d;border-color:#ff4d6d;box-shadow:0 0 12px rgba(255,87,109,0.6)}
+.ans{margin-top:8px;background:rgba(0,0,0,0.32);border:1px solid rgba(255,255,255,0.08);padding:10px 12px;border-radius:14px}
 .pic{max-width:100%;border-radius:14px;border:1px solid rgba(255,255,255,0.12);margin-top:8px;display:block}
 .fileLabel{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:999px;background:rgba(255,255,255,0.08);border:1px dashed rgba(255,255,255,0.2);font-size:12px;cursor:pointer;margin:4px 4px 0 0}
-.vote{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
-.vote button{border:1px solid rgba(255,255,255,0.14);background:rgba(255,255,255,0.06);color:#fff;padding:6px 12px;border-radius:999px;font-size:12px;cursor:pointer;transition:0.15s}
-.vote button.activeUp{background:#2d6ff7;border-color:#2d6ff7}
-.vote button.activeDown{background:#ff4d6d;border-color:#ff4d6d}
-.modal{position:fixed;inset:0;background:rgba(0,0,0,0.72);backdrop-filter:blur(12px);z-index:50;display:none;align-items:center;justify-content:center;padding:16px}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(10px);z-index:50;display:none;align-items:center;justify-content:center;padding:16px}
 .modalBox{width:100%;max-width:440px;background:#111827;border:1px solid rgba(255,255,255,0.14);border-radius:20px;padding:16px}
 .rec{width:42px;height:42px;border-radius:50%;background:#ff4d6d;display:flex;align-items:center;justify-content:center;border:0;color:#fff;font-size:18px;cursor:pointer;box-shadow:0 0 16px rgba(255,77,109,0.6)}
 .rec.recording{animation:pulse 1s infinite}
 @keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.15)}100%{transform:scale(1)}}
-audio{width:100%;margin-top:8px;height:32px}
+audio{width:100%;margin-top:8px;height:36px}
 </style>
 </head>
 <body>
@@ -43,32 +57,75 @@ audio{width:100%;margin-top:8px;height:32px}
 
 <header>
 <div class="logo">SIEL <span>◈ Braid QG Lab</span></div>
-<div style="display:flex;gap:8px"><a class="btn2 btn" href="https://www.researchgate.net/publication/414975934_Subjectivity-Intersection_Braid_Quantum_Gravity_From_a_Finite_Pointed-Braid_Source_to_Quantum_Structure_Lorentz_Geometry_and_Strong-Curvature_Spacetime_A_Constructive_Refutation_of_Objectivist_Primacy" target="_blank">Paper</a><span class="btn">Forum</span></div>
+<div style="display:flex;gap:8px"><a class="btn2 btn" href="https://www.researchgate.net/publication/414975934_Subjectivity-Intersection_Braid_Quantum_Gravity_From_a_Finite_Pointed-Braid_Source_to_Quantum_Structure_Lorentz_Geometry_and_Strong-Curvature_Spacetime_A_Constructive_Refutation_of_Objectivist_Primacy" target="_blank">Paper</a><a class="btn" href="#forum">Forum</a></div>
 </header>
 
 <div class="wrap">
+<div>
 <div class="card">
-<h3 style="font-size:20px">Forum — WhatsApp Style</h3>
-<p class="mono" style="font-size:11px;color:#8ea0c0;margin:4px 0 10px">Post question with pic + voice note. Reply the same.</p>
+<div><span class="pill">SATORU WATANABE • VERSION 1.1</span> <span class="pill">DOI 10.5281/zenodo.23047902</span></div>
+<div class="heroTitle" style="margin-top:12px">Subjectivity-Intersection<br>Braid Quantum Gravity</div>
+<p style="margin-top:10px;color:#b8c6e0;font-size:14px;line-height:1.7">A finite pointed braid source supplies quantum structure, Born probabilities, and a Lorentz-signature carrier <span class="mono">diag(-1,+1,+1,+1)</span> with spectrum <span class="mono">(12/25,52/25,52/25,52/25)</span>. Standpoint is not human — it is a typed mode of access that makes an event definable.</p>
+<div class="big">
+<div class="bigBox"><div class="mono" style="font-size:10px;color:#8ea0c0">SIGNATURE</div><div class="bigNum">-+++</div><div class="mono" style="font-size:10px;color:#8ea0c0">word inversion → clock flip</div></div>
+<div class="bigBox"><div class="mono" style="font-size:10px;color:#8ea0c0">INVARIANT</div><div class="bigNum">pB=3/5</div><div class="mono" style="font-size:10px;color:#8ea0c0">rank 3+2 split</div></div>
+</div>
+</div>
+
+<div class="card" style="margin-top:14px">
+<h3>Notes — Simple</h3>
+<div class="note"><b>Subjectivity:</b> The condition needed to define an event. No standpoint, no event.</div>
+<div class="note"><b>Intersection:</b> Different braid histories give same public 4 probabilities but keep different private provenance.</div>
+<div class="note"><b>Result:</b> Spacetime is not assumed. It is derived from braids.</div>
+<textarea id="myNote" class="input" style="height:68px" placeholder=""></textarea>
+<button class="btn" onclick="saveNote()">Save Note</button>
+</div>
+</div>
+
+<div>
+<div class="card">
+<h3>Professional Braid Visualization — 7 Braids</h3>
+<div class="animStage" id="stage">
+<div class="profLine" style="left:14%;height:280px;animation-delay:0s"></div>
+<div class="profLine" style="left:26%;height:300px;animation-delay:0.1s;background:linear-gradient(180deg,#7affb6,#6ea8ff)"></div>
+<div class="profLine" style="left:38%;height:320px;animation-delay:0.2s;background:linear-gradient(180deg,#ff7ab6,#a78bfa)"></div>
+<div class="profLine" style="left:50%;height:340px;animation-delay:0.3s;background:linear-gradient(180deg,#6ea8ff,#ffe27a)"></div>
+<div class="profLine" style="left:62%;height:320px;animation-delay:0.4s;background:linear-gradient(180deg,#a78bfa,#6ea8ff)"></div>
+<div class="profLine" style="left:74%;height:300px;animation-delay:0.5s;background:linear-gradient(180deg,#ffe27a,#ff7ab6)"></div>
+<div class="profLine" style="left:86%;height:280px;animation-delay:0.6s;background:linear-gradient(180deg,#7affb6,#a78bfa)"></div>
+<div class="bubble" style="left:18%;top:65%"></div>
+<div class="bubble" style="left:72%;top:28%;animation-delay:1s;background:radial-gradient(circle at 30% 30%, #fff, #ff7ab6 60%, transparent);box-shadow:0 0 24px #ff7ab6"></div>
+<div class="bubble" style="left:50%;top:72%;animation-delay:2s;background:radial-gradient(circle at 30% 30%, #fff, #7affb6 60%, transparent);box-shadow:0 0 24px #7affb6"></div>
+<div class="bubble" style="left:35%;top:20%;animation-delay:0.5s;background:radial-gradient(circle at 30% 30%, #fff, #ffe27a 60%, transparent);box-shadow:0 0 24px #ffe27a"></div>
+<div style="position:absolute;bottom:10px;left:12px" class="mono"><span style="font-size:10px;padding:5px 10px;background:rgba(0,0,0,0.6);border-radius:999px;border:1px solid rgba(255,255,255,0.14)">FINITE BRAID → QUANTUM → LORENTZ → SPACETIME • 7 BRAIDS • 9 WAVES</span></div>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px">
+<img src="https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=500" style="width:100%;height:86px;object-fit:cover;border-radius:12px;border:1px solid rgba(255,255,255,0.12)">
+<img src="https://images.unsplash.com/photo-1531306728370-e2ebd9d7bb99?w=500" style="width:100%;height:86px;object-fit:cover;border-radius:12px;border:1px solid rgba(255,255,255,0.12)">
+</div>
+</div>
+
+<div class="card" id="forum" style="margin-top:14px">
+<h3>Forum — Q&A</h3>
 <input id="qTitle" class="input" placeholder="">
-<textarea id="qBody" class="input" placeholder="" style="height:70px"></textarea>
-<div style="display:flex;flex-wrap:wrap;align-items:center;gap:6px">
+<textarea id="qBody" class="input" placeholder=""></textarea>
+<div style="display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:4px">
 <label class="fileLabel">📷 Pic <input type="file" id="qImage" accept="image/*" hidden></label>
 <button id="qRecBtn" class="rec" onclick="toggleRec('q')">🎤</button>
 <span id="qRecStatus" class="mono" style="font-size:11px;color:#ffb3c0"></span>
 </div>
 <div id="qPreview"></div>
 <div id="qAudioPreview"></div>
-<button class="btn" style="margin-top:10px;width:100%" onclick="postQ()">Post Question</button>
-</div>
-
+<button class="btn" style="margin-top:8px" onclick="postQ()">Post Question</button>
+<div style="margin-top:14px;display:flex;justify-content:space-between"><b>Discussions</b><span id="qCount" class="mono" style="font-size:11px;color:#8ea0c0"></span></div>
 <div id="qList"></div>
 </div>
+</div>
+</div>
 
-<!-- ANSWER MODAL -->
 <div id="ansModal" class="modal">
 <div class="modalBox">
-<h3>Reply</h3>
+<h3>Answer</h3>
 <input id="aName" class="input" placeholder="Your name">
 <textarea id="aText" class="input" placeholder=""></textarea>
 <div style="display:flex;flex-wrap:wrap;align-items:center;gap:6px">
@@ -78,7 +135,7 @@ audio{width:100%;margin-top:8px;height:32px}
 </div>
 <div id="aPreview"></div>
 <div id="aAudioPreview"></div>
-<div style="display:flex;gap:8px;margin-top:12px"><button class="btn" onclick="submitAns()" style="flex:1">Post Reply</button><button class="btn btn2" onclick="closeAns()" style="flex:1">Cancel</button></div>
+<div style="display:flex;gap:8px;margin-top:10px"><button class="btn" onclick="submitAns()">Post Answer</button><button class="btn btn2" onclick="closeAns()">Cancel</button></div>
 </div>
 </div>
 
@@ -92,15 +149,30 @@ function drawBG(){
  t+=0.008;
  bctx.clearRect(0,0,bg.width,bg.height);
  for(let k=0;k<9;k++){
-  bctx.beginPath(); bctx.strokeStyle=`hsla(${220+k*14},90%,62%,${0.18})`; bctx.lineWidth=2;
-  for(let x=0;x<bg.width;x+=10){ const y=bg.height*0.5 + Math.sin(x*0.008 + t*1.2 + k*0.9)*(80+k*14); if(x===0)bctx.moveTo(x,y); else bctx.lineTo(x,y); }
-  bctx.stroke(); bctx.shadowBlur=18; bctx.shadowColor=`hsla(${220+k*14},90%,62%,0.7)`; bctx.stroke(); bctx.shadowBlur=0;
+  bctx.beginPath();
+  bctx.strokeStyle=`hsla(${220+k*14},90%,62%,${0.2 + Math.sin(t+k)*0.08})`;
+  bctx.lineWidth=2.2 + Math.sin(t+k)*1;
+  for(let x=0;x<bg.width;x+=10){
+   const y=bg.height*0.5 + Math.sin(x*0.008 + t*1.2 + k*0.9)* (80+k*14) + Math.cos(t*0.5 + k)*28;
+   if(x===0)bctx.moveTo(x,y); else bctx.lineTo(x,y);
+  }
+  bctx.stroke(); bctx.shadowBlur=20; bctx.shadowColor=`hsla(${220+k*14},90%,62%,0.85)`;
+  bctx.stroke(); bctx.shadowBlur=0;
  }
  octx.clearRect(0,0,orb.width,orb.height);
- for(let i=0;i<22;i++){ const x=(Math.sin(t*0.3+i)*0.5+0.5)*orb.width; const y=(Math.cos(t*0.5+i*1.3)*0.5+0.5)*orb.height; octx.beginPath(); octx.arc(x,y,2.5,0,Math.PI*2); octx.fillStyle=`hsla(${210+i*10},90%,70%,0.9)`; octx.shadowBlur=16; octx.shadowColor=octx.fillStyle; octx.fill(); octx.shadowBlur=0; }
+ for(let i=0;i<24;i++){
+  const x = (Math.sin(t*0.3+i)*0.5+0.5)*orb.width;
+  const y = (Math.cos(t*0.5+i*1.3)*0.5+0.5)*orb.height;
+  const r = 2 + Math.sin(t+i)*1.6;
+  octx.beginPath(); octx.arc(x,y,r,0,Math.PI*2);
+  octx.fillStyle=`hsla(${210+i*10},90%,70%,0.95)`; octx.shadowBlur=20; octx.shadowColor=octx.fillStyle; octx.fill(); octx.shadowBlur=0;
+ }
  requestAnimationFrame(drawBG);
 }
 drawBG();
+
+myNote.value=localStorage.getItem('sielNote')||'';
+function saveNote(){localStorage.setItem('sielNote',myNote.value); alert('Note saved');}
 
 let qs=JSON.parse(localStorage.getItem('sielQsV2')||'[]');
 let pendingQImg=null, pendingAImg=null, pendingQAudio=null, pendingAAudio=null, curAnsIndex=null;
@@ -108,7 +180,7 @@ let mediaRecorder=null, recChunks=[], recType=null, recStream=null;
 
 qImage.addEventListener('change',e=>{
  const f=e.target.files[0]; if(!f)return;
- const r=new FileReader(); r.onload=ev=>{pendingQImg=ev.target.result; qPreview.innerHTML=`<img src="${pendingQImg}" class="pic"><button class="btn btn2" style="margin-top:6px" onclick="clearQImg()">Remove Pic</button>`}; r.readAsDataURL(f);
+ const r=new FileReader(); r.onload=ev=>{pendingQImg=ev.target.result; qPreview.innerHTML=`<img src="${pendingQImg}" class="pic"><button class="btn2 btn" style="margin-top:6px" onclick="clearQImg()">Remove Pic</button>`}; r.readAsDataURL(f);
 });
 function clearQImg(){pendingQImg=null; qImage.value=''; qPreview.innerHTML='';}
 aImage.addEventListener('change',e=>{
@@ -117,47 +189,43 @@ aImage.addEventListener('change',e=>{
 });
 
 async function toggleRec(type){
- const btn = type==='q'? qRecBtn : aRecBtn;
- const status = type==='q'? qRecStatus : aRecStatus;
- if(mediaRecorder && mediaRecorder.state==='recording'){
-  mediaRecorder.stop(); btn.classList.remove('recording'); status.textContent=''; return;
- }
+ const btn = type==='q'? document.getElementById('qRecBtn'): document.getElementById('aRecBtn');
+ const status = type==='q'? document.getElementById('qRecStatus'): document.getElementById('aRecStatus');
+ if(mediaRecorder && mediaRecorder.state==='recording'){ mediaRecorder.stop(); btn.classList.remove('recording'); status.textContent=''; return; }
  try{
-  recType=type;
-  recStream = await navigator.mediaDevices.getUserMedia({audio:true});
-  recChunks=[];
-  mediaRecorder = new MediaRecorder(recStream);
+  recType=type; recStream = await navigator.mediaDevices.getUserMedia({audio:true});
+  recChunks=[]; mediaRecorder = new MediaRecorder(recStream);
   mediaRecorder.ondataavailable=e=>{ if(e.data.size>0) recChunks.push(e.data); };
   mediaRecorder.onstop=()=>{
    const blob=new Blob(recChunks,{type:'audio/webm'});
    const reader=new FileReader(); reader.onload=ev=>{
     const data=ev.target.result;
-    if(recType==='q'){ pendingQAudio=data; qAudioPreview.innerHTML=`<audio controls src="${data}"></audio><button class="btn btn2" style="margin-top:4px" onclick="clearQAudio()">Remove Voice</button>`; }
-    else { pendingAAudio=data; aAudioPreview.innerHTML=`<audio controls src="${data}"></audio>`; }
+    if(recType==='q'){ pendingQAudio=data; document.getElementById('qAudioPreview').innerHTML=`<audio controls src="${data}"></audio><button class="btn btn2" style="margin-top:4px" onclick="clearQAudio()">Remove Voice</button>`; }
+    else { pendingAAudio=data; document.getElementById('aAudioPreview').innerHTML=`<audio controls src="${data}"></audio>`; }
    }; reader.readAsDataURL(blob);
    recStream.getTracks().forEach(t=>t.stop());
   };
-  mediaRecorder.start(); btn.classList.add('recording'); status.textContent='Recording... tap to stop';
- }catch(err){ alert('Mic permission needed for voice notes'); }
+  mediaRecorder.start(); btn.classList.add('recording'); status.textContent='Recording... tap again to stop';
+ }catch(err){ alert('Mic permission needed'); }
 }
-function clearQAudio(){ pendingQAudio=null; qAudioPreview.innerHTML=''; }
-function clearAAudio(){ pendingAAudio=null; aAudioPreview.innerHTML=''; }
+function clearQAudio(){ pendingQAudio=null; document.getElementById('qAudioPreview').innerHTML=''; }
 
 function render(){
- document.getElementById('qList').innerHTML=qs.map((q,qi)=>`
+ qCount.textContent=qs.length+' posts';
+ qList.innerHTML=qs.map((q,qi)=>`
   <div class="q">
-   <div style="display:flex;justify-content:space-between;align-items:center"><b style="font-size:16px">${q.title}</b><span class="mono" style="font-size:10px;color:#8ea0c0">${new Date(q.time).toLocaleTimeString()}</span></div>
-   <div style="font-size:14px;color:#d8e4f8;margin:8px 0;white-space:pre-wrap;line-height:1.5">${q.body}</div>
+   <b style="font-size:15px;line-height:1.3">${q.title}</b>
+   <div style="font-size:13px;color:#c2d0e8;margin:6px 0;white-space:pre-wrap;line-height:1.6">${q.body}</div>
    ${q.image?`<img src="${q.image}" class="pic">`:''}
    ${q.audio?`<audio controls src="${q.audio}"></audio>`:''}
    <div class="vote">
-    <button class="${q.myVote==='up'?'activeUp':''}" onclick="voteQ(${qi},'up')">👍 ${q.likes}</button>
-    <button class="${q.myVote==='down'?'activeDown':''}" onclick="voteQ(${qi},'down')">👎 ${q.dislikes}</button>
-    <button onclick="openAns(${qi})">💬 Reply with Pic/Voice</button>
+    <button class="${q.myVote==='up'?'activeUp':''}" onclick="voteQ(${qi},'up')">👍 ${q.likes} Like</button>
+    <button class="${q.myVote==='down'?'activeDown':''}" onclick="voteQ(${qi},'down')">👎 ${q.dislikes} Dislike</button>
+    <button onclick="openAns(${qi})">💬 Answer</button>
    </div>
    <div>${q.answers.map((a,ai)=>`
     <div class="ans">
-     <div style="font-size:13px"><b>${a.name}:</b> <span style="white-space:pre-wrap">${a.text}</span></div>
+     <div style="font-size:13px;line-height:1.5"><b>${a.name}:</b> ${a.text}</div>
      ${a.image?`<img src="${a.image}" class="pic">`:''}
      ${a.audio?`<audio controls src="${a.audio}"></audio>`:''}
      <div class="vote">
@@ -167,14 +235,17 @@ function render(){
     </div>
    `).join('')}</div>
   </div>
- `).join('')||'<div style="text-align:center;color:#8ea0c0;padding:20px">No questions yet</div>';
+ `).join('')||'<div style="text-align:center;color:#8ea0c0;font-size:13px;padding:14px">No questions yet. Be first!</div>';
 }
 function postQ(){
- const title=qTitle.value.trim(); const body=qBody.value.trim(); if(title.length<1 && !pendingQImg && !pendingQAudio) return alert('Write something or add pic/voice');
- qs.unshift({title:title||'Untitled',body,image:pendingQImg,audio:pendingQAudio,time:Date.now(),likes:0,dislikes:0,myVote:null,answers:[]}); save(); qTitle.value=''; qBody.value=''; clearQImg(); clearQAudio();
+ const title=qTitle.value.trim(); const body=qBody.value.trim(); if(title.length<2 && !pendingQImg && !pendingQAudio) return alert('Write question or add pic/voice');
+ qs.unshift({title,body,image:pendingQImg,audio:pendingQAudio,time:Date.now(),likes:0,dislikes:0,myVote:null,answers:[]}); save(); qTitle.value=''; qBody.value=''; clearQImg(); clearQAudio();
 }
 function voteQ(i,type){
- const q=qs[i]; if(q.myVote===type){ if(type==='up')q.likes--; else q.dislikes--; q.myVote=null; } else { if(q.myVote==='up')q.likes--; if(q.myVote==='down')q.dislikes--; if(type==='up')q.likes++; else q.dislikes++; q.myVote=type; } save();
+ const q=qs[i];
+ if(q.myVote===type){ if(type==='up')q.likes--; else q.dislikes--; q.myVote=null; } 
+ else { if(q.myVote==='up')q.likes--; if(q.myVote==='down')q.dislikes--; if(type==='up')q.likes++; else q.dislikes++; q.myVote=type; }
+ save();
 }
 function openAns(i){curAnsIndex=i; pendingAImg=null; pendingAAudio=null; aImage.value=''; aPreview.innerHTML=''; aAudioPreview.innerHTML=''; aName.value=''; aText.value=''; ansModal.style.display='flex';}
 function closeAns(){ansModal.style.display='none';}
@@ -183,7 +254,10 @@ function submitAns(){
  qs[curAnsIndex].answers.push({name,text,image:pendingAImg,audio:pendingAAudio,likes:0,dislikes:0,myVote:null}); save(); closeAns();
 }
 function voteA(qi,ai,type){
- const a=qs[qi].answers[ai]; if(a.myVote===type){ if(type==='up')a.likes--; else a.dislikes--; a.myVote=null; } else { if(a.myVote==='up')a.likes--; if(a.myVote==='down')a.dislikes--; if(type==='up')a.likes++; else a.dislikes++; a.myVote=type; } save();
+ const a=qs[qi].answers[ai];
+ if(a.myVote===type){ if(type==='up')a.likes--; else a.dislikes--; a.myVote=null; }
+ else { if(a.myVote==='up')a.likes--; if(a.myVote==='down')a.dislikes--; if(type==='up')a.likes++; else a.dislikes++; a.myVote=type; }
+ save();
 }
 function save(){localStorage.setItem('sielQsV2',JSON.stringify(qs)); render();}
 render();
