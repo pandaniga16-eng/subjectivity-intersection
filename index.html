@@ -3,136 +3,201 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Subjectivity-Intersection | Braid Quantum Gravity</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<title>SIEL — Braid Quantum Gravity</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:Inter,sans-serif;background:#05070a;color:#e8ecf2;overflow-x:hidden}
-a{color:inherit;text-decoration:none}
-
-/* ANIMATED BACKGROUND */
-.bg{position:fixed;inset:0;z-index:-2;background:radial-gradient(ellipse at 20% 20%, #1a2a5a 0%, transparent 60%), radial-gradient(ellipse at 80% 80%, #2a1a5a 0%, transparent 60%), #05070a}
-canvas#braids{position:fixed;inset:0;z-index:-1;opacity:0.6}
-
-header{position:sticky;top:0;z-index:20;display:flex;justify-content:space-between;align-items:center;padding:14px 18px;background:rgba(10,12,18,0.8);backdrop-filter:blur(12px);border-bottom:1px solid #1e2635}
-.logo{font-weight:900;letter-spacing:-0.02em}
-.logo span{color:#6ea8ff}
-.btn{background:#2d6ff7;color:#fff;border:0;padding:10px 16px;border-radius:999px;font-weight:700;cursor:pointer}
-.btn-ghost{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.14)}
-
-.hero{max-width:1100px;margin:40px auto;padding:0 18px;display:grid;grid-template-columns:1.2fr 0.8fr;gap:20px}
-@media(max-width:900px){.hero{grid-template-columns:1fr}}
-.card{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:18px;padding:18px;backdrop-filter:blur(10px)}
-.card h2{font-size:22px;line-height:1.2;margin-bottom:10px}
-.pill{display:inline-block;padding:4px 10px;border-radius:999px;background:rgba(110,168,255,0.18);border:1px solid rgba(110,168,255,0.3);font-size:11px;letter-spacing:0.06em;margin-right:6px}
+body{font-family:Inter,sans-serif;background:#04060a;color:#eaf0ff;overflow-x:hidden}
 .mono{font-family:JetBrains Mono,monospace}
-.bigNum{font-size:38px;font-weight:900;line-height:1;letter-spacing:-0.03em}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.note{padding:12px;border-left:3px solid #2d6ff7;background:rgba(45,111,247,0.08);border-radius:0 12px 12px 0;margin:10px 0;font-size:14px;line-height:1.6}
-.animBox{height:220px;border-radius:14px;overflow:hidden;position:relative;background:linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));border:1px solid rgba(255,255,255,0.12);display:flex;align-items:center;justify-content:center}
-.dot{position:absolute;width:8px;height:8px;border-radius:50%;background:#6ea8ff;box-shadow:0 0 18px #6ea8ff;animation:orbit 6s linear infinite}
-@keyframes orbit{0%{transform:rotate(0deg) translateX(70px) rotate(0deg)}100%{transform:rotate(360deg) translateX(70px) rotate(-360deg)}}
-.braidLine{position:absolute;width:2px;height:120px;background:linear-gradient(#6ea8ff, #a78bfa);animation:braidMove 3s ease-in-out infinite alternate;transform-origin:top}
-@keyframes braidMove{0%{transform:rotate(-20deg) translateY(0)}100%{transform:rotate(20deg) translateY(20px)}}
-.input{width:100%;background:rgba(0,0,0,0.4);border:1px solid rgba(255,255,255,0.14);border-radius:10px;padding:11px;color:#fff;margin:6px 0}
-.q{padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.08)}
+header{position:fixed;top:0;left:0;right:0;z-index:30;display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:rgba(8,10,16,0.75);backdrop-filter:blur(18px);border-bottom:1px solid rgba(255,255,255,0.1)}
+.logo{font-weight:900;letter-spacing:-0.03em;font-size:16px}.logo span{color:#6ea8ff;font-weight:600}
+.btn{border:0;padding:10px 18px;border-radius:999px;font-weight:700;cursor:pointer;background:#2d6ff7;color:#fff;box-shadow:0 8px 24px rgba(45,111,247,0.35);transition:0.2s}
+.btn:active{transform:scale(0.97)}
+.btn2{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.14);color:#fff}
+.bg{position:fixed;inset:0;z-index:-3;background:radial-gradient(1200px 600px at 20% 10%, #142a6a 0%, transparent 60%),radial-gradient(1000px 600px at 90% 90%, #3a1a6a 0%, transparent 60%),#04060a}
+canvas#main{position:fixed;inset:0;z-index:-2}
+canvas#orb{position:fixed;inset:0;z-index:-1;pointer-events:none}
+.wrap{max-width:1150px;margin:96px auto 30px;padding:0 16px;display:grid;grid-template-columns:1.2fr 0.8fr;gap:16px}
+@media(max-width:980px){.wrap{grid-template-columns:1fr}}
+.card{background:linear-gradient(180deg, rgba(255,255,255,0.09), rgba(255,255,255,0.04));border:1px solid rgba(255,255,255,0.12);border-radius:22px;padding:18px;backdrop-filter:blur(16px);box-shadow:0 20px 60px rgba(0,0,0,0.4)}
+.heroTitle{font-size:34px;line-height:0.95;letter-spacing:-0.04em;font-weight:900}
+@media(max-width:600px){.heroTitle{font-size:26px}}
+.pill{display:inline-block;padding:5px 10px;border-radius:999px;background:rgba(110,168,255,0.16);border:1px solid rgba(110,168,255,0.28);font-size:10px;letter-spacing:0.08em}
+.big{display:flex;gap:12px;margin-top:14px}
+.bigBox{flex:1;padding:12px;border-radius:16px;background:rgba(0,0,0,0.35);border:1px solid rgba(255,255,255,0.12)}
+.bigNum{font-size:32px;font-weight:900;letter-spacing:-0.03em}
+.note{padding:12px;border-left:3px solid #2d6ff7;background:rgba(45,111,247,0.1);border-radius:0 14px 14px 0;margin:10px 0;font-size:13.5px;line-height:1.6}
+.animStage{height:420px;border-radius:18px;overflow:hidden;position:relative;background:radial-gradient(400px 200px at 50% 0%, rgba(110,168,255,0.25), transparent), rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.12);display:flex;align-items:center;justify-content:center}
+.profLine{position:absolute;width:3px;height:220px;border-radius:3px;background:linear-gradient(180deg,#6ea8ff,#a78bfa,#ff7ab6);box-shadow:0 0 18px currentColor;animation:braid 3.2s ease-in-out infinite alternate}
+@keyframes braid{0%{transform:translateY(-30px) rotate(-18deg) scaleY(0.9)}100%{transform:translateY(30px) rotate(18deg) scaleY(1.15)}}
+.bubble{position:absolute;width:14px;height:14px;border-radius:50%;background:radial-gradient(circle at 30% 30%, #fff, #6ea8ff 60%, transparent);box-shadow:0 0 22px #6ea8ff, 0 0 44px #6ea8ff;animation:float 7s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translate(0,0)}50%{transform:translate(30px,-60px)}}
+.input{width:100%;background:rgba(0,0,0,0.45);border:1px solid rgba(255,255,255,0.14);border-radius:12px;padding:12px;color:#fff;margin:6px 0;font-size:14px}
+.q{padding:14px 0;border-bottom:1px solid rgba(255,255,255,0.08)}
+.vote{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+.vote button{border:1px solid rgba(255,255,255,0.14);background:rgba(255,255,255,0.06);color:#fff;padding:6px 12px;border-radius:999px;font-size:12px;cursor:pointer;transition:0.15s}
+.vote button:hover{background:rgba(255,255,255,0.12)}
+.vote button.activeUp{background:#2d6ff7;border-color:#2d6ff7;box-shadow:0 0 12px rgba(45,111,247,0.6)}
+.vote button.activeDown{background:#ff4d6d;border-color:#ff4d6d;box-shadow:0 0 12px rgba(255,87,109,0.6)}
+.ans{margin-top:8px;background:rgba(0,0,0,0.32);border:1px solid rgba(255,255,255,0.08);padding:10px 12px;border-radius:14px}
 </style>
 </head>
 <body>
 <div class="bg"></div>
-<canvas id="braids"></canvas>
+<canvas id="main"></canvas>
+<canvas id="orb"></canvas>
 
 <header>
-<div class="logo">SIEL <span>◈ Subjectivity Intersection</span></div>
-<div style="display:flex;gap:8px"><a class="btn-ghost btn" href="https://www.researchgate.net/publication/414975934_Subjectivity-Intersection_Braid_Quantum_Gravity_From_a_Finite_Pointed-Braid_Source_to_Quantum_Structure_Lorentz_Geometry_and_Strong-Curvature_Spacetime_A_Constructive_Refutation_of_Objectivist_Primacy" target="_blank">ResearchGate</a><a class="btn" href="#forum">Enter Forum</a></div>
+<div class="logo">SIEL <span>◈ Braid QG Lab</span></div>
+<div style="display:flex;gap:8px"><a class="btn2 btn" href="https://www.researchgate.net/publication/414975934_Subjectivity-Intersection_Braid_Quantum_Gravity_From_a_Finite_Pointed-Braid_Source_to_Quantum_Structure_Lorentz_Geometry_and_Strong-Curvature_Spacetime_A_Constructive_Refutation_of_Objectivist_Primacy" target="_blank">Paper</a><a class="btn" href="#forum">Forum</a></div>
 </header>
 
-<div class="hero">
+<div class="wrap">
 <div>
 <div class="card">
-<div><span class="pill">VERSION 1.1 — 7 OCT 2026</span><span class="pill">DOI: 10.5281/zenodo.23047902</span></div>
-<h2 style="margin-top:12px">Subjectivity-Intersection Braid Quantum Gravity<br>From a Finite Pointed-Braid Source to Quantum Structure, Lorentz Geometry and Spacetime</h2>
-<p style="font-size:14px;line-height:1.7;color:#b8c0d0;margin-top:8px">
-A standpoint is not a human observer. It is a typed, source-relative mode of access needed to define an event. 
-From 8 signed braid representatives, this paper derives: finite complex carrier, Born-type probabilities, CPTP collision parent, integer clock, and a Lorentz signature carrier <span class="mono">diag(-1,+1,+1,+1)</span> with exact spectrum <span class="mono">(12/25,52/25,52/25,52/25)</span>. No spacetime manifold is assumed in advance.
-</p>
-<div class="grid2" style="margin-top:14px">
-<div class="card" style="padding:12px"><div class="mono" style="font-size:11px;color:#8aa0c0">LORENTZ SIGNATURE</div><div class="bigNum">-+++</div><div style="font-size:12px;color:#8aa0c0">from word inversion</div></div>
-<div class="card" style="padding:12px"><div class="mono" style="font-size:11px;color:#8aa0c0">ROUTING INVARIANT</div><div class="bigNum">3/5</div><div style="font-size:12px;color:#8aa0c0">rank 3+2 split</div></div>
+<div><span class="pill">SATORU WATANABE • VERSION 1.1</span> <span class="pill">DOI 10.5281/zenodo.23047902</span></div>
+<div class="heroTitle" style="margin-top:12px">Subjectivity-Intersection<br>Braid Quantum Gravity</div>
+<p style="margin-top:10px;color:#b8c6e0;font-size:14px;line-height:1.7">A finite pointed braid source supplies quantum structure, Born probabilities, and a Lorentz-signature carrier <span class="mono">diag(-1,+1,+1,+1)</span> with spectrum <span class="mono">(12/25,52/25,52/25,52/25)</span>. Standpoint is not human — it is a typed mode of access that makes an event definable.</p>
+<div class="big">
+<div class="bigBox"><div class="mono" style="font-size:10px;color:#8ea0c0">SIGNATURE</div><div class="bigNum">-+++</div><div class="mono" style="font-size:10px;color:#8ea0c0">word inversion → clock flip</div></div>
+<div class="bigBox"><div class="mono" style="font-size:10px;color:#8ea0c0">INVARIANT</div><div class="bigNum">pB=3/5</div><div class="mono" style="font-size:10px;color:#8ea0c0">rank 3+2 split</div></div>
 </div>
 </div>
 
-<div class="card">
-<h2>Notes — Readable Explanation</h2>
-<div class="note"><b>1. The Core Idea:</b> World does not start with space. It starts with intersection of standpoints. Braids keep provenance — who crossed what, in which order.</div>
-<div class="note"><b>2. Clock + Space:</b> Braid word gives integer clock. Mismatch quotient gives V4. Fourier split gives 1 time + 3 space directions. Inversion flips only clock → Lorentz signature.</div>
-<div class="note"><b>3. Quantum from Braid:</b> 8 braid sources → 4 outcome probabilities (same public record) but different internal records. This is how subjectivity leaves trace.</div>
-<div class="note"><b>4. Your Question Matters:</b> Ask below in simple words. Good question = what is source, what is standpoint, what is retained?</div>
-<textarea id="userNote" class="input" style="height:70px" placeholder="Write your personal note here (saved on your phone)..."></textarea>
-<button class="btn" onclick="saveNote()">Save My Note</button>
+<div class="card" style="margin-top:14px">
+<h3>Notes — Simple</h3>
+<div class="note"><b>Subjectivity:</b> The condition needed to define an event. No standpoint, no event.</div>
+<div class="note"><b>Intersection:</b> Different braid histories give same public 4 probabilities but keep different private provenance.</div>
+<div class="note"><b>Result:</b> Spacetime is not assumed. It is derived from braids.</div>
+<textarea id="myNote" class="input" style="height:68px" placeholder="Write your personal note..."></textarea>
+<button class="btn" onclick="saveNote()">Save Note</button>
 </div>
 </div>
 
 <div>
 <div class="card">
-<h2>Live Visualization</h2>
-<div class="animBox" id="animBox">
-<div class="braidLine" style="left:40%;animation-delay:0s"></div>
-<div class="braidLine" style="left:50%;animation-delay:0.3s;background:linear-gradient(#ff7ab6,#6ea8ff)"></div>
-<div class="braidLine" style="left:60%;animation-delay:0.6s;background:linear-gradient(#7affb6,#6ea8ff)"></div>
-<div class="dot" style="animation-duration:4s"></div>
-<div class="dot" style="animation-duration:6s;animation-delay:1s;background:#a78bfa;box-shadow:0 0 18px #a78bfa"></div>
-<div class="dot" style="animation-duration:5s;animation-delay:0.5s;background:#7affb6;box-shadow:0 0 18px #7affb6"></div>
-<div style="position:absolute;bottom:8px;left:10px;font-size:11px" class="mono">BRAID WORD → CLOCK → LORENTZ</div>
+<h3>Professional Braid Visualization</h3>
+<div class="animStage" id="stage">
+<div class="profLine" style="left:28%;animation-delay:0s"></div>
+<div class="profLine" style="left:38%;animation-delay:0.2s;background:linear-gradient(#7affb6,#6ea8ff)"></div>
+<div class="profLine" style="left:50%;animation-delay:0.4s;background:linear-gradient(#ff7ab6,#a78bfa)"></div>
+<div class="profLine" style="left:62%;animation-delay:0.6s"></div>
+<div class="profLine" style="left:72%;animation-delay:0.8s;background:linear-gradient(#ffe27a,#ff7ab6)"></div>
+<div class="bubble" style="left:20%;top:60%"></div>
+<div class="bubble" style="left:70%;top:30%;animation-delay:1s;background:radial-gradient(circle at 30% 30%, #fff, #ff7ab6 60%, transparent);box-shadow:0 0 22px #ff7ab6"></div>
+<div class="bubble" style="left:50%;top:70%;animation-delay:2s;background:radial-gradient(circle at 30% 30%, #fff, #7affb6 60%, transparent);box-shadow:0 0 22px #7affb6"></div>
+<div style="position:absolute;bottom:10px;left:12px" class="mono"><span style="font-size:10px;padding:4px 8px;background:rgba(0,0,0,0.5);border-radius:999px;border:1px solid rgba(255,255,255,0.12)">FINITE BRAID → QUANTUM → LORENTZ → SPACETIME</span></div>
 </div>
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px">
-<img src="https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=400" style="width:100%;height:80px;object-fit:cover;border-radius:10px;border:1px solid rgba(255,255,255,0.12)" alt="space">
-<img src="https://images.unsplash.com/photo-1516331138075-f3adc1e149cd?w=400" style="width:100%;height:80px;object-fit:cover;border-radius:10px;border:1px solid rgba(255,255,255,0.12)" alt="braid">
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px">
+<img src="https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=500" style="width:100%;height:86px;object-fit:cover;border-radius:12px;border:1px solid rgba(255,255,255,0.12)">
+<img src="https://images.unsplash.com/photo-1531306728370-e2ebd9d7bb99?w=500" style="width:100%;height:86px;object-fit:cover;border-radius:12px;border:1px solid rgba(255,255,255,0.12)">
 </div>
 </div>
 
-<div class="card" id="forum">
-<h2>Forum — Questions & Answers</h2>
-<p style="font-size:12px;color:#8aa0c0">Simple, readable. No categories. Just ask about the paper.</p>
-<input id="qTitle" class="input" placeholder="Your question, e.g. What is pointed-braid source?">
-<textarea id="qBody" class="input" placeholder="Explain in simple words..."></textarea>
-<button class="btn" onclick="postQ()">Ask Question</button>
-<div style="margin-top:12px"><b>Discussions</b> <span id="qCount" style="font-size:12px;color:#8aa0c0"></span><div id="qList" style="margin-top:8px"></div></div>
+<div class="card" id="forum" style="margin-top:14px">
+<h3>Forum — Q&A</h3>
+<p class="mono" style="font-size:11px;color:#8ea0c0">Each question and each answer has like / dislike</p>
+<input id="qTitle" class="input" placeholder="Ask: What is subjectivity?">
+<textarea id="qBody" class="input" placeholder="Explain in simple readable words..."></textarea>
+<button class="btn" onclick="postQ()">Post Question</button>
+<div style="margin-top:14px;display:flex;justify-content:space-between"><b>Discussions</b><span id="qCount" class="mono" style="font-size:11px;color:#8ea0c0"></span></div>
+<div id="qList"></div>
 </div>
 </div>
 </div>
 
 <script>
-// animated braids canvas
-const c=document.getElementById('braids'); const ctx=c.getContext('2d');
-function resize(){c.width=innerWidth; c.height=innerHeight} resize(); addEventListener('resize',resize);
-let t=0; function draw(){
- t+=0.01; ctx.clearRect(0,0,c.width,c.height);
- for(let i=0;i<5;i++){
-  ctx.beginPath(); ctx.strokeStyle=`hsla(${210+i*20},80%,60%,0.25)`; ctx.lineWidth=1.5;
-  for(let x=0;x<c.width;x+=8){
-   const y=c.height*0.5 + Math.sin(x*0.01 + t + i)*80 + i*20 -60;
-   if(x==0)ctx.moveTo(x,y); else ctx.lineTo(x,y);
-  } ctx.stroke();
+// BIG PROFESSIONAL BACKGROUND ANIMATION
+const bg=document.getElementById('main'); const bctx=bg.getContext('2d');
+function rsize(){bg.width=innerWidth; bg.height=innerHeight; orb.width=innerWidth; orb.height=innerHeight} 
+const orb=document.getElementById('orb'); const octx=orb.getContext('2d');
+rsize(); addEventListener('resize',rsize);
+let t=0;
+function drawBG(){
+ t+=0.008;
+ bctx.clearRect(0,0,bg.width,bg.height);
+ // big moving braid ribbons
+ for(let k=0;k<6;k++){
+  bctx.beginPath();
+  bctx.strokeStyle=`hsla(${220+k*16},90%,62%,${0.18 + Math.sin(t+k)*0.08})`;
+  bctx.lineWidth=2 + Math.sin(t+k)*0.8;
+  for(let x=0;x<bg.width;x+=10){
+   const y=bg.height*0.5 + Math.sin(x*0.008 + t*1.2 + k*0.9)* (90+k*12) + Math.cos(t*0.5 + k)*30;
+   if(x===0)bctx.moveTo(x,y); else bctx.lineTo(x,y);
+  }
+  bctx.stroke();
+  // glow
+  bctx.shadowBlur=18; bctx.shadowColor=`hsla(${220+k*16},90%,62%,0.8)`;
+  bctx.stroke(); bctx.shadowBlur=0;
  }
- requestAnimationFrame(draw);
-} draw();
+ // floating particles
+ octx.clearRect(0,0,orb.width,orb.height);
+ for(let i=0;i<18;i++){
+  const x = (Math.sin(t*0.3+i)*0.5+0.5)*orb.width;
+  const y = (Math.cos(t*0.5+i*1.3)*0.5+0.5)*orb.height;
+  const r = 2 + Math.sin(t+i)*1.5;
+  octx.beginPath(); octx.arc(x,y,r,0,Math.PI*2);
+  octx.fillStyle=`hsla(${210+i*12},90%,70%,0.9)`; octx.shadowBlur=18; octx.shadowColor=octx.fillStyle; octx.fill(); octx.shadowBlur=0;
+ }
+ requestAnimationFrame(drawBG);
+}
+drawBG();
 
-let notes=localStorage.getItem('sielNote')||''; document.getElementById('userNote').value=notes;
-function saveNote(){localStorage.setItem('sielNote',userNote.value); alert('Note saved on this phone');}
+// Notes
+myNote.value=localStorage.getItem('sielNote')||'';
+function saveNote(){localStorage.setItem('sielNote',myNote.value); alert('Note saved');}
 
-let qs=JSON.parse(localStorage.getItem('sielQs')||'[]');
-function renderQ(){
+// Q&A with like/dislike per Q and per Answer
+let qs=JSON.parse(localStorage.getItem('sielQsV2')||'[]');
+function render(){
  qCount.textContent=qs.length+' posts';
- qList.innerHTML=qs.map((q,i)=>`<div class="q"><b style="display:block">${q.title}</b><div style="font-size:13px;color:#b8c0d0;margin:4px 0;white-space:pre-wrap;line-height:1.5">${q.body}</div><div style="display:flex;gap:6px;margin-top:6px"><button onclick="likeQ(${i})" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);color:#fff;padding:5px 10px;border-radius:999px;font-size:12px">👍 ${q.likes}</button><button onclick="ansQ(${i})" style="background:#fff;color:#000;padding:5px 10px;border-radius:999px;font-size:12px;border:0">💬 ${q.answers.length} Answer</button></div><div>${q.answers.map(a=>`<div style="margin-top:6px;background:rgba(255,255,255,0.06);padding:8px;border-radius:10px;font-size:13px;line-height:1.5"><b>${a.name}:</b> ${a.text}</div>`).join('')}</div></div>`).join('')||'<div style="color:#8aa0c0;font-size:13px;padding:10px;text-align:center">No questions yet. Be first to ask about the paper!</div>';
+ qList.innerHTML=qs.map((q,qi)=>`
+  <div class="q">
+   <b style="font-size:15px;line-height:1.3">${q.title}</b>
+   <div style="font-size:13px;color:#c2d0e8;margin:6px 0;white-space:pre-wrap;line-height:1.6">${q.body}</div>
+   <div class="vote">
+    <button class="${q.myVote==='up'?'activeUp':''}" onclick="voteQ(${qi},'up')">👍 ${q.likes} Like</button>
+    <button class="${q.myVote==='down'?'activeDown':''}" onclick="voteQ(${qi},'down')">👎 ${q.dislikes} Dislike</button>
+    <button onclick="ans(${qi})">💬 Answer</button>
+   </div>
+   <div>${q.answers.map((a,ai)=>`
+    <div class="ans">
+     <div style="font-size:13px;line-height:1.5"><b>${a.name}:</b> ${a.text}</div>
+     <div class="vote">
+      <button class="${a.myVote==='up'?'activeUp':''}" onclick="voteA(${qi},${ai},'up')">👍 ${a.likes}</button>
+      <button class="${a.myVote==='down'?'activeDown':''}" onclick="voteA(${qi},${ai},'down')">👎 ${a.dislikes}</button>
+     </div>
+    </div>
+   `).join('')}</div>
+  </div>
+ `).join('')||'<div style="text-align:center;color:#8ea0c0;font-size:13px;padding:14px">No questions yet. Be first!</div>';
 }
 function postQ(){
- const title=qTitle.value.trim(); const body=qBody.value.trim(); if(title.length<3)return alert('Write question');
- qs.unshift({title,body,time:Date.now(),likes:0,answers:[]}); localStorage.setItem('sielQs',JSON.stringify(qs)); qTitle.value=''; qBody.value=''; renderQ();
+ const title=qTitle.value.trim(); const body=qBody.value.trim(); if(title.length<2)return alert('Write question');
+ qs.unshift({title,body,time:Date.now(),likes:0,dislikes:0,myVote:null,answers:[]}); save(); qTitle.value=''; qBody.value='';
 }
-function likeQ(i){qs[i].likes++; localStorage.setItem('sielQs',JSON.stringify(qs)); renderQ();}
-function ansQ(i){const name=prompt('Your name?')||'Guest'; const text=prompt('Your clear answer:'); if(!text)return; qs[i].answers.push({name,text}); localStorage.setItem('sielQs',JSON.stringify(qs)); renderQ();}
-renderQ();
+function voteQ(i,type){
+ const q=qs[i];
+ if(q.myVote===type){ // toggle off
+  if(type==='up')q.likes--; else q.dislikes--; q.myVote=null;
+ } else {
+  if(q.myVote==='up')q.likes--; if(q.myVote==='down')q.dislikes--;
+  if(type==='up')q.likes++; else q.dislikes++; q.myVote=type;
+ }
+ save();
+}
+function ans(i){
+ const name=prompt('Your name?')||'Guest'; const text=prompt('Write clear answer:'); if(!text)return;
+ qs[i].answers.push({name,text,likes:0,dislikes:0,myVote:null}); save();
+}
+function voteA(qi,ai,type){
+ const a=qs[qi].answers[ai];
+ if(a.myVote===type){ if(type==='up')a.likes--; else a.dislikes--; a.myVote=null; }
+ else { if(a.myVote==='up')a.likes--; if(a.myVote==='down')a.dislikes--; if(type==='up')a.likes++; else a.dislikes++; a.myVote=type; }
+ save();
+}
+function save(){localStorage.setItem('sielQsV2',JSON.stringify(qs)); render();}
+render();
 </script>
 </body>
 </html>
