@@ -33,7 +33,7 @@ canvas#orb{position:fixed;inset:0;z-index:-1;pointer-events:none}
 .bubble{position:absolute;width:16px;height:16px;border-radius:50%;background:radial-gradient(circle at 30% 30%, #fff, #6ea8ff 60%, transparent);box-shadow:0 0 24px #6ea8ff, 0 0 48px #6ea8ff;animation:float 7s ease-in-out infinite}
 @keyframes float{0%,100%{transform:translate(0,0)}50%{transform:translate(30px,-70px)}}
 .input{width:100%;background:rgba(0,0,0,0.45);border:1px solid rgba(255,255,255,0.14);border-radius:12px;padding:12px;color:#fff;margin:6px 0;font-size:14px}
-.q{padding:14px 0;border-bottom:1px solid rgba(255,255,255,0.08)}
+.q{padding:16px 0;border-bottom:1px solid rgba(255,255,255,0.08)}
 .vote{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
 .vote button{border:1px solid rgba(255,255,255,0.14);background:rgba(255,255,255,0.06);color:#fff;padding:6px 12px;border-radius:999px;font-size:12px;cursor:pointer;transition:0.15s}
 .vote button:hover{background:rgba(255,255,255,0.12)}
@@ -48,6 +48,12 @@ canvas#orb{position:fixed;inset:0;z-index:-1;pointer-events:none}
 .rec.recording{animation:pulse 1s infinite}
 @keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.15)}100%{transform:scale(1)}}
 audio{width:100%;margin-top:8px;height:36px}
+.bigSubject{height:620px;border-radius:24px;position:relative;overflow:hidden;background:radial-gradient(600px 400px at 50% 0%, rgba(110,168,255,0.35), transparent), radial-gradient(500px 400px at 80% 80%, rgba(255,122,182,0.25), transparent), rgba(0,0,0,0.5);border:1px solid rgba(255,255,255,0.14);display:flex;align-items:center;justify-content:center}
+.wave{display:flex;gap:4px;align-items:center;margin-top:8px}
+.bar{width:3px;background:#6ea8ff;border-radius:99px;animation:waveBar 0.8s ease-in-out infinite}
+@keyframes waveBar{0%,100%{height:8px}50%{height:22px}}
+.voiceBox{display:flex;align-items:center;gap:10px;background:rgba(0,0,0,0.4);border:1px solid rgba(255,255,255,0.12);border-radius:999px;padding:8px 14px;margin-top:8px}
+.chan{padding:10px 12px;border-radius:14px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);margin:6px 0;display:flex;justify-content:space-between;align-items:center}
 </style>
 </head>
 <body>
@@ -62,23 +68,36 @@ audio{width:100%;margin-top:8px;height:36px}
 
 <div class="wrap">
 <div>
-<div class="card">
-<div><span class="pill">SATORU WATANABE • VERSION 1.1</span> <span class="pill">DOI 10.5281/zenodo.23047902</span></div>
-<div class="heroTitle" style="margin-top:12px">Subjectivity-Intersection<br>Braid Quantum Gravity</div>
-<p style="margin-top:10px;color:#b8c6e0;font-size:14px;line-height:1.7">A finite pointed braid source supplies quantum structure, Born probabilities, and a Lorentz-signature carrier <span class="mono">diag(-1,+1,+1,+1)</span> with spectrum <span class="mono">(12/25,52/25,52/25,52/25)</span>. Standpoint is not human — it is a typed mode of access that makes an event definable.</p>
-<div class="big">
-<div class="bigBox"><div class="mono" style="font-size:10px;color:#8ea0c0">SIGNATURE</div><div class="bigNum">-+++</div><div class="mono" style="font-size:10px;color:#8ea0c0">word inversion → clock flip</div></div>
-<div class="bigBox"><div class="mono" style="font-size:10px;color:#8ea0c0">INVARIANT</div><div class="bigNum">pB=3/5</div><div class="mono" style="font-size:10px;color:#8ea0c0">rank 3+2 split</div></div>
+<!-- BIG ANIMATION ABOUT SUBJECTIVITY REPLACES OLD FIRST PAGE -->
+<div class="card" style="padding:0;overflow:hidden">
+<div class="bigSubject" id="subjectStage">
+<canvas id="subjectCanvas" style="position:absolute;inset:0;width:100%;height:100%"></canvas>
+<div style="position:relative;z-index:2;text-align:center;padding:20px">
+<div class="pill">SUBJECTIVITY = HOW YOU LOOK</div>
+<h1 style="font-size:42px;line-height:0.9;letter-spacing:-0.04em;margin:14px 0;font-weight:900">No Viewpoint<br><span style="color:#6ea8ff">No Event</span></h1>
+<p class="mono" style="font-size:12px;color:#b8c6e0;max-width:360px;margin:0 auto;line-height:1.6">Three different people look at same braid. They get same 4 numbers (public) but different private story (provenance). That is intersection. Spacetime comes after.</p>
+<div style="display:flex;justify-content:center;gap:10px;margin-top:14px">
+<div class="bigBox" style="min-width:86px"><div class="mono" style="font-size:9px">SIGNATURE</div><div style="font-size:22px;font-weight:900">-+++</div></div>
+<div class="bigBox" style="min-width:86px"><div class="mono" style="font-size:9px">INVARIANT</div><div style="font-size:22px;font-weight:900">pB=3/5</div></div>
+</div>
+</div>
 </div>
 </div>
 
 <div class="card" style="margin-top:14px">
-<h3>Notes — Simple</h3>
-<div class="note"><b>Subjectivity:</b> The condition needed to define an event. No standpoint, no event.</div>
-<div class="note"><b>Intersection:</b> Different braid histories give same public 4 probabilities but keep different private provenance.</div>
-<div class="note"><b>Result:</b> Spacetime is not assumed. It is derived from braids.</div>
-<textarea id="myNote" class="input" style="height:68px" placeholder=""></textarea>
+<h3>Simple Notes — Easy to Understand</h3>
+<div class="note"><b>🎯 Subjectivity:</b> Imagine you need glasses to see. No glasses = you see nothing. Subjectivity is like those glasses — you need a way of looking before something can exist for you.</div>
+<div class="note"><b>🔗 Intersection:</b> Two people watch same movie but remember different parts. They agree on what happened (same probabilities) but their personal memory is different. Braids work like that.</div>
+<div class="note"><b>🌌 Result:</b> We don't start with space and time. Space and time are BUILT from tiny braids twisting. Like building a house from threads.</div>
+<textarea id="myNote" class="input" style="height:68px" placeholder="Write your own simple note..."></textarea>
 <button class="btn" onclick="saveNote()">Save Note</button>
+</div>
+
+<div class="card" style="margin-top:14px">
+<h3>📢 Channels — Create & Follow</h3>
+<input id="chanName" class="input" placeholder="Channel name e.g. Braid Beginners">
+<button class="btn" onclick="createChan()">Create Channel</button>
+<div id="chanList" style="margin-top:10px"></div>
 </div>
 </div>
 
@@ -107,8 +126,8 @@ audio{width:100%;margin-top:8px;height:36px}
 
 <div class="card" id="forum" style="margin-top:14px">
 <h3>Forum — Q&A</h3>
-<input id="qTitle" class="input" placeholder="">
-<textarea id="qBody" class="input" placeholder=""></textarea>
+<input id="qTitle" class="input" placeholder="Question title...">
+<textarea id="qBody" class="input" placeholder="Ask in detail..."></textarea>
 <div style="display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:4px">
 <label class="fileLabel">📷 Pic <input type="file" id="qImage" accept="image/*" hidden></label>
 <button id="qRecBtn" class="rec" onclick="toggleRec('q')">🎤</button>
@@ -127,7 +146,7 @@ audio{width:100%;margin-top:8px;height:36px}
 <div class="modalBox">
 <h3>Answer</h3>
 <input id="aName" class="input" placeholder="Your name">
-<textarea id="aText" class="input" placeholder=""></textarea>
+<textarea id="aText" class="input" placeholder="Write answer..."></textarea>
 <div style="display:flex;flex-wrap:wrap;align-items:center;gap:6px">
 <label class="fileLabel">📷 Pic <input type="file" id="aImage" accept="image/*" hidden></label>
 <button id="aRecBtn" class="rec" onclick="toggleRec('a')">🎤</button>
@@ -141,7 +160,7 @@ audio{width:100%;margin-top:8px;height:36px}
 
 <script>
 const bg=document.getElementById('main'); const bctx=bg.getContext('2d');
-function rsize(){bg.width=innerWidth; bg.height=innerHeight; orb.width=innerWidth; orb.height=innerHeight} 
+function rsize(){bg.width=innerWidth; bg.height=innerHeight; orb.width=innerWidth; orb.height=innerHeight; const sc=document.getElementById('subjectCanvas'); if(sc){sc.width=sc.offsetWidth*2; sc.height=sc.offsetHeight*2;}} 
 const orb=document.getElementById('orb'); const octx=orb.getContext('2d');
 rsize(); addEventListener('resize',rsize);
 let t=0;
@@ -149,24 +168,15 @@ function drawBG(){
  t+=0.008;
  bctx.clearRect(0,0,bg.width,bg.height);
  for(let k=0;k<9;k++){
-  bctx.beginPath();
-  bctx.strokeStyle=`hsla(${220+k*14},90%,62%,${0.2 + Math.sin(t+k)*0.08})`;
-  bctx.lineWidth=2.2 + Math.sin(t+k)*1;
-  for(let x=0;x<bg.width;x+=10){
-   const y=bg.height*0.5 + Math.sin(x*0.008 + t*1.2 + k*0.9)* (80+k*14) + Math.cos(t*0.5 + k)*28;
-   if(x===0)bctx.moveTo(x,y); else bctx.lineTo(x,y);
-  }
-  bctx.stroke(); bctx.shadowBlur=20; bctx.shadowColor=`hsla(${220+k*14},90%,62%,0.85)`;
-  bctx.stroke(); bctx.shadowBlur=0;
+  bctx.beginPath(); bctx.strokeStyle=`hsla(${220+k*14},90%,62%,${0.2 + Math.sin(t+k)*0.08})`; bctx.lineWidth=2.2 + Math.sin(t+k)*1;
+  for(let x=0;x<bg.width;x+=10){ const y=bg.height*0.5 + Math.sin(x*0.008 + t*1.2 + k*0.9)*(80+k*14) + Math.cos(t*0.5 + k)*28; if(x===0)bctx.moveTo(x,y); else bctx.lineTo(x,y); }
+  bctx.stroke(); bctx.shadowBlur=20; bctx.shadowColor=`hsla(${220+k*14},90%,62%,0.85)`; bctx.stroke(); bctx.shadowBlur=0;
  }
  octx.clearRect(0,0,orb.width,orb.height);
- for(let i=0;i<24;i++){
-  const x = (Math.sin(t*0.3+i)*0.5+0.5)*orb.width;
-  const y = (Math.cos(t*0.5+i*1.3)*0.5+0.5)*orb.height;
-  const r = 2 + Math.sin(t+i)*1.6;
-  octx.beginPath(); octx.arc(x,y,r,0,Math.PI*2);
-  octx.fillStyle=`hsla(${210+i*10},90%,70%,0.95)`; octx.shadowBlur=20; octx.shadowColor=octx.fillStyle; octx.fill(); octx.shadowBlur=0;
- }
+ for(let i=0;i<24;i++){ const x=(Math.sin(t*0.3+i)*0.5+0.5)*orb.width; const y=(Math.cos(t*0.5+i*1.3)*0.5+0.5)*orb.height; const r=2+Math.sin(t+i)*1.6; octx.beginPath(); octx.arc(x,y,r,0,Math.PI*2); octx.fillStyle=`hsla(${210+i*10},90%,70%,0.95)`; octx.shadowBlur=20; octx.shadowColor=octx.fillStyle; octx.fill(); octx.shadowBlur=0; }
+ const sc=document.getElementById('subjectCanvas'); const sctx=sc.getContext('2d');
+ sctx.clearRect(0,0,sc.width,sc.height);
+ for(let k=0;k<6;k++){ sctx.beginPath(); sctx.strokeStyle=`hsla(${200+k*30},90%,65%,0.25)`; sctx.lineWidth=2; for(let x=0;x<sc.width;x+=12){ const y=sc.height*0.5 + Math.sin(x*0.01 + t*2 + k)*80 + Math.cos(t+k*0.7)*30; if(x===0)sctx.moveTo(x,y); else sctx.lineTo(x,y);} sctx.stroke(); }
  requestAnimationFrame(drawBG);
 }
 drawBG();
@@ -175,7 +185,8 @@ myNote.value=localStorage.getItem('sielNote')||'';
 function saveNote(){localStorage.setItem('sielNote',myNote.value); alert('Note saved');}
 
 let qs=JSON.parse(localStorage.getItem('sielQsV2')||'[]');
-let pendingQImg=null, pendingAImg=null, pendingQAudio=null, pendingAAudio=null, curAnsIndex=null;
+let chans=JSON.parse(localStorage.getItem('sielChans')||'[]');
+let pendingQImg=null, pendingAImg=null, pendingQAudio=null, pendingAAudio=null, curAnsIndex=null, editTarget=null;
 let mediaRecorder=null, recChunks=[], recType=null, recStream=null;
 
 qImage.addEventListener('change',e=>{
@@ -200,8 +211,8 @@ async function toggleRec(type){
    const blob=new Blob(recChunks,{type:'audio/webm'});
    const reader=new FileReader(); reader.onload=ev=>{
     const data=ev.target.result;
-    if(recType==='q'){ pendingQAudio=data; document.getElementById('qAudioPreview').innerHTML=`<audio controls src="${data}"></audio><button class="btn btn2" style="margin-top:4px" onclick="clearQAudio()">Remove Voice</button>`; }
-    else { pendingAAudio=data; document.getElementById('aAudioPreview').innerHTML=`<audio controls src="${data}"></audio>`; }
+    if(recType==='q'){ pendingQAudio=data; document.getElementById('qAudioPreview').innerHTML=`<div class="voiceBox"><button class="rec" style="width:32px;height:32px" onclick="new Audio('${data}').play()">▶</button><div class="wave"><div class="bar" style="animation-delay:0s"></div><div class="bar" style="animation-delay:0.1s"></div><div class="bar" style="animation-delay:0.2s"></div><div class="bar" style="animation-delay:0.3s"></div><div class="bar" style="animation-delay:0.4s"></div></div><audio controls src="${data}" style="width:120px"></audio></div><button class="btn btn2" style="margin-top:4px" onclick="clearQAudio()">Remove Voice</button>`; }
+    else { pendingAAudio=data; document.getElementById('aAudioPreview').innerHTML=`<div class="voiceBox"><button class="rec" style="width:32px;height:32px" onclick="new Audio('${data}').play()">▶</button><div class="wave"><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div></div><audio controls src="${data}" style="width:120px"></audio></div>`; }
    }; reader.readAsDataURL(blob);
    recStream.getTracks().forEach(t=>t.stop());
   };
@@ -214,52 +225,48 @@ function render(){
  qCount.textContent=qs.length+' posts';
  qList.innerHTML=qs.map((q,qi)=>`
   <div class="q">
-   <b style="font-size:15px;line-height:1.3">${q.title}</b>
+   <div style="display:flex;justify-content:space-between"><b style="font-size:14px" class="mono">Q${qs.length-qi}: ${q.title}</b><span class="mono" style="font-size:10px;color:#8ea0c0">${new Date(q.time).toLocaleTimeString()}</span></div>
    <div style="font-size:13px;color:#c2d0e8;margin:6px 0;white-space:pre-wrap;line-height:1.6">${q.body}</div>
    ${q.image?`<img src="${q.image}" class="pic">`:''}
-   ${q.audio?`<audio controls src="${q.audio}"></audio>`:''}
+   ${q.audio?`<div class="voiceBox"><button class="rec" style="width:32px;height:32px" onclick="new Audio('${q.audio}').play()">▶</button><div class="wave"><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div></div><audio controls src="${q.audio}"></audio></div>`:''}
    <div class="vote">
-    <button class="${q.myVote==='up'?'activeUp':''}" onclick="voteQ(${qi},'up')">👍 ${q.likes} Like</button>
-    <button class="${q.myVote==='down'?'activeDown':''}" onclick="voteQ(${qi},'down')">👎 ${q.dislikes} Dislike</button>
-    <button onclick="openAns(${qi})">💬 Answer</button>
+    <button class="${q.myVote==='up'?'activeUp':''}" onclick="voteQ(${qi},'up')">👍 ${q.likes}</button>
+    <button class="${q.myVote==='down'?'activeDown':''}" onclick="voteQ(${qi},'down')">👎 ${q.dislikes}</button>
+    <button onclick="openAns(${qi})">💬 Reply</button>
+    <button onclick="editQ(${qi})">✏️ Edit</button>
    </div>
-   <div>${q.answers.map((a,ai)=>`
-    <div class="ans">
-     <div style="font-size:13px;line-height:1.5"><b>${a.name}:</b> ${a.text}</div>
+   ${q.answers.length?`<div style="margin-top:10px"><b class="mono" style="font-size:11px">Answers:</b><ul style="list-style:none;padding:0">${q.answers.map((a,ai)=>`
+    <li class="ans">
+     • <b>${a.name}:</b> <span style="white-space:pre-wrap">${a.text}</span>
      ${a.image?`<img src="${a.image}" class="pic">`:''}
-     ${a.audio?`<audio controls src="${a.audio}"></audio>`:''}
+     ${a.audio?`<div class="voiceBox"><button class="rec" style="width:28px;height:28px;font-size:14px" onclick="new Audio('${a.audio}').play()">▶</button><audio controls src="${a.audio}" style="height:28px"></audio></div>`:''}
      <div class="vote">
       <button class="${a.myVote==='up'?'activeUp':''}" onclick="voteA(${qi},${ai},'up')">👍 ${a.likes}</button>
       <button class="${a.myVote==='down'?'activeDown':''}" onclick="voteA(${qi},${ai},'down')">👎 ${a.dislikes}</button>
+      <button onclick="editA(${qi},${ai})">✏️ Edit</button>
      </div>
-    </div>
-   `).join('')}</div>
+    </li>
+   `).join('')}</ul></div>`:''}
   </div>
  `).join('')||'<div style="text-align:center;color:#8ea0c0;font-size:13px;padding:14px">No questions yet. Be first!</div>';
+ renderChans();
 }
 function postQ(){
- const title=qTitle.value.trim(); const body=qBody.value.trim(); if(title.length<2 && !pendingQImg && !pendingQAudio) return alert('Write question or add pic/voice');
- qs.unshift({title,body,image:pendingQImg,audio:pendingQAudio,time:Date.now(),likes:0,dislikes:0,myVote:null,answers:[]}); save(); qTitle.value=''; qBody.value=''; clearQImg(); clearQAudio();
+ const title=qTitle.value.trim(); const body=qBody.value.trim(); if(title.length<1 && !body && !pendingQImg && !pendingQAudio) return alert('Write something');
+ if(editTarget && editTarget.type==='q'){ qs[editTarget.index].title=title||qs[editTarget.index].title; qs[editTarget.index].body=body||qs[editTarget.index].body; if(pendingQImg) qs[editTarget.index].image=pendingQImg; if(pendingQAudio) qs[editTarget.index].audio=pendingQAudio; editTarget=null; qTitle.value=''; qBody.value=''; clearQImg(); clearQAudio(); document.querySelector('#forum .btn').textContent='Post Question'; save(); return; }
+ qs.unshift({title:title||'Question',body,image:pendingQImg,audio:pendingQAudio,time:Date.now(),likes:0,dislikes:0,myVote:null,answers:[]}); save(); qTitle.value=''; qBody.value=''; clearQImg(); clearQAudio();
 }
-function voteQ(i,type){
- const q=qs[i];
- if(q.myVote===type){ if(type==='up')q.likes--; else q.dislikes--; q.myVote=null; } 
- else { if(q.myVote==='up')q.likes--; if(q.myVote==='down')q.dislikes--; if(type==='up')q.likes++; else q.dislikes++; q.myVote=type; }
- save();
-}
+function editQ(i){ qTitle.value=qs[i].title; qBody.value=qs[i].body; editTarget={type:'q',index:i}; document.querySelector('#forum .btn').textContent='Update Question'; window.scrollTo({top:document.getElementById('forum').offsetTop-80,behavior:'smooth'}); }
+function editA(qi,ai){ const a=qs[qi].answers[ai]; const newText=prompt('Edit answer:',a.text); if(newText!==null){ a.text=newText; save(); } }
+function voteQ(i,type){ const q=qs[i]; if(q.myVote===type){ if(type==='up')q.likes--; else q.dislikes--; q.myVote=null; } else { if(q.myVote==='up')q.likes--; if(q.myVote==='down')q.dislikes--; if(type==='up')q.likes++; else q.dislikes++; q.myVote=type; } save(); }
 function openAns(i){curAnsIndex=i; pendingAImg=null; pendingAAudio=null; aImage.value=''; aPreview.innerHTML=''; aAudioPreview.innerHTML=''; aName.value=''; aText.value=''; ansModal.style.display='flex';}
 function closeAns(){ansModal.style.display='none';}
-function submitAns(){
- const name=aName.value.trim()||'Guest'; const text=aText.value.trim(); if(!text && !pendingAImg && !pendingAAudio) return alert('Add text, pic or voice');
- qs[curAnsIndex].answers.push({name,text,image:pendingAImg,audio:pendingAAudio,likes:0,dislikes:0,myVote:null}); save(); closeAns();
-}
-function voteA(qi,ai,type){
- const a=qs[qi].answers[ai];
- if(a.myVote===type){ if(type==='up')a.likes--; else a.dislikes--; a.myVote=null; }
- else { if(a.myVote==='up')a.likes--; if(a.myVote==='down')a.dislikes--; if(type==='up')a.likes++; else a.dislikes++; a.myVote=type; }
- save();
-}
+function submitAns(){ const name=aName.value.trim()||'Guest'; const text=aText.value.trim(); if(!text && !pendingAImg && !pendingAAudio) return alert('Add text, pic or voice'); qs[curAnsIndex].answers.push({name,text,image:pendingAImg,audio:pendingAAudio,likes:0,dislikes:0,myVote:null}); save(); closeAns(); }
+function voteA(qi,ai,type){ const a=qs[qi].answers[ai]; if(a.myVote===type){ if(type==='up')a.likes--; else a.dislikes--; a.myVote=null; } else { if(a.myVote==='up')a.likes--; if(a.myVote==='down')a.dislikes--; if(type==='up')a.likes++; else a.dislikes++; a.myVote=type; } save(); }
 function save(){localStorage.setItem('sielQsV2',JSON.stringify(qs)); render();}
+function createChan(){ const n=chanName.value.trim(); if(!n) return alert('Enter channel name'); chans.push({name:n,followers:0,followed:false}); chanName.value=''; localStorage.setItem('sielChans',JSON.stringify(chans)); renderChans(); }
+function renderChans(){ chanList.innerHTML=chans.map((c,i)=>`<div class="chan"><span>📢 ${c.name}</span><div><span class="mono" style="font-size:11px">${c.followers} followers</span> <button class="btn ${c.followed?'':'btn2'}" style="padding:4px 10px;font-size:11px" onclick="toggleFollow(${i})">${c.followed?'Following':'Follow'}</button></div></div>`).join('')||'<div class="mono" style="font-size:11px;color:#8ea0c0">No channels yet</div>'; }
+function toggleFollow(i){ chans[i].followed=!chans[i].followed; chans[i].followers+=chans[i].followed?1:-1; localStorage.setItem('sielChans',JSON.stringify(chans)); renderChans(); }
 render();
 </script>
 </body>
