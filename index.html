@@ -65,10 +65,10 @@ audio{width:100%;margin-top:8px;height:36px}
 <div class="wrap">
 <div>
 <div class="card" style="padding:0;overflow:hidden">
-<img src="poster.jpg" style="width:100%;display:block;border-radius:22px" alt="Subjectivity-Intersection Braid Quantum Gravity - The World Was Not Simply There from the Beginning">
-<div style="padding:14px 16px;background:linear-gradient(180deg, #0b141a, #111827);color:#eaf0ff;border-radius:0 0 22px 22px">
-<div style="font-weight:900;font-size:18px">Subjectivity-Intersection Braid Quantum Gravity</div>
-<div class="mono" style="font-size:11px;color:#8ea0c0;margin-top:6px">The world emerges when different subjectivities intersect — Channel is a platform for conversations</div>
+<img src="23de654b-9e60-483f-825d-b76250152f61.jpeg" style="width:100%;display:block;border-radius:22px" alt="Subjectivity-Intersection Braid Quantum Gravity Poster">
+<div style="padding:14px 16px;background:linear-gradient(180deg, #fef6ec, #fff8ef);color:#3d3a36;border-radius:0 0 22px 22px">
+<div style="font-weight:900;font-size:20px">skiii — A platform where you can have conversations</div>
+<div class="mono" style="font-size:11px;color:#6b6560;margin-top:6px">Channel is also another platform where you can have conversations</div>
 </div>
 </div>
 <div class="card" style="margin-top:14px">
@@ -83,8 +83,9 @@ audio{width:100%;margin-top:8px;height:36px}
 <h3>📢 Channels — Tap to open & chat</h3>
 <p class="mono" style="font-size:11px;color:#b8c6e0;margin:6px 0">Create a channel. Follow to join. Only followers can send messages.</p>
 <input id="chanName" class="input" placeholder="Channel name e.g. Braid Beginners">
-<button class="btn" onclick="createChan()">Create Group</button>
+<button class="btn" onclick="createChan()">Create Channel</button>
 <div id="chanList" style="margin-top:10px"></div>
+<div style="margin-top:8px"><button class="btn2 btn" style="font-size:11px" onclick="clearAllChannels()">Clear All Channels (reset)</button></div>
 </div>
 </div>
 <div>
@@ -287,6 +288,7 @@ function sendChMsg(){
 }
 function followCurrent(){ if(curCh!==null){ chans[curCh].followed=true; chans[curCh].followers++; saveAll(); updateChAccess(); } }
 function leaveChannel(){ if(curCh!==null){ chans[curCh].followed=false; chans[curCh].followers=Math.max(0,chans[curCh].followers-1); saveAll(); updateChAccess(); closeChannel(); } }
+function clearAllChannels(){ if(confirm('Clear all channels?')){ chans=[]; localStorage.removeItem('sielChans'); localStorage.removeItem('sielChansV3'); saveAll(); } }
 render();
 </script>
 </body>
