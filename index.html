@@ -65,10 +65,10 @@ audio{width:100%;margin-top:8px;height:36px}
 <div class="wrap">
 <div>
 <div class="card" style="padding:0;overflow:hidden">
-<img src="IMG_2781.jpeg" style="width:100%;display:block;border-radius:22px" alt="A platform where you can have conversations">
-<div style="padding:14px 16px;background:linear-gradient(180deg, #fef6ec, #fff8ef);color:#3d3a36;border-radius:0 0 22px 22px">
-<div style="font-weight:900;font-size:20px">skiii — A platform where you can have conversations</div>
-<div class="mono" style="font-size:11px;color:#6b6560;margin-top:6px">Channel is also another platform where you can have conversations</div>
+<img src="poster.jpg" style="width:100%;display:block;border-radius:22px" alt="Subjectivity-Intersection Braid Quantum Gravity - The World Was Not Simply There from the Beginning">
+<div style="padding:14px 16px;background:linear-gradient(180deg, #0b141a, #111827);color:#eaf0ff;border-radius:0 0 22px 22px">
+<div style="font-weight:900;font-size:18px">Subjectivity-Intersection Braid Quantum Gravity</div>
+<div class="mono" style="font-size:11px;color:#8ea0c0;margin-top:6px">The world emerges when different subjectivities intersect — Channel is a platform for conversations</div>
 </div>
 </div>
 <div class="card" style="margin-top:14px">
@@ -83,9 +83,8 @@ audio{width:100%;margin-top:8px;height:36px}
 <h3>📢 Channels — Tap to open & chat</h3>
 <p class="mono" style="font-size:11px;color:#b8c6e0;margin:6px 0">Create a channel. Follow to join. Only followers can send messages.</p>
 <input id="chanName" class="input" placeholder="Channel name e.g. Braid Beginners">
-<button class="btn" onclick="createChan()">Create Channel</button>
+<button class="btn" onclick="createChan()">Create Group</button>
 <div id="chanList" style="margin-top:10px"></div>
-<div style="margin-top:8px"><button class="btn2 btn" style="font-size:11px" onclick="clearAllChannels()">Clear All Channels (reset)</button></div>
 </div>
 </div>
 <div>
@@ -179,30 +178,25 @@ function drawBG(){
 drawBG();
 myNote.value=localStorage.getItem('sielNote')||'';
 function saveNote(){localStorage.setItem('sielNote',myNote.value); alert('Saved');}
-
-// FIXED CHANNEL STORAGE - V3 with migration
 let qs=JSON.parse(localStorage.getItem('sielQsV2')||'[]');
 let rawChans=JSON.parse(localStorage.getItem('sielChansV3')||localStorage.getItem('sielChans')||'[]');
 let chans=rawChans.map(c=>{
-  if(typeof c==='string') return {name:c,followers:1,followed:true,created:Date.now(),msgs:[{me:false,name:'System',text:'Welcome to '+c,text2:c,time:Date.now()}]};
+  if(typeof c==='string') return {name:c,followers:1,followed:true,created:Date.now(),msgs:[{me:false,name:'System',text:'Welcome to '+c,time:Date.now()}]};
   return {
     name:c.name||'Channel',
     followers:c.followers||1,
     followed:c.followed!==undefined?c.followed:true,
     created:c.created||Date.now(),
-    msgs:Array.isArray(c.msgs)?c.msgs:(c.lastMsg?[ {me:false,name:'System',text:c.lastMsg,time:Date.now()} ]:[ {me:false,name:'System',text:'Welcome to '+(c.name||'Channel'),time:Date.now()} ])
+    msgs:Array.isArray(c.msgs)?c.msgs:[ {me:false,name:'System',text:'Welcome to '+(c.name||'Channel'),time:Date.now()} ]
   };
 });
-
 let pendingQImg=null, pendingAImg=null, pendingQAudio=null, pendingAAudio=null, curAnsIndex=null, editTarget=null, curCh=null, pendingChImg=null, pendingChAudio=null;
 let mediaRecorder=null, recChunks=[], recType=null, recStream=null;
-
 qImage.addEventListener('change',e=>{ const f=e.target.files[0]; if(!f)return; const r=new FileReader(); r.onload=ev=>{pendingQImg=ev.target.result; qPreview.innerHTML=`<img src="${pendingQImg}" class="pic"><button class="btn btn2" onclick="clearQImg()">Remove</button>`}; r.readAsDataURL(f); });
 function clearQImg(){pendingQImg=null; qImage.value=''; qPreview.innerHTML='';}
 aImage.addEventListener('change',e=>{ const f=e.target.files[0]; if(!f)return; const r=new FileReader(); r.onload=ev=>{pendingAImg=ev.target.result; aPreview.innerHTML=`<img src="${pendingAImg}" class="pic">`}; r.readAsDataURL(f); });
 document.getElementById('chImage').addEventListener('change',e=>{ const f=e.target.files[0]; if(!f)return; const r=new FileReader(); r.onload=ev=>{pendingChImg=ev.target.result; document.getElementById('chImagePreview').innerHTML=`<img src="${pendingChImg}" class="pic"><button class="btn btn2" onclick="clearChImg()">Remove</button>`}; r.readAsDataURL(f); });
 function clearChImg(){pendingChImg=null; document.getElementById('chImage').value=''; document.getElementById('chImagePreview').innerHTML='';}
-
 async function toggleRec(type){
  const btn=document.getElementById(type==='q'?'qRecBtn':'aRecBtn');
  if(mediaRecorder && mediaRecorder.state==='recording'){ mediaRecorder.stop(); btn.classList.remove('recording'); return; }
@@ -214,7 +208,6 @@ async function toggleRecCh(){
  try{ recStream=await navigator.mediaDevices.getUserMedia({audio:true}); recChunks=[]; mediaRecorder=new MediaRecorder(recStream); mediaRecorder.ondataavailable=e=>{if(e.data.size>0)recChunks.push(e.data)}; mediaRecorder.onstop=()=>{ const blob=new Blob(recChunks,{type:'audio/webm'}); const reader=new FileReader(); reader.onload=ev=>{ pendingChAudio=ev.target.result; document.getElementById('chAudioPreview').innerHTML=`<audio controls src="${pendingChAudio}"></audio><button class="btn btn2" onclick="clearChAudio()">Remove</button>`}; reader.readAsDataURL(blob); recStream.getTracks().forEach(t=>t.stop()); }; mediaRecorder.start(); btn.classList.add('recording'); }catch(err){alert('Mic needed');}
 }
 function clearChAudio(){pendingChAudio=null; document.getElementById('chAudioPreview').innerHTML='';}
-
 function render(){
  qCount.textContent=qs.length+' posts';
  let sorted=[...qs].sort((a,b)=>a.time-b.time);
@@ -235,7 +228,6 @@ function openAns(i){curAnsIndex=i; pendingAImg=null; pendingAAudio=null; aImage.
 function closeAns(){ansModal.style.display='none';}
 function submitAns(){ const name=aName.value.trim()||'Guest'; const text=aText.value.trim(); if(!text && !pendingAImg && !pendingAAudio) return alert('Add text'); qs[curAnsIndex].answers.push({name,text,image:pendingAImg,audio:pendingAAudio}); saveAll(); closeAns(); }
 function saveAll(){ localStorage.setItem('sielQsV2',JSON.stringify(qs)); localStorage.setItem('sielChansV3',JSON.stringify(chans)); render(); }
-
 function createChan(){
  const n=chanName.value.trim(); if(!n) return alert('Enter channel name');
  if(chans.some(c=>c.name.toLowerCase()===n.toLowerCase())) return alert('Channel already exists');
@@ -295,7 +287,6 @@ function sendChMsg(){
 }
 function followCurrent(){ if(curCh!==null){ chans[curCh].followed=true; chans[curCh].followers++; saveAll(); updateChAccess(); } }
 function leaveChannel(){ if(curCh!==null){ chans[curCh].followed=false; chans[curCh].followers=Math.max(0,chans[curCh].followers-1); saveAll(); updateChAccess(); closeChannel(); } }
-function clearAllChannels(){ if(confirm('Clear all channels?')){ chans=[]; localStorage.removeItem('sielChans'); localStorage.removeItem('sielChansV3'); saveAll(); } }
 render();
 </script>
 </body>
