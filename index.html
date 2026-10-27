@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>SIEL — Full — Posting Works</title>
+<title>SIEL — Full — Posting Fixed</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif;background:#000;color:#e7e9ea}
@@ -15,20 +15,27 @@ body{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif;bac
 .tab.active::after{content:'';position:absolute;bottom:0;left:25%;right:25%;height:3px;background:#fff;border-radius:9999px}
 .header{padding:12px 16px;border-bottom:1px solid #2f3336;background:#000;display:flex;justify-content:space-between;align-items:center}
 .input{width:100%;background:#202327;border:1px solid #333639;border-radius:24px;padding:14px 18px;color:#fff;font-size:15px;outline:none}
-.textarea{width:100%;background:#202327;border:1px solid #333639;border-radius:16px;padding:14px 18px;color:#fff;font-size:15px;outline:none;resize:none;min-height:90px}
+.textarea{width:100%;background:#202327;border:1px solid #333639;border-radius:16px;padding:14px 18px;color:#fff;font-size:15px;outline:none;resize:none;min-height:100px}
 .btn{border:0;padding:0 22px;height:44px;border-radius:9999px;font-weight:700;cursor:pointer}
 .btn-green{background:#25D366;color:#000}
 .btn-white{background:#fff;color:#000}
 .btn-dark{background:#2a3942;color:#fff}
-.post-card{padding:14px 16px;border-bottom:1px solid #2f3336;display:flex;gap:12px;background:#000}
+.post-card{padding:14px 16px;border-bottom:1px solid #2f3336;background:#000}
+.post-top{display:flex;gap:12px}
 .avatar{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,#1d9bf0,#8a2be2);display:flex;align-items:center;justify-content:center;font-weight:800;flex-shrink:0}
+.post-body{margin-top:8px;font-size:15px;line-height:20px;white-space:pre-wrap;word-break:break-word}
+.post-actions{display:flex;gap:24px;margin-top:12px;border-top:1px solid #1a1a1a;padding-top:10px}
+.action{cursor:pointer;display:flex;align-items:center;gap:6px;font-size:14px;color:#71767b}
+.action:hover{color:#fff}
+.action.liked{color:#f91880}
+.action.commented{color:#1d9bf0}
 .group-item{padding:14px 16px;border-bottom:1px solid #1f2428;display:flex;gap:12px;align-items:center;cursor:pointer;background:#000}
 .group-avatar{width:48px;height:48px;border-radius:50%;background:#25D366;color:#000;display:flex;align-items:center;justify-content:center;font-weight:800;flex-shrink:0}
 .bottom{position:fixed;bottom:0;left:0;right:0;max-width:620px;margin:0 auto;background:#000;border-top:1px solid #2f3336;display:flex;justify-content:space-around;align-items:center;height:64px;z-index:60}
 .b-item{flex:1;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:11px;color:#71767b;cursor:pointer}
 .b-item.active{color:#fff}
 .b-item .ic{font-size:22px}
-.fab{position:fixed;bottom:80px;right:16px;width:56px;height:56px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px;color:#000;cursor:pointer;z-index:55}
+.fab{position:fixed;bottom:80px;right:16px;width:56px;height:56px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px;color:#000;cursor:pointer;z-index:55;box-shadow:0 4px 12px rgba(0,0,0,0.5)}
 #groupModal{position:fixed;inset:0;background:#000;z-index:99999;display:none;flex-direction:column}
 #groupModal.show{display:flex}
 .gHeader{height:60px;background:#202327;padding:0 12px;display:flex;align-items:center;gap:12px;border-bottom:1px solid #2f3336}
@@ -45,7 +52,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif;bac
 .box2{width:100%;max-width:460px;background:#202c33;border-radius:16px;padding:20px;max-height:90vh;overflow-y:auto}
 .trinity{padding:10px 16px;border-bottom:1px solid #2f3336;display:flex;gap:8px;align-items:center;font-size:14px;background:#000}
 .counter{background:#25D366;color:#000;padding:3px 10px;border-radius:9999px;font-weight:800;font-size:12px}
-.quickPost{padding:12px 16px;border-bottom:1px solid #2f3336;background:#000;display:flex;gap:12px}
+.comments-box{margin-top:12px;background:#0a0a0a;border-radius:12px;padding:10px;border:1px solid #1a1a1a}
+.comment-item{display:flex;gap:8px;padding:8px 0;border-bottom:1px solid #1a1a1a}
+.comment-item:last-child{border-bottom:0}
 </style>
 </head>
 <body>
@@ -60,26 +69,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif;bac
 <div class="trinity"><span>🔵 Trinity</span><span id="topCounter">0 / 1000</span><span class="counter" id="badgeCounter">0 joined</span></div>
 
 <div id="view-feed">
-<div class="header"><div style="font-weight:800">For you</div><div style="font-size:12px;color:#8696a0" id="postCount">0 posts</div></div>
-
-<!-- POSTING SITE — WORDS OR PICTURES AS DESIRED -->
-<div class="quickPost">
-<div class="avatar" id="quickAvatar">U</div>
-<div style="flex:1">
-<textarea id="quickPostBody" class="input" placeholder="What's happening?" style="border-radius:16px;min-height:70px"></textarea>
-<div id="quickImgPreview" style="margin-top:8px"></div>
-<div style="display:flex;gap:8px;margin-top:10px">
-<button type="button" class="btn-white btn" style="height:38px" onclick="document.getElementById('quickPostImage').click()">🖼️ Picture</button>
-<input type="file" id="quickPostImage" accept="image/*" hidden>
-<button type="button" class="btn-green btn" style="flex:1;height:38px" onclick="quickPublish()">Post</button>
-</div>
-<div id="quickError" style="display:none;color:#f15c6d;font-size:12px;margin-top:6px"></div>
-<div style="font-size:11px;color:#555;margin-top:6px">Post words only, picture only, or both — as you desire</div>
-</div>
-</div>
-
+<div class="header"><div style="font-weight:800">For you</div><div style="display:flex;gap:8px;align-items:center"><span style="font-size:12px;color:#71767b" id="postCount">0 posts</span><button type="button" class="btn-white btn" style="height:32px;font-size:13px" onclick="openPostModal()">+ Post</button></div></div>
 <div id="postsList"></div>
-<div id="emptyFeed" style="padding:60px 20px;text-align:center;color:#555"><div style="font-size:40px">📝</div><div style="margin-top:8px">No posts yet — post above</div></div>
+<div id="emptyFeed" style="padding:60px 20px;text-align:center;color:#555"><div style="font-size:40px">📝</div><div style="margin-top:8px">No posts yet — tap + Post</div><div style="font-size:12px;margin-top:4px">Words or pictures as you desire</div></div>
 <div style="height:100px"></div>
 </div>
 
@@ -124,20 +116,18 @@ body{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif;bac
 
 <div id="forceLogin" class="forceModal"><div class="box"><div style="font-size:36px">◈</div><h2 style="margin-top:10px">Join 1000</h2><input id="forceEmail" class="input" type="email" placeholder="Your email" style="margin-top:12px"><button type="button" class="btn btn-green" style="width:100%;margin-top:14px;height:46px" onclick="doForceLogin()">Continue</button><div id="forceError" style="display:none;color:#f15c6d;margin-top:10px;font-size:13px"></div></div></div>
 
-<div id="postModal" class="smallModal"><div class="box2"><h3 style="font-weight:800">Create Post</h3><textarea id="postBody" class="textarea" placeholder="What's happening?" style="margin-top:12px"></textarea><div id="postImgPreview" style="margin-top:10px"></div><div style="display:flex;gap:8px;margin-top:14px"><button type="button" class="btn-white btn" onclick="document.getElementById('postImage').click()">🖼️ Picture</button><input type="file" id="postImage" accept="image/*" hidden><button type="button" class="btn-green btn" style="flex:1" onclick="publishPost()">Post</button></div><div id="postError" style="display:none;color:#f15c6d;font-size:12px;margin-top:8px"></div><div style="font-size:11px;color:#555;margin-top:8px">Words only, picture only, or both</div><button type="button" class="btn btn-dark" style="width:100%;margin-top:10px" onclick="closePostModal()">Cancel</button></div></div>
+<div id="postModal" class="smallModal"><div class="box2"><h3 style="font-weight:800">Create Post</h3><p style="font-size:12px;color:#71767b;margin-top:4px">Words or pictures — as you desire</p><textarea id="postBody" class="textarea" placeholder="What's happening?" style="margin-top:12px"></textarea><div id="postImgPreview" style="margin-top:10px"></div><div style="display:flex;gap:8px;margin-top:14px"><button type="button" class="btn-white btn" onclick="document.getElementById('postImage').click()">🖼️ Picture</button><input type="file" id="postImage" accept="image/*" hidden><button type="button" class="btn-green btn" style="flex:1" onclick="publishPost()">Post</button></div><div id="postError" style="display:none;color:#f15c6d;font-size:12px;margin-top:8px"></div><button type="button" class="btn btn-dark" style="width:100%;margin-top:10px" onclick="closePostModal()">Cancel</button></div></div>
 
-<div id="ansModal" class="smallModal"><div class="box2"><h3>Comment</h3><textarea id="ansText" class="textarea" placeholder="Write a comment..."></textarea><div style="display:flex;gap:8px;margin-top:12px"><button type="button" class="btn btn-dark" style="flex:1" onclick="closeAns()">Cancel</button><button type="button" class="btn-green btn" style="flex:1" onclick="submitAns()">Comment</button></div></div></div>
+<div id="commentModal" class="smallModal"><div class="box2"><h3 style="font-weight:800">Comments</h3><div id="commentPostPreview" style="margin-top:12px;padding:12px;background:#000;border-radius:12px;border:1px solid #1a1a1a"></div><div id="commentsList" style="margin-top:12px;max-height:250px;overflow-y:auto"></div><textarea id="commentText" class="textarea" placeholder="Write a comment..." style="margin-top:12px;min-height:70px"></textarea><div style="display:flex;gap:8px;margin-top:10px"><button type="button" class="btn btn-dark" style="flex:1" onclick="closeCommentModal()">Close</button><button type="button" class="btn-green btn" style="flex:1" onclick="submitComment()">Comment</button></div></div></div>
 
 <script>
-// FULL DATA - POSTING WORKS FOR WORDS OR PICTURES
 let people = JSON.parse(localStorage.getItem('siel1000People')||'[]');
 let currentUser = localStorage.getItem('sielEmail')||'';
 let posts = JSON.parse(localStorage.getItem('sielQsV2')||'[]');
 let groups = JSON.parse(localStorage.getItem('sielGroupsV2')||'[]');
 let notes = JSON.parse(localStorage.getItem('sielNotes')||'[]');
-let curGroup=null, pendingPostImg=null, quickPostImg=null, pendingNoteImg=null, curAnsIdx=null;
+let curGroup=null, pendingPostImg=null, pendingNoteImg=null, curCommentPost=null;
 
-// Clean old link posts
 posts = posts.filter(p=>{
   let e=(p.email||'').toLowerCase();
   if(e.includes('satoru')) return false;
@@ -147,6 +137,7 @@ posts = posts.filter(p=>{
 });
 localStorage.setItem('sielQsV2',JSON.stringify(posts));
 groups = groups.map(g=>({ name:g.name, admin:g.admin, members:g.members||[g.admin], msgs:g.msgs||[], updatedAt:g.updatedAt||Date.now(), createdAt:g.createdAt||Date.now() }));
+posts = posts.map(p=>({ ...p, likes:p.likes||0, likedBy:p.likedBy||[], answers:p.answers||[], comments:p.comments||p.answers||[] }));
 
 function isGroupAdmin(g){ return g && g.admin===currentUser; }
 function isGlobalAdmin(){ let l=currentUser.toLowerCase(); return l==='admin@skiii.com'||l==='pandaniga16@gmail.com'; }
@@ -156,7 +147,6 @@ function updateCounters(){
   document.getElementById('postCount').textContent = posts.length+' posts';
   document.getElementById('groupCount').textContent = groups.length+' groups';
   document.getElementById('notesCount').textContent = notes.length+' notes';
-  document.getElementById('quickAvatar').textContent = currentUser? currentUser[0].toUpperCase() : 'U';
 }
 function checkLogin(){ document.getElementById('forceLogin').style.display = currentUser ? 'none' : 'flex'; updateCounters(); }
 function doForceLogin(){
@@ -175,18 +165,52 @@ function renderAll(){
   if(posts.length===0){ plist.innerHTML=''; empty.style.display='block'; }
   else{
     empty.style.display='none';
-    plist.innerHTML=[...posts].sort((a,b)=>b.time-a.time).map(p=>{
-      let idx=posts.indexOf(p); let name=(p.email||'anon').split('@')[0];
-      return `<div class="post-card"><div class="avatar">${name[0].toUpperCase()}</div><div style="flex:1;min-width:0"><div style="display:flex;justify-content:space-between"><div style="font-weight:700">@${name}</div><div style="font-size:11px;color:#555">${new Date(p.time).toLocaleString()}</div></div>${p.body?`<div style="margin-top:6px;white-space:pre-wrap;word-break:break-word">${p.body}</div>`:''}${p.image?`<img src="${p.image}" style="width:100%;border-radius:12px;margin-top:10px;border:1px solid #2f3336;display:block">`:''}<div style="display:flex;gap:18px;margin-top:10px;color:#555;font-size:14px"><span onclick="openAns(${idx})" style="cursor:pointer">💬 ${p.answers?.length||0}</span><span onclick="likePost(${idx})" style="cursor:pointer">♡ ${p.likes||0}</span><span onclick="deletePost(${idx})" style="cursor:pointer;color:#f15c6d">🗑</span></div></div></div>`;
+    plist.innerHTML=[...posts].sort((a,b)=>b.time-a.time).map((p)=>{
+      let idx=posts.indexOf(p);
+      let name=(p.email||'anon').split('@')[0];
+      let isLiked = p.likedBy && p.likedBy.includes(currentUser);
+      let comments = p.comments || p.answers || [];
+      return `<div class="post-card">
+        <div class="post-top">
+          <div class="avatar">${name[0].toUpperCase()}</div>
+          <div style="flex:1;min-width:0">
+            <div style="display:flex;justify-content:space-between">
+              <div style="font-weight:700">@${name}</div>
+              <div style="font-size:11px;color:#555">${new Date(p.time).toLocaleString()}</div>
+            </div>
+            ${p.body?`<div class="post-body">${p.body}</div>`:''}
+            ${p.image?`<img src="${p.image}" style="width:100%;border-radius:12px;margin-top:10px;border:1px solid #222;display:block">`:''}
+            <div class="post-actions">
+              <div class="action ${isLiked?'liked':''}" onclick="likePost(${idx})">
+                <span style="font-size:18px">${isLiked?'❤️':'♡'}</span>
+                <span>${p.likes||0} Likes</span>
+              </div>
+              <div class="action commented" onclick="openCommentModal(${idx})">
+                <span style="font-size:18px">💬</span>
+                <span>${comments.length} Comments</span>
+              </div>
+              <div class="action" onclick="deletePost(${idx})" style="margin-left:auto;color:#f15c6d">
+                <span>🗑</span>
+              </div>
+            </div>
+            ${comments.length>0?`
+              <div class="comments-box">
+                ${comments.slice(-3).map(c=>`<div class="comment-item"><div style="width:28px;height:28px;border-radius:50%;background:#2a3942;display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0">${c.name[0].toUpperCase()}</div><div style="flex:1"><b style="font-size:13px">@${c.name}</b><div style="font-size:13px;margin-top:2px;white-space:pre-wrap">${c.text}</div></div></div>`).join('')}
+                ${comments.length>3?`<div style="font-size:12px;color:#1d9bf0;margin-top:6px;cursor:pointer" onclick="openCommentModal(${idx})">View all ${comments.length} comments</div>`:''}
+              </div>
+            `:''}
+          </div>
+        </div>
+      </div>`;
     }).join('');
   }
   let sorted=[...groups].sort((a,b)=>(b.updatedAt||0)-(a.updatedAt||0));
   document.getElementById('groupsList').innerHTML=sorted.map(g=>{
     let oi=groups.indexOf(g); let last=g.msgs[g.msgs.length-1];
-    return `<div class="group-item" onclick="openGroup(${oi})"><div class="group-avatar">⧉</div><div style="flex:1;min-width:0"><div style="font-weight:700">${g.name}</div><div style="font-size:13px;color:#555;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${last?last.text:'Tap to open'}</div></div></div>`;
+    return `<div class="group-item" onclick="openGroup(${oi})"><div class="group-avatar">⧉</div><div style="flex:1"><div style="font-weight:700">${g.name}</div><div style="font-size:13px;color:#555;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${last?last.text:'Tap to open'}</div></div></div>`;
   }).join('');
   document.getElementById('emptyGroups').style.display = groups.length===0 ? 'block' : 'none';
-  document.getElementById('notesList').innerHTML=notes.slice().reverse().map(n=>`<div style="padding:14px 16px;border-bottom:1px solid #2f3336;display:flex;gap:12px"><div class="avatar" style="width:36px;height:36px;font-size:12px">${(n.form||'N')[0]}</div><div style="flex:1"><div style="font-weight:700">${n.form}</div><div style="margin-top:4px;white-space:pre-wrap">${n.body||''}</div>${n.image?`<img src="${n.image}" style="width:100%;border-radius:10px;margin-top:8px">`:''}</div></div>`).join('')||'<div style="padding:40px;text-align:center;color:#555">No notes</div>';
+  document.getElementById('notesList').innerHTML=notes.slice().reverse().map(n=>`<div style="padding:14px 16px;border-bottom:1px solid #222;display:flex;gap:12px"><div class="avatar" style="width:36px;height:36px;font-size:12px">${(n.form||'N')[0]}</div><div style="flex:1"><div style="font-weight:700">${n.form}</div><div style="margin-top:4px;white-space:pre-wrap">${n.body||''}</div>${n.image?`<img src="${n.image}" style="width:100%;border-radius:10px;margin-top:8px">`:''}</div></div>`).join('')||'<div style="padding:40px;text-align:center;color:#555">No notes</div>';
 }
 
 function saveAll(){ localStorage.setItem('sielQsV2',JSON.stringify(posts)); localStorage.setItem('sielGroupsV2',JSON.stringify(groups)); localStorage.setItem('siel1000People',JSON.stringify(people)); localStorage.setItem('sielNotes',JSON.stringify(notes)); renderAll(); }
@@ -200,49 +224,17 @@ window.switchTab = function(name){
   if(name==='notes'){ document.getElementById('tab-notes').classList.add('active'); document.getElementById('b-notes').classList.add('active'); document.getElementById('view-notes').style.display='block'; }
 }
 
-// === POSTING SITE FIXED — WORDS OR PICTURES AS DESIRED ===
-function handleQuickImage(input){
-  let f=input.files[0]; if(!f) return;
-  let r=new FileReader();
-  r.onload=function(ev){
-    quickPostImg=ev.target.result;
-    document.getElementById('quickImgPreview').innerHTML = '<img src="'+quickPostImg+'" style="width:100%;border-radius:12px"><button type="button" onclick="removeQuickImg()" style="margin-top:6px;background:#f15c6d;color:#fff;border:0;padding:4px 10px;border-radius:9999px;font-size:11px">Remove picture</button>';
-  };
-  r.readAsDataURL(f);
-}
-window.removeQuickImg = function(){ quickPostImg=null; document.getElementById('quickImgPreview').innerHTML=''; document.getElementById('quickPostImage').value=''; }
-
-document.getElementById('quickPostImage').addEventListener('change',function(e){ handleQuickImage(e.target); });
-
-window.quickPublish = function(){
-  let bodyEl=document.getElementById('quickPostBody');
-  let body=bodyEl.value.trim();
-  let err=document.getElementById('quickError');
-  if(!currentUser){ err.style.display='block'; err.textContent='Login first — enter email'; return; }
-  // ALLOW WORDS ONLY, PICTURE ONLY, OR BOTH
-  if(!body && !quickPostImg){
-    err.style.display='block'; err.textContent='Write words or add picture';
-    return;
-  }
-  let post={ body:body, text:body, image:quickPostImg, email:currentUser, time:Date.now(), likes:0, answers:[] };
-  posts.unshift(post);
-  localStorage.setItem('sielQsV2',JSON.stringify(posts));
-  bodyEl.value=''; removeQuickImg(); err.style.display='none';
-  renderAll();
-}
-
-function handleModalImage(input){
-  let f=input.files[0]; if(!f) return;
+// POSTING FIXED — WORDS OR PICTURE AS DESIRED
+document.getElementById('postImage').addEventListener('change',function(e){
+  let f=e.target.files[0]; if(!f)return;
   let r=new FileReader();
   r.onload=function(ev){
     pendingPostImg=ev.target.result;
-    document.getElementById('postImgPreview').innerHTML = '<img src="'+pendingPostImg+'" style="width:100%;border-radius:12px"><button type="button" onclick="removeModalImg()" style="margin-top:6px;background:#f15c6d;color:#fff;border:0;padding:4px 10px;border-radius:9999px;font-size:11px">Remove picture</button>';
+    document.getElementById('postImgPreview').innerHTML='<img src="'+pendingPostImg+'" style="width:100%;border-radius:12px"><button type="button" onclick="removeModalImg()" style="margin-top:6px;background:#f15c6d;color:#fff;border:0;padding:4px 10px;border-radius:9999px;font-size:11px">Remove</button>';
   };
   r.readAsDataURL(f);
-}
+});
 window.removeModalImg = function(){ pendingPostImg=null; document.getElementById('postImgPreview').innerHTML=''; document.getElementById('postImage').value=''; }
-document.getElementById('postImage').addEventListener('change',function(e){ handleModalImage(e.target); });
-
 window.openPostModal = function(){ document.getElementById('postError').style.display='none'; document.getElementById('postModal').classList.add('show'); setTimeout(function(){document.getElementById('postBody').focus();},100); }
 window.closePostModal = function(){ document.getElementById('postModal').classList.remove('show'); }
 window.publishPost = function(){
@@ -250,22 +242,57 @@ window.publishPost = function(){
   let body=bodyEl.value.trim();
   let err=document.getElementById('postError');
   if(!currentUser){ err.style.display='block'; err.textContent='Login first'; return; }
-  if(!body && !pendingPostImg){
-    err.style.display='block'; err.textContent='Write words or add picture';
-    return;
-  }
-  let post={ body:body, text:body, image:pendingPostImg, email:currentUser, time:Date.now(), likes:0, answers:[] };
-  posts.unshift(post);
+  if(!body && !pendingPostImg){ err.style.display='block'; err.textContent='Write words or add picture'; return; }
+  posts.unshift({ body:body, text:body, image:pendingPostImg, email:currentUser, time:Date.now(), likes:0, likedBy:[], comments:[], answers:[] });
   localStorage.setItem('sielQsV2',JSON.stringify(posts));
   bodyEl.value=''; removeModalImg(); err.style.display='none';
   closePostModal(); renderAll(); switchTab('feed');
 }
 
-window.deletePost = function(i){ if(confirm('Delete?')){ posts.splice(i,1); saveAll(); } }
-window.likePost = function(i){ posts[i].likes=(posts[i].likes||0)+1; saveAll(); }
-window.openAns = function(i){ curAnsIdx=i; document.getElementById('ansModal').classList.add('show'); }
-window.closeAns = function(){ document.getElementById('ansModal').classList.remove('show'); }
-window.submitAns = function(){ let t=document.getElementById('ansText').value.trim(); if(!t)return; posts[curAnsIdx].answers.push({name:currentUser.split('@')[0],text:t}); saveAll(); document.getElementById('ansText').value=''; closeAns(); }
+// LIKES — ALLOW LIKES ON POSTS
+window.likePost = function(i){
+  if(!currentUser){ alert('Login first'); return; }
+  let p=posts[i];
+  p.likedBy=p.likedBy||[];
+  p.likes=p.likes||0;
+  if(p.likedBy.includes(currentUser)){
+    p.likedBy=p.likedBy.filter(e=>e!==currentUser);
+    p.likes=Math.max(0,p.likes-1);
+  }else{
+    p.likedBy.push(currentUser);
+    p.likes++;
+  }
+  saveAll();
+}
+
+// COMMENTS — ALLOW COMMENTS ON POSTS
+window.openCommentModal = function(i){
+  curCommentPost=i;
+  let p=posts[i];
+  let name=(p.email||'anon').split('@')[0];
+  document.getElementById('commentPostPreview').innerHTML=`<div style="display:flex;gap:8px"><div class="avatar" style="width:32px;height:32px;font-size:12px">${name[0].toUpperCase()}</div><div style="flex:1"><b>@${name}</b><div style="margin-top:4px;white-space:pre-wrap;font-size:14px">${p.body||''}</div>${p.image?`<img src="${p.image}" style="width:100%;border-radius:8px;margin-top:8px">`:''}</div></div>`;
+  let comments=p.comments||p.answers||[];
+  document.getElementById('commentsList').innerHTML = comments.length? comments.map(c=>`<div class="comment-item"><div style="width:28px;height:28px;border-radius:50%;background:#2a3942;display:flex;align-items:center;justify-content:center;font-size:10px">${c.name[0].toUpperCase()}</div><div style="flex:1"><b style="font-size:13px">@${c.name}</b> <span style="font-size:11px;color:#555">${new Date(c.time).toLocaleString()}</span><div style="font-size:13px;margin-top:2px;white-space:pre-wrap">${c.text}</div></div></div>`).join('') : '<div style="padding:20px;text-align:center;color:#555">No comments yet — be first</div>';
+  document.getElementById('commentModal').classList.add('show');
+}
+window.closeCommentModal = function(){ document.getElementById('commentModal').classList.remove('show'); curCommentPost=null; document.getElementById('commentText').value=''; }
+window.submitComment = function(){
+  if(curCommentPost===null) return;
+  if(!currentUser){ alert('Login first'); return; }
+  let txt=document.getElementById('commentText').value.trim();
+  if(!txt) return;
+  let p=posts[curCommentPost];
+  p.comments=p.comments||[];
+  p.answers=p.answers||[];
+  let comment={ name:currentUser.split('@')[0], text:txt, email:currentUser, time:Date.now() };
+  p.comments.push(comment);
+  p.answers.push(comment);
+  saveAll();
+  document.getElementById('commentText').value='';
+  openCommentModal(curCommentPost);
+}
+
+window.deletePost = function(i){ if(confirm('Delete post?')){ posts.splice(i,1); saveAll(); } }
 
 document.getElementById('noteImage').addEventListener('change',function(e){
   let f=e.target.files[0]; if(!f)return;
@@ -283,7 +310,6 @@ window.sendGroupMsg = function(){ if(curGroup===null)return; let inp=document.ge
 
 renderAll();
 switchTab('feed');
-console.log('Posting works - words or pictures as desired');
 </script>
 </body>
 </html>
