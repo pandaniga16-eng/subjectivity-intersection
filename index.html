@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>SIEL — Full — Fixed</title>
+<title>SIEL — Posting Fixed Final</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:#000;color:#e7e9ea}
@@ -48,7 +48,6 @@ body{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:#
 .counter{background:#25D366;color:#000;padding:3px 10px;border-radius:9999px;font-weight:800;font-size:12px}
 .comments-box{margin-top:12px;background:#0a0a0a;border-radius:12px;padding:10px;border:1px solid #1a1a1a}
 .comment-item{display:flex;gap:8px;padding:8px 0;border-bottom:1px solid #1a1a1a}
-.comment-item:last-child{border-bottom:0}
 </style>
 </head>
 <body>
@@ -110,12 +109,11 @@ body{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:#
 
 <div id="forceLogin" class="forceModal"><div class="box"><h2>Join 1000</h2><input id="forceEmail" class="input" type="email" placeholder="Your email" style="margin-top:12px"><button type="button" class="btn btn-green" style="width:100%;margin-top:14px;height:46px" onclick="doForceLogin()">Continue</button><div id="forceError" style="display:none;color:#f15c6d;margin-top:10px;font-size:13px"></div></div></div>
 
-<div id="postModal" class="smallModal"><div class="box2"><h3 style="font-weight:800">Create Post</h3><textarea id="postBody" class="textarea" placeholder="What's happening? Words or picture" style="margin-top:12px"></textarea><div id="postImgPreview" style="margin-top:10px"></div><div style="display:flex;gap:8px;margin-top:14px"><button type="button" class="btn-white btn" onclick="document.getElementById('postImage').click()">🖼️ Picture</button><input type="file" id="postImage" accept="image/*" hidden><button type="button" class="btn-green btn" style="flex:1" onclick="publishPost()">Post</button></div><div id="postError" style="display:none;color:#f15c6d;font-size:12px;margin-top:8px"></div><button type="button" class="btn btn-dark" style="width:100%;margin-top:10px" onclick="closePostModal()">Cancel</button></div></div>
+<div id="postModal" class="smallModal"><div class="box2"><h3 style="font-weight:800">Create Post</h3><textarea id="postBody" class="textarea" placeholder="What's happening? Words or picture — your desire" style="margin-top:12px"></textarea><div id="postImgPreview" style="margin-top:10px"></div><div style="display:flex;gap:8px;margin-top:14px"><button type="button" class="btn-white btn" onclick="document.getElementById('postImage').click()">🖼️ Picture</button><input type="file" id="postImage" accept="image/*" hidden><button type="button" class="btn-green btn" style="flex:1" onclick="publishPost()">Post</button></div><div id="postError" style="display:none;color:#f15c6d;font-size:12px;margin-top:8px"></div><button type="button" class="btn btn-dark" style="width:100%;margin-top:10px" onclick="closePostModal()">Cancel</button></div></div>
 
-<div id="commentModal" class="smallModal"><div class="box2"><h3 style="font-weight:800">Comments</h3><div id="commentPostPreview" style="margin-top:12px;padding:12px;background:#000;border-radius:12px;border:1px solid #1a1a1a"></div><div id="commentsList" style="margin-top:12px;max-height:250px;overflow-y:auto"></div><textarea id="commentText" class="textarea" placeholder="Write a comment..." style="margin-top:12px;min-height:70px"></textarea><div style="display:flex;gap:8px;margin-top:10px"><button type="button" class="btn btn-dark" style="flex:1" onclick="closeCommentModal()">Close</button><button type="button" class="btn-green btn" style="flex:1" onclick="submitComment()">Send Comment</button></div><div id="commentError" style="display:none;color:#f15c6d;font-size:12px;margin-top:8px"></div></div></div>
+<div id="commentModal" class="smallModal"><div class="box2"><h3 style="font-weight:800">Comments</h3><div id="commentPostPreview" style="margin-top:12px;padding:12px;background:#000;border-radius:12px;border:1px solid #1a1a1a"></div><div id="commentsList" style="margin-top:12px;max-height:250px;overflow-y:auto"></div><textarea id="commentText" class="textarea" placeholder="Write a comment..." style="margin-top:12px;min-height:70px"></textarea><div style="display:flex;gap:8px;margin-top:10px"><button type="button" class="btn btn-dark" style="flex:1" onclick="closeCommentModal()">Close</button><button type="button" class="btn-green btn" style="flex:1" onclick="submitComment()">Send</button></div><div id="commentError" style="display:none;color:#f15c6d;font-size:12px;margin-top:8px"></div></div></div>
 
 <script>
-// FIXED DATA INIT
 let people = JSON.parse(localStorage.getItem('siel1000People')||'[]');
 let currentUser = localStorage.getItem('sielEmail')||'';
 let posts = JSON.parse(localStorage.getItem('sielQsV2')||'[]');
@@ -123,11 +121,9 @@ let groups = JSON.parse(localStorage.getItem('sielGroupsV2')||'[]');
 let notes = JSON.parse(localStorage.getItem('sielNotes')||'[]');
 let curGroup=null, pendingPostImg=null, pendingNoteImg=null, curCommentPost=null;
 
-// Clean old posts and normalize
 posts = posts.filter(p=>{ let e=(p.email||'').toLowerCase(); if(e.includes('satoru')) return false; return true; });
-posts = posts.map(p=>({ body:p.body||p.text||'', text:p.body||p.text||'', image:p.image||null, email:p.email||'anon', time:p.time||Date.now(), likes:p.likes||0, likedBy:p.likedBy||[], comments:p.comments||p.answers||[], answers:p.answers||p.comments||[] }));
+posts = posts.map(p=>({ body:p.body||p.text||'', image:p.image||null, email:p.email||'anon', time:p.time||Date.now(), likes:p.likes||0, likedBy:p.likedBy||[], comments:p.comments||p.answers||[] }));
 groups = groups.map(g=>({ name:g.name, admin:g.admin, members:g.members||[g.admin], msgs:g.msgs||[], updatedAt:g.updatedAt||Date.now(), createdAt:g.createdAt||Date.now() }));
-localStorage.setItem('sielQsV2',JSON.stringify(posts));
 
 function isGroupAdmin(g){ return g && g.admin===currentUser; }
 function isGlobalAdmin(){ return currentUser.toLowerCase()==='admin@skiii.com'||currentUser.toLowerCase()==='pandaniga16@gmail.com'; }
@@ -172,7 +168,7 @@ function renderAll(){
               <div class="action" onclick="openCommentModal(${idx})"><span>💬</span><span>${comments.length} Comments</span></div>
               <div class="action" onclick="deletePost(${idx})" style="margin-left:auto;color:#f15c6d">🗑 Delete</div>
             </div>
-            ${comments.length?`<div class="comments-box">${comments.slice(-3).map(c=>`<div class="comment-item"><div style="width:28px;height:28px;border-radius:50%;background:#2a3942;display:flex;align-items:center;justify-content:center;font-size:10px">${c.name[0].toUpperCase()}</div><div style="flex:1"><b style="font-size:13px">@${c.name}</b><div style="font-size:13px;margin-top:2px;white-space:pre-wrap">${c.text}</div></div></div>`).join('')}${comments.length>3?`<div style="font-size:12px;color:#1d9bf0;margin-top:6px;cursor:pointer" onclick="openCommentModal(${idx})">View all ${comments.length} comments</div>`:''}</div>`:''}
+            ${comments.length?`<div class="comments-box">${comments.slice(-2).map(c=>`<div class="comment-item"><div style="width:28px;height:28px;border-radius:50%;background:#2a3942;display:flex;align-items:center;justify-content:center;font-size:10px">${c.name[0].toUpperCase()}</div><div style="flex:1"><b style="font-size:13px">@${c.name}</b><div style="font-size:13px;margin-top:2px;white-space:pre-wrap">${c.text}</div></div></div>`).join('')}${comments.length>2?`<div style="font-size:12px;color:#1d9bf0;margin-top:6px;cursor:pointer" onclick="openCommentModal(${idx})">View all ${comments.length} comments</div>`:''}</div>`:''}
           </div>
         </div>
       </div>`;
@@ -187,7 +183,19 @@ function renderAll(){
   document.getElementById('notesList').innerHTML=notes.slice().reverse().map(n=>`<div style="padding:14px 16px;border-bottom:1px solid #222;display:flex;gap:12px"><div class="avatar" style="width:36px;height:36px;font-size:12px">${(n.form||'N')[0]}</div><div style="flex:1"><div style="font-weight:700">${n.form}</div><div style="margin-top:4px;white-space:pre-wrap">${n.body||''}</div>${n.image?`<img src="${n.image}" style="width:100%;border-radius:10px;margin-top:8px">`:''}</div></div>`).join('')||'<div style="padding:40px;text-align:center;color:#555">No notes</div>';
 }
 
-function saveAll(){ localStorage.setItem('sielQsV2',JSON.stringify(posts)); localStorage.setItem('sielGroupsV2',JSON.stringify(groups)); localStorage.setItem('siel1000People',JSON.stringify(people)); localStorage.setItem('sielNotes',JSON.stringify(notes)); renderAll(); }
+function saveAll(){
+  try{
+    localStorage.setItem('sielQsV2',JSON.stringify(posts));
+  }catch(e){
+    console.log('Storage full, removing oldest posts images');
+    posts.forEach(p=>{ if(p.image && p.image.length>10000) p.image=null; });
+    localStorage.setItem('sielQsV2',JSON.stringify(posts));
+  }
+  localStorage.setItem('sielGroupsV2',JSON.stringify(groups));
+  localStorage.setItem('siel1000People',JSON.stringify(people));
+  localStorage.setItem('sielNotes',JSON.stringify(notes));
+  renderAll();
+}
 
 window.switchTab = function(name){
   document.getElementById('tab-feed').classList.remove('active'); document.getElementById('tab-comm').classList.remove('active'); document.getElementById('tab-notes').classList.remove('active');
@@ -198,89 +206,95 @@ window.switchTab = function(name){
   if(name==='notes'){ document.getElementById('tab-notes').classList.add('active'); document.getElementById('b-notes').classList.add('active'); document.getElementById('view-notes').style.display='block'; }
 }
 
-// POST IMAGE HANDLER — FIXED
+// IMAGE COMPRESS — FIXES POSTING PROBLEM (too big image blocks localStorage)
+function compressImage(file, callback){
+  let reader=new FileReader();
+  reader.onload=function(e){
+    let img=new Image();
+    img.onload=function(){
+      let canvas=document.createElement('canvas');
+      let maxW=800;
+      let scale=Math.min(1, maxW/img.width);
+      canvas.width=img.width*scale;
+      canvas.height=img.height*scale;
+      let ctx=canvas.getContext('2d');
+      ctx.drawImage(img,0,0,canvas.width,canvas.height);
+      let compressed=canvas.toDataURL('image/jpeg',0.6);
+      callback(compressed);
+    };
+    img.src=e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
 document.getElementById('postImage').addEventListener('change',function(e){
   let f=e.target.files[0]; if(!f) return;
-  let r=new FileReader();
-  r.onload=function(ev){
-    pendingPostImg=ev.target.result;
-    document.getElementById('postImgPreview').innerHTML='<img src="'+pendingPostImg+'" style="width:100%;border-radius:12px"><button type="button" onclick="removeModalImg()" style="margin-top:6px;background:#f15c6d;color:#fff;border:0;padding:4px 10px;border-radius:9999px;font-size:11px">Remove picture</button>';
-  };
-  r.readAsDataURL(f);
+  compressImage(f,function(compressed){
+    pendingPostImg=compressed;
+    document.getElementById('postImgPreview').innerHTML='<img src="'+pendingPostImg+'" style="width:100%;border-radius:12px"><div style="font-size:11px;color:#25D366;margin-top:4px">Picture compressed — ready to post</div><button type="button" onclick="removeModalImg()" style="margin-top:6px;background:#f15c6d;color:#fff;border:0;padding:4px 10px;border-radius:9999px;font-size:11px">Remove</button>';
+  });
 });
 window.removeModalImg = function(){ pendingPostImg=null; document.getElementById('postImgPreview').innerHTML=''; document.getElementById('postImage').value=''; }
-window.openPostModal = function(){ document.getElementById('postError').style.display='none'; document.getElementById('postModal').classList.add('show'); setTimeout(function(){document.getElementById('postBody').focus();},100); }
+window.openPostModal = function(){ document.getElementById('postError').style.display='none'; document.getElementById('postModal').classList.add('show'); }
 window.closePostModal = function(){ document.getElementById('postModal').classList.remove('show'); }
 
-// POSTS CAN BE POSTED — FIXED — WORDS OR PICTURE
+// POSTING FIXED — WORKS FOR WORDS OR PICTURE OR BOTH
 window.publishPost = function(){
   let bodyEl=document.getElementById('postBody');
   let body=bodyEl.value.trim();
   let err=document.getElementById('postError');
-  if(!currentUser){ err.style.display='block'; err.textContent='Login first — enter email'; return; }
-  if(!body && !pendingPostImg){ err.style.display='block'; err.textContent='Write words or add picture'; return; }
-  // FIXED: create post object correctly
-  let newPost={ body:body, text:body, image:pendingPostImg, email:currentUser, time:Date.now(), likes:0, likedBy:[], comments:[], answers:[] };
-  posts.unshift(newPost);
-  localStorage.setItem('sielQsV2',JSON.stringify(posts));
-  bodyEl.value=''; removeModalImg(); err.style.display='none';
-  closePostModal();
-  renderAll();
-  switchTab('feed');
-  console.log('Post published', newPost);
+  if(!currentUser){ err.style.display='block'; err.textContent='Login first'; return; }
+  if(!body && !pendingPostImg){ err.style.display='block'; err.textContent='Write words or add picture — your desire'; return; }
+  try{
+    let newPost={ body:body, image:pendingPostImg, email:currentUser, time:Date.now(), likes:0, likedBy:[], comments:[] };
+    posts.unshift(newPost);
+    localStorage.setItem('sielQsV2',JSON.stringify(posts));
+    bodyEl.value=''; removeModalImg(); err.style.display='none';
+    closePostModal(); renderAll(); switchTab('feed');
+    console.log('POST SUCCESS');
+  }catch(e){
+    console.log('POST FAILED, trying without image', e);
+    try{
+      let newPost={ body:body, image:null, email:currentUser, time:Date.now(), likes:0, likedBy:[], comments:[] };
+      posts.unshift(newPost);
+      localStorage.setItem('sielQsV2',JSON.stringify(posts));
+      bodyEl.value=''; removeModalImg(); err.style.display='none';
+      closePostModal(); renderAll(); switchTab('feed');
+      alert('Picture too large — posted words only. Try smaller picture.');
+    }catch(e2){
+      err.style.display='block'; err.textContent='Storage full — delete some old posts';
+    }
+  }
 }
 
 window.deletePost = function(i){ if(confirm('Delete post?')){ posts.splice(i,1); saveAll(); } }
 window.likePost = function(i){
   if(!currentUser){ alert('Login first'); return; }
-  let p=posts[i];
-  p.likedBy=p.likedBy||[]; p.likes=p.likes||0;
+  let p=posts[i]; p.likedBy=p.likedBy||[]; p.likes=p.likes||0;
   if(p.likedBy.includes(currentUser)){ p.likedBy=p.likedBy.filter(e=>e!==currentUser); p.likes=Math.max(0,p.likes-1); }
   else{ p.likedBy.push(currentUser); p.likes++; }
-  localStorage.setItem('sielQsV2',JSON.stringify(posts));
-  renderAll();
+  saveAll();
 }
-
-// COMMENT CAN SEND — FIXED
 window.openCommentModal = function(i){
   if(!currentUser){ alert('Login first'); return; }
-  curCommentPost=i;
-  let p=posts[i];
-  let name=(p.email||'anon').split('@')[0];
+  curCommentPost=i; let p=posts[i]; let name=(p.email||'anon').split('@')[0];
   document.getElementById('commentPostPreview').innerHTML=`<div style="display:flex;gap:8px"><div class="avatar" style="width:32px;height:32px;font-size:12px">${name[0].toUpperCase()}</div><div style="flex:1"><b>@${name}</b><div style="margin-top:4px;white-space:pre-wrap;font-size:14px">${p.body||''}</div>${p.image?`<img src="${p.image}" style="width:100%;border-radius:8px;margin-top:8px">`:''}</div></div>`;
-  let comments=p.comments||[];
-  document.getElementById('commentsList').innerHTML = comments.length? comments.map(c=>`<div class="comment-item"><div style="width:28px;height:28px;border-radius:50%;background:#2a3942;display:flex;align-items:center;justify-content:center;font-size:10px">${c.name[0].toUpperCase()}</div><div style="flex:1"><b style="font-size:13px">@${c.name}</b> <span style="font-size:11px;color:#555">${new Date(c.time).toLocaleString()}</span><div style="font-size:13px;margin-top:2px;white-space:pre-wrap">${c.text}</div></div></div>`).join('') : '<div style="padding:20px;text-align:center;color:#555">No comments yet</div>';
-  document.getElementById('commentError').style.display='none';
-  document.getElementById('commentModal').classList.add('show');
-  setTimeout(function(){ document.getElementById('commentText').focus(); },100);
+  let comments=p.comments||[]; document.getElementById('commentsList').innerHTML = comments.length? comments.map(c=>`<div class="comment-item"><div style="width:28px;height:28px;border-radius:50%;background:#2a3942;display:flex;align-items:center;justify-content:center;font-size:10px">${c.name[0].toUpperCase()}</div><div style="flex:1"><b style="font-size:13px">@${c.name}</b><div style="font-size:13px;margin-top:2px;white-space:pre-wrap">${c.text}</div></div></div>`).join('') : '<div style="padding:20px;text-align:center;color:#555">No comments yet</div>';
+  document.getElementById('commentError').style.display='none'; document.getElementById('commentModal').classList.add('show');
 }
-window.closeCommentModal = function(){ document.getElementById('commentModal').classList.remove('show'); curCommentPost=null; document.getElementById('commentText').value=''; document.getElementById('commentError').style.display='none'; }
+window.closeCommentModal = function(){ document.getElementById('commentModal').classList.remove('show'); curCommentPost=null; document.getElementById('commentText').value=''; }
 window.submitComment = function(){
   let err=document.getElementById('commentError');
-  if(curCommentPost===null || curCommentPost===undefined){ err.style.display='block'; err.textContent='Open a post first'; return; }
+  if(curCommentPost===null){ err.style.display='block'; err.textContent='Open a post first'; return; }
   if(!currentUser){ err.style.display='block'; err.textContent='Login first'; return; }
-  let txt=document.getElementById('commentText').value.trim();
-  if(!txt){ err.style.display='block'; err.textContent='Write a comment'; return; }
-  let p=posts[curCommentPost];
-  if(!p){ err.style.display='block'; err.textContent='Post not found'; return; }
-  p.comments=p.comments||[]; p.answers=p.answers||[];
-  let comment={ name:currentUser.split('@')[0], text:txt, email:currentUser, time:Date.now() };
-  p.comments.push(comment);
-  p.answers.push(comment);
-  localStorage.setItem('sielQsV2',JSON.stringify(posts));
-  document.getElementById('commentText').value='';
-  err.style.display='none';
-  renderAll();
-  // refresh list in modal
-  openCommentModal(curCommentPost);
-  console.log('Comment sent', comment);
+  let txt=document.getElementById('commentText').value.trim(); if(!txt){ err.style.display='block'; err.textContent='Write a comment'; return; }
+  let p=posts[curCommentPost]; p.comments=p.comments||[]; let comment={ name:currentUser.split('@')[0], text:txt, email:currentUser, time:Date.now() }; p.comments.push(comment); saveAll(); document.getElementById('commentText').value=''; openCommentModal(curCommentPost);
 }
 
 document.getElementById('noteImage').addEventListener('change',function(e){
-  let f=e.target.files[0]; if(!f)return;
-  let r=new FileReader(); r.onload=function(ev){ pendingNoteImg=ev.target.result; document.getElementById('noteImgPreview').innerHTML='<img src="'+pendingNoteImg+'" style="width:100%;border-radius:12px;margin-top:8px">'; }; r.readAsDataURL(f);
+  let f=e.target.files[0]; if(!f)return; compressImage(f,function(c){ pendingNoteImg=c; document.getElementById('noteImgPreview').innerHTML='<img src="'+pendingNoteImg+'" style="width:100%;border-radius:12px;margin-top:8px">'; });
 });
-window.saveNote = function(){ if(!currentUser){ alert('Login'); return; } let text=document.getElementById('noteText').value.trim(); let form=document.getElementById('noteForm').value; if(!text&&!pendingNoteImg){ alert('Write note'); return; } notes.push({form,body:text,text,image:pendingNoteImg,email:currentUser,time:Date.now()}); saveAll(); document.getElementById('noteText').value=''; document.getElementById('noteImgPreview').innerHTML=''; pendingNoteImg=null; }
+window.saveNote = function(){ if(!currentUser){ alert('Login'); return; } let text=document.getElementById('noteText').value.trim(); let form=document.getElementById('noteForm').value; if(!text&&!pendingNoteImg){ alert('Write note'); return; } notes.push({form,body:text,image:pendingNoteImg,email:currentUser,time:Date.now()}); saveAll(); document.getElementById('noteText').value=''; document.getElementById('noteImgPreview').innerHTML=''; pendingNoteImg=null; }
 
 window.createGroup = function(){ if(!currentUser){ alert('Login first'); return; } let name=document.getElementById('newGroupName').value.trim(); if(!name){ alert('Enter name'); return; } let now=Date.now(); groups.push({name,admin:currentUser,members:[currentUser],msgs:[{email:'system',name:'System',text:'Group created',time:now}],updatedAt:now,createdAt:now}); document.getElementById('newGroupName').value=''; saveAll(); openGroup(groups.length-1); }
 window.openGroup = function(i){ if(!currentUser){ alert('Login first'); return; } curGroup=i; let g=groups[i]; document.getElementById('gName').textContent=g.name; document.getElementById('gInfo').textContent=`${g.members.length} members`; document.getElementById('joinBtn').style.display=g.members.includes(currentUser)?'none':'block'; document.getElementById('delGroupBtn').style.display=(isGroupAdmin(g)||isGlobalAdmin())?'block':'none'; document.getElementById('groupModal').classList.add('show'); renderGroupMsgs(); }
@@ -292,7 +306,7 @@ window.sendGroupMsg = function(){ if(curGroup===null)return; let inp=document.ge
 
 renderAll();
 switchTab('feed');
-console.log('FIXED: Posts can be posted, Comments can send');
+console.log('Posting fixed with compression');
 </script>
 </body>
 </html>
