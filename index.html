@@ -6,7 +6,19 @@
 <title>SIEL — Braid Quantum Gravity</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;background:#04060a;color:#eaf0ff;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+body{font-family:-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;background:#04060a;color:#eaf0ff;overflow-x:hidden;-webkit-font-smoothing:antialiased;transition:background 0.3s,color 0.3s}
+body.white-mode{background:#f6f7fb;color:#0a1020}
+body.white-mode header{background:rgba(255,255,255,0.9);border-bottom:1px solid rgba(0,0,0,0.08)}
+body.white-mode .bg{background:radial-gradient(1200px 600px at 20% 10%, #dbe6ff 0%, transparent 60%),radial-gradient(1000px 600px at 90% 90%, #e9d9ff 0%, transparent 60%),#f6f7fb}
+body.white-mode .card{background:linear-gradient(180deg, rgba(255,255,255,0.95), rgba(255,255,255,0.75));border:1px solid rgba(0,0,0,0.08);box-shadow:0 10px 30px rgba(0,0,0,0.08)}
+body.white-mode .input{background:rgba(255,255,255,0.9);border:1px solid rgba(0,0,0,0.12);color:#0a1020}
+body.white-mode .chan{background:rgba(0,0,0,0.04);border:1px solid rgba(0,0,0,0.08)}
+body.white-mode .trinity-banner{background:linear-gradient(90deg, #eef3ff 0%, #f3efff 50%, #fff1f6 100%);border-bottom:1px solid rgba(0,0,0,0.08)}
+body.white-mode .note{background:rgba(45,111,247,0.08)}
+body.white-mode .chBox{background:#f6f7fb}
+body.white-mode .chHeader{background:#eef2ff}
+body.white-mode .chMsgs{background:#f6f7fb}
+body.white-mode .chInput{background:#eef2ff}
 .mono{font-family:-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif}
 header{position:fixed;top:0;left:0;right:0;z-index:30;display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:rgba(8,10,16,0.75);backdrop-filter:blur(18px);border-bottom:1px solid rgba(255,255,255,0.1)}
 .logo{font-weight:900;letter-spacing:-0.03em;font-size:16px}.logo span{color:#6ea8ff;font-weight:600}
@@ -18,7 +30,9 @@ canvas#orb{position:fixed;inset:0;z-index:-1;pointer-events:none}
 .trinity-banner{margin-top:58px;background:linear-gradient(90deg, #0f1d4a 0%, #1a1247 50%, #2a184a 100%);border-bottom:1px solid rgba(110,168,255,0.25);padding:14px 16px;display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:center;text-align:center}
 .trinity-banner b{color:#6ea8ff}
 .trinity-dot{width:8px;height:8px;border-radius:50%;background:#6ea8ff;box-shadow:0 0 12px #6ea8ff;display:inline-block}
-.wrap{max-width:1150px;margin:16px auto 30px;padding:0 16px;display:grid;grid-template-columns:1.2fr 0.8fr;gap:16px}
+.counter{padding:4px 12px;border-radius:999px;background:rgba(110,168,255,0.18);border:1px solid rgba(110,168,255,0.4);font-weight:800;font-size:12px;color:#6ea8ff}
+.wrap{max-width:1150px;margin:16px auto 30px;padding:0 16px;display:grid;grid-template-columns:1.2fr 0.8fr;gap:16px;transition:0.4s}
+.wrap.locked{filter:blur(16px);pointer-events:none;user-select:none}
 @media(max-width:980px){.wrap{grid-template-columns:1fr}}
 .card{background:linear-gradient(180deg, rgba(255,255,255,0.09), rgba(255,255,255,0.04));border:1px solid rgba(255,255,255,0.12);border-radius:22px;padding:18px;backdrop-filter:blur(16px);box-shadow:0 20px 60px rgba(0,0,0,0.4)}
 .note{padding:12px;border-left:3px solid #2d6ff7;background:rgba(45,111,247,0.1);border-radius:0 14px 14px 0;margin:10px 0;font-size:13.5px;line-height:1.6}
@@ -38,6 +52,9 @@ canvas#orb{position:fixed;inset:0;z-index:-1;pointer-events:none}
 .fileLabel{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:999px;background:rgba(255,255,255,0.08);border:1px dashed rgba(255,255,255,0.2);font-size:12px;cursor:pointer;margin:4px 4px 0 0}
 .modal{position:fixed;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(10px);z-index:50;display:none;align-items:center;justify-content:center;padding:16px}
 .modalBox{width:100%;max-width:440px;background:#111827;border:1px solid rgba(255,255,255,0.14);border-radius:20px;padding:16px}
+.forceModal{position:fixed;inset:0;background:rgba(3,6,15,0.88);backdrop-filter:blur(24px);z-index:200;display:flex;align-items:center;justify-content:center;padding:16px}
+body.white-mode .forceModal{background:rgba(246,247,251,0.92)}
+body.white-mode .modalBox{background:#fff}
 .rec{width:42px;height:42px;border-radius:50%;background:#ff4d6d;display:flex;align-items:center;justify-content:center;border:0;color:#fff;font-size:18px;cursor:pointer}
 .rec.recording{animation:pulse 1s infinite}
 @keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.15)}100%{transform:scale(1)}}
@@ -62,25 +79,45 @@ audio{width:100%;margin-top:8px;height:36px}
 <canvas id="main"></canvas>
 <canvas id="orb"></canvas>
 
+<!-- ADDED: FORCED LOGIN + NO RE-LOGIN -->
+<div id="forceLogin" class="forceModal">
+<div class="modalBox" style="text-align:center;max-width:460px;padding:24px;border-radius:26px">
+<h2 style="font-size:23px;font-weight:900">◈ Join the 1000 People Project</h2>
+<p class="mono" style="font-size:13px;color:#8ea0c0;margin:12px 0;line-height:1.6">
+<span class="trinity-dot"></span> <b style="color:#6ea8ff">Trinity:</b> 3 points = minimum stable reality<br>
+<b style="color:#fff">One email = One spot forever — no re-login allowed.</b><br>
+Login required to enter SIEL.
+</p>
+<div style="background:rgba(110,168,255,0.12);border:1px solid rgba(110,168,255,0.25);border-radius:14px;padding:10px;margin:12px 0">
+<span id="forceCounter" style="font-weight:800;color:#6ea8ff">0 / 1000 joined</span>
+<div style="width:100%;height:6px;background:rgba(255,255,255,0.1);border-radius:99px;margin-top:8px"><div id="forceBar" style="height:6px;background:#6ea8ff;border-radius:99px;width:0%"></div></div>
+</div>
+<input id="forceEmail" class="input" type="email" placeholder="your@email.com" style="text-align:center;font-size:16px">
+<button class="btn" style="width:100%;margin-top:12px;padding:14px;font-size:16px" onclick="doForceLogin()">Claim Spot #<span id="nextNum">1</span></button>
+<div id="forceError" style="display:none;margin-top:10px;padding:8px;background:rgba(255,77,109,0.15);border:1px solid rgba(255,77,109,0.3);border-radius:10px;color:#ff8da1;font-size:12px"></div>
+<p class="mono" style="font-size:10px;color:#6a7a90;margin-top:10px">Admin: admin@skiii.com</p>
+</div>
+</div>
+
 <header>
 <div class="logo">SIEL <span>◈ Braid QG Lab</span></div>
 <div style="display:flex;gap:6px;align-items:center">
 <span id="userEmailLabel" class="mono" style="font-size:11px;color:#8ea0c0"></span>
+<button class="btn2 btn" style="padding:8px 12px" onclick="toggleWhite()">⚪ White</button>
 <button class="btn2 btn" style="padding:8px 12px" onclick="openLogin()">Login</button>
 <a class="btn2 btn" href="https://www.researchgate.net/publication/414975934_Subjectivity-Intersection_Braid_Quantum_Gravity_From_a_Finite_Pointed-Braid_Source_to_Quantum_Structure_Lorentz_Geometry_and_Strong-Curvature_Spacetime_A_Constructive_Refutation_of_Objectivist_Primacy" target="_blank">Paper 1</a>
 <a class="btn" style="background:#a78bfa" href="https://x.gd/hAQQ1" target="_blank">Paper 2</a>
 </div>
 </header>
 
-<!-- NEW TRINITY + 1000 PEOPLE BANNER -->
 <div class="trinity-banner">
 <div><span class="trinity-dot"></span> <b>Trinity Principle:</b> 3 points = minimum stable reality — subjectivity needs intersection to exist</div>
 <div style="opacity:0.6">—</div>
 <div><b>1000 People Project:</b> When 1000 subjectivities intersect, we build a new shared spacetime — you are one of the 1000 ◈</div>
-<div><button class="btn" style="padding:6px 14px;font-size:12px" onclick="alert('Join the 1000 — login with email to become a contributor')">Join 1000</button></div>
+<div class="counter" id="topCounter">0 / 1000</div>
 </div>
 
-<div class="wrap">
+<div class="wrap locked" id="mainWrap">
 <div>
 <div class="card" style="padding:0;overflow:hidden">
 <img src="23de654b-9e60-483f-825d-b76250152f61.jpeg" style="width:100%;display:block;border-radius:22px" alt="Subjectivity-Intersection Braid Quantum Gravity">
@@ -142,17 +179,19 @@ audio{width:100%;margin-top:8px;height:36px}
 </div>
 </div>
 
-<!-- Login Modal -->
 <div id="loginModal" class="modal">
 <div class="modalBox">
 <h3>Email Login</h3>
-<p class="mono" style="font-size:12px;color:#8ea0c0;margin:8px 0">Login with email to become part of 1000. Use admin@skiii.com for admin access.</p>
+<p class="mono" style="font-size:12px;color:#8ea0c0;margin:8px 0">Login with email to become part of 1000. One email = one spot, no re-login. Use admin@skiii.com for admin access.</p>
 <input id="loginEmail" class="input" type="email" placeholder="your@email.com">
-<div style="display:flex;gap:8px;margin-top:10px">
+<div id="loginError" style="display:none;margin-top:8px;padding:8px;background:rgba(255,77,109,0.15);border:1px solid rgba(255,77,109,0.3);border-radius:10px;color:#ff8da1;font-size:12px"></div>
+<div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">
 <button class="btn" onclick="doLogin()">Login</button>
+<button class="btn2 btn" onclick="toggleWhite()">⚪ White/Dark</button>
 <button class="btn btn2" onclick="closeLogin()">Cancel</button>
-<button class="btn btn2" onclick="doLogout()">Logout</button>
+<button class="btn btn2" onclick="doLogout()">Logout & Lock</button>
 </div>
+<div id="allEmails" style="margin-top:10px;max-height:120px;overflow-y:auto;font-size:11px;color:#8ea0c0"></div>
 </div>
 </div>
 
@@ -216,20 +255,50 @@ function drawBG(){
 }
 drawBG();
 
-// LOGIN + ADMIN
+// === NEW: WHITE MODE + FORCED LOGIN + NO RE-LOGIN ===
+let people = JSON.parse(localStorage.getItem('siel1000People')||'[]');
 let currentUser = localStorage.getItem('sielEmail') || '';
+let whiteMode = localStorage.getItem('sielWhite')==='1';
+function applyWhite(){ if(whiteMode) document.body.classList.add('white-mode'); else document.body.classList.remove('white-mode'); localStorage.setItem('sielWhite', whiteMode?'1':'0'); }
+function toggleWhite(){ whiteMode=!whiteMode; applyWhite(); }
+applyWhite();
+
 function isAdmin(){ return currentUser && (currentUser.toLowerCase()==='admin@skiii.com' || currentUser.toLowerCase().includes('admin')); }
 function updateLoginUI(){
  document.getElementById('userEmailLabel').textContent = currentUser ? currentUser + (isAdmin()?' [ADMIN]':'') : 'Not logged in';
  document.getElementById('adminBadge').innerHTML = isAdmin() ? '<span class="adminTag">ADMIN MODE</span>' : '';
  document.getElementById('deleteChanBtn').style.display = isAdmin() ? 'block' : 'none';
+ document.getElementById('topCounter').textContent = people.length + ' / 1000';
+ document.getElementById('forceCounter').textContent = people.length + ' / 1000 joined';
+ document.getElementById('forceBar').style.width = (Math.min(100, people.length/1000*100))+'%';
+ document.getElementById('nextNum').textContent = people.length+1;
+ document.getElementById('allEmails').innerHTML = people.map(p=>`<div>${p}</div>`).join('');
 }
-function openLogin(){ document.getElementById('loginModal').style.display='flex'; document.getElementById('loginEmail').value=currentUser; }
+function checkLock(){
+ if(!currentUser){ document.getElementById('forceLogin').style.display='flex'; document.getElementById('mainWrap').classList.add('locked'); }
+ else { document.getElementById('forceLogin').style.display='none'; document.getElementById('mainWrap').classList.remove('locked'); }
+ updateLoginUI();
+}
+function showForceError(msg){ const el=document.getElementById('forceError'); el.textContent=msg; el.style.display='block'; setTimeout(()=>el.style.display='none',4000); }
+function showLoginError(msg){ const el=document.getElementById('loginError'); el.textContent=msg; el.style.display='block'; setTimeout(()=>el.style.display='none',4000); }
+function doForceLogin(){
+ const e=document.getElementById('forceEmail').value.trim().toLowerCase();
+ if(!e.includes('@')) return showForceError('Enter valid email');
+ if(people.map(p=>p.toLowerCase()).includes(e)){ return showForceError('⛔ Account already exists! '+e+' cannot login again. One email = one spot.'); }
+ currentUser=e; localStorage.setItem('sielEmail',e); people.push(e); localStorage.setItem('siel1000People', JSON.stringify(people)); checkLock(); saveAll(); render();
+}
+function openLogin(){ document.getElementById('loginModal').style.display='flex'; document.getElementById('loginEmail').value=''; }
 function closeLogin(){ document.getElementById('loginModal').style.display='none'; }
-function doLogin(){ const e=document.getElementById('loginEmail').value.trim(); if(!e.includes('@')) return alert('Enter valid email'); currentUser=e; localStorage.setItem('sielEmail',e); updateLoginUI(); closeLogin(); saveAll(); render(); }
-function doLogout(){ currentUser=''; localStorage.removeItem('sielEmail'); updateLoginUI(); closeLogin(); render(); }
-updateLoginUI();
+function doLogin(){
+ const e=document.getElementById('loginEmail').value.trim().toLowerCase();
+ if(!e.includes('@')) return showLoginError('Enter valid email');
+ if(people.map(p=>p.toLowerCase()).includes(e)){ return showLoginError('⛔ Account already exists! '+e+' cannot login again.'); }
+ currentUser=e; localStorage.setItem('sielEmail',e); people.push(e); localStorage.setItem('siel1000People', JSON.stringify(people)); updateLoginUI(); closeLogin(); checkLock(); saveAll(); render();
+}
+function doLogout(){ currentUser=''; localStorage.removeItem('sielEmail'); updateLoginUI(); closeLogin(); checkLock(); render(); }
+checkLock();
 
+// === ORIGINAL FULL CODE (kept) ===
 myNote.value=localStorage.getItem('sielNote')||'';
 function saveNote(){localStorage.setItem('sielNote',myNote.value); alert('Saved');}
 let qs=JSON.parse(localStorage.getItem('sielQsV2')||'[]');
@@ -261,7 +330,7 @@ function render(){
  let sorted=[...qs].sort((a,b)=>a.time-b.time);
  qList.innerHTML=sorted.map((q,qi)=>{
   let oi=qs.indexOf(q);
-  return `<div class="q"><div style="display:flex;justify-content:space-between"><b>Q${qi+1}: ${q.title}</b><span class="mono" style="font-size:10px;color:#8ea0c0">${new Date(q.time).toLocaleTimeString()}</span></div><div style="font-size:13px;color:#c2d0e8;margin:6px 0;white-space:pre-wrap">${q.body}</div>${q.image?`<img src="${q.image}" class="pic">`:''}${q.audio?`<audio controls src="${q.audio}"></audio>`:''}<div class="vote"><button class="${q.myVote==='up'?'activeUp':''}" onclick="voteQ(${oi},'up')">👍 ${q.likes}</button><button class="${q.myVote==='down'?'activeDown':''}" onclick="voteQ(${oi},'down')">👎 ${q.dislikes}</button><button onclick="openAns(${oi})">Reply</button><button onclick="editQ(${oi})">Edit</button></div>${q.answers.length?`<div style="margin-top:8px">${q.answers.map(a=>`<div class="ans"><b>${a.name}:</b> ${a.text}</div>`).join('')}</div>`:''}</div>`;
+  return `<div class="q"><div style="display:flex;justify-content:space-between"><b>Q${qi+1}: ${q.title}</b><span class="mono" style="font-size:10px;color:#8ea0c0">${new Date(q.time).toLocaleTimeString()}</span></div><div style="font-size:13px;color:#c2d0e8;margin:6px 0;white-space:pre-wrap">${q.body}</div>${q.image?`<img src="${q.image}" class="pic">`:''}${q.audio?`<audio controls src="${q.audio}"></audio>`:''}<div class="vote"><button class="${q.myVote==='up'?'activeUp':''}" onclick="voteQ(${oi},'up')">👍 ${q.likes}</button><button class="${q.myVote==='down'?'activeDown':''}" onclick="voteQ(${oi},'down')">👎 ${q.dislikes}</button><button onclick="openAns(${oi})">Reply</button><button onclick="editQ(${oi})">Edit</button></div>${q.answers.length?`<div style="margin-top:8px">${q.answers.map(a=>`<div class="ans"><b>${a.name}:</b> ${a.text}${a.image?`<img src="${a.image}" class="pic">`:''}${a.audio?`<audio controls src="${a.audio}"></audio>`:''}</div>`).join('')}</div>`:''}</div>`;
  }).join('')||'<div style="text-align:center;color:#8ea0c0;padding:14px">No questions yet</div>';
  renderChans();
 }
@@ -275,7 +344,7 @@ function voteQ(i,type){ const q=qs[i]; if(q.myVote===type){ if(type==='up')q.lik
 function openAns(i){curAnsIndex=i; pendingAImg=null; pendingAAudio=null; aImage.value=''; aPreview.innerHTML=''; aAudioPreview.innerHTML=''; aName.value=''; aText.value=''; ansModal.style.display='flex';}
 function closeAns(){ansModal.style.display='none';}
 function submitAns(){ const name=aName.value.trim()||'Guest'; const text=aText.value.trim(); if(!text && !pendingAImg && !pendingAAudio) return alert('Add text'); qs[curAnsIndex].answers.push({name,text,image:pendingAImg,audio:pendingAAudio}); saveAll(); closeAns(); }
-function saveAll(){ localStorage.setItem('sielQsV2',JSON.stringify(qs)); localStorage.setItem('sielChansV3',JSON.stringify(chans)); render(); }
+function saveAll(){ localStorage.setItem('sielQsV2',JSON.stringify(qs)); localStorage.setItem('sielChansV3',JSON.stringify(chans)); localStorage.setItem('siel1000People', JSON.stringify(people)); render(); updateLoginUI(); }
 function createChan(){
  if(!currentUser) return alert('Please login with email first');
  const n=chanName.value.trim(); if(!n) return alert('Enter channel name');
