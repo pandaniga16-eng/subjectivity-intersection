@@ -3,288 +3,247 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>SIEL — Braid Quantum Gravity</title>
+<title>SIEL — Subjective Intersection Platform</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;background:#04060a;color:#eaf0ff;overflow-x:hidden;-webkit-font-smoothing:antialiased;transition:background 0.3s,color 0.3s}
-body.white-mode{background:#f6f7fb;color:#0a1020}
-body.white-mode header{background:rgba(255,255,255,0.9);border-bottom:1px solid rgba(0,0,0,0.08)}
-body.white-mode .bg{background:radial-gradient(1200px 600px at 20% 10%, #dbe6ff 0%, transparent 60%),radial-gradient(1000px 600px at 90% 90%, #e9d9ff 0%, transparent 60%),#f6f7fb}
-body.white-mode .card{background:linear-gradient(180deg, rgba(255,255,255,0.95), rgba(255,255,255,0.75));border:1px solid rgba(0,0,0,0.08);box-shadow:0 10px 30px rgba(0,0,0,0.08)}
-body.white-mode .input{background:rgba(255,255,255,0.9);border:1px solid rgba(0,0,0,0.12);color:#0a1020}
-body.white-mode .chan{background:rgba(0,0,0,0.04);border:1px solid rgba(0,0,0,0.08)}
-body.white-mode .trinity-banner{background:linear-gradient(90deg, #eef3ff 0%, #f3efff 50%, #fff1f6 100%);border-bottom:1px solid rgba(0,0,0,0.08)}
-body.white-mode .note{background:rgba(45,111,247,0.08)}
-body.white-mode .chBox{background:#f6f7fb}
-body.white-mode .chHeader{background:#eef2ff}
-body.white-mode .chMsgs{background:#f6f7fb}
-body.white-mode .chInput{background:#eef2ff}
-.mono{font-family:-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif}
-header{position:fixed;top:0;left:0;right:0;z-index:30;display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:rgba(8,10,16,0.75);backdrop-filter:blur(18px);border-bottom:1px solid rgba(255,255,255,0.1)}
-.logo{font-weight:900;letter-spacing:-0.03em;font-size:16px}.logo span{color:#6ea8ff;font-weight:600}
-.btn{border:0;padding:10px 18px;border-radius:999px;font-weight:700;cursor:pointer;background:#2d6ff7;color:#fff;box-shadow:0 8px 24px rgba(45,111,247,0.35)}
-.btn2{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.14);color:#fff}
-.bg{position:fixed;inset:0;z-index:-3;background:radial-gradient(1200px 600px at 20% 10%, #142a6a 0%, transparent 60%),radial-gradient(1000px 600px at 90% 90%, #3a1a6a 0%, transparent 60%),#04060a}
-canvas#main{position:fixed;inset:0;z-index:-2}
-canvas#orb{position:fixed;inset:0;z-index:-1;pointer-events:none}
-.trinity-banner{margin-top:58px;background:linear-gradient(90deg, #0f1d4a 0%, #1a1247 50%, #2a184a 100%);border-bottom:1px solid rgba(110,168,255,0.25);padding:14px 16px;display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:center;text-align:center}
-.trinity-banner b{color:#6ea8ff}
-.trinity-dot{width:8px;height:8px;border-radius:50%;background:#6ea8ff;box-shadow:0 0 12px #6ea8ff;display:inline-block}
-.counter{padding:4px 12px;border-radius:999px;background:rgba(110,168,255,0.18);border:1px solid rgba(110,168,255,0.4);font-weight:800;font-size:12px;color:#6ea8ff}
-.wrap{max-width:1150px;margin:16px auto 30px;padding:0 16px;display:grid;grid-template-columns:1.2fr 0.8fr;gap:16px;transition:0.4s}
-.wrap.locked{filter:blur(16px);pointer-events:none;user-select:none}
-@media(max-width:980px){.wrap{grid-template-columns:1fr}}
-.card{background:linear-gradient(180deg, rgba(255,255,255,0.09), rgba(255,255,255,0.04));border:1px solid rgba(255,255,255,0.12);border-radius:22px;padding:18px;backdrop-filter:blur(16px);box-shadow:0 20px 60px rgba(0,0,0,0.4)}
-.note{padding:12px;border-left:3px solid #2d6ff7;background:rgba(45,111,247,0.1);border-radius:0 14px 14px 0;margin:10px 0;font-size:13.5px;line-height:1.6}
-.animStage{height:520px;border-radius:18px;overflow:hidden;position:relative;background:radial-gradient(500px 250px at 50% 0%, rgba(110,168,255,0.28), transparent), rgba(0,0,0,0.35);border:1px solid rgba(255,255,255,0.12);display:flex;align-items:center;justify-content:center;perspective:1200px;transform-style:preserve-3d}
-.profLine{position:absolute;width:4px;height:300px;border-radius:4px;background:linear-gradient(180deg,#6ea8ff,#a78bfa,#ff7ab6);transform-style:preserve-3d;animation:braid 3.2s ease-in-out infinite alternate}
-@keyframes braid{0%{transform:translateY(-40px) rotateX(10deg) rotateY(-18deg) translateZ(-40px)}100%{transform:translateY(40px) rotateX(-10deg) rotateY(18deg) translateZ(60px)}}
-.bubble{position:absolute;width:16px;height:16px;border-radius:50%;background:radial-gradient(circle at 30% 30%, #fff, #6ea8ff 60%, transparent);box-shadow:0 0 24px #6ea8ff;animation:float 7s ease-in-out infinite;transform-style:preserve-3d}
-@keyframes float{0%,100%{transform:translate3d(0,0,0) rotateY(0deg)}25%{transform:translate3d(30px,-40px,50px) rotateY(90deg)}50%{transform:translate3d(30px,-70px,0px) rotateY(180deg)}75%{transform:translate3d(-20px,-30px,80px) rotateY(270deg)}}
-.input{width:100%;background:rgba(0,0,0,0.45);border:1px solid rgba(255,255,255,0.14);border-radius:12px;padding:12px;color:#fff;margin:6px 0;font-size:14px}
-.q{padding:16px 0;border-bottom:1px solid rgba(255,255,255,0.08)}
-.vote{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
-.vote button{border:1px solid rgba(255,255,255,0.14);background:rgba(255,255,255,0.06);color:#fff;padding:6px 12px;border-radius:999px;font-size:12px;cursor:pointer}
-.vote button.activeUp{background:#2d6ff7}
-.vote button.activeDown{background:#ff4d6d}
-.ans{margin-top:8px;background:rgba(0,0,0,0.32);border:1px solid rgba(255,255,255,0.08);padding:10px 12px;border-radius:14px}
-.pic{max-width:100%;border-radius:14px;border:1px solid rgba(255,255,255,0.12);margin-top:8px;display:block}
-.fileLabel{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:999px;background:rgba(255,255,255,0.08);border:1px dashed rgba(255,255,255,0.2);font-size:12px;cursor:pointer;margin:4px 4px 0 0}
-.modal{position:fixed;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(10px);z-index:50;display:none;align-items:center;justify-content:center;padding:16px}
-.modalBox{width:100%;max-width:440px;background:#111827;border:1px solid rgba(255,255,255,0.14);border-radius:20px;padding:16px}
-.forceModal{position:fixed;inset:0;background:rgba(3,6,15,0.88);backdrop-filter:blur(24px);z-index:200;display:flex;align-items:center;justify-content:center;padding:16px}
-body.white-mode .forceModal{background:rgba(246,247,251,0.92)}
-body.white-mode .modalBox{background:#fff}
-.rec{width:42px;height:42px;border-radius:50%;background:#ff4d6d;display:flex;align-items:center;justify-content:center;border:0;color:#fff;font-size:18px;cursor:pointer}
-.rec.recording{animation:pulse 1s infinite}
-@keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.15)}100%{transform:scale(1)}}
-audio{width:100%;margin-top:8px;height:36px}
-.chan{padding:14px;border-radius:16px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);margin:8px 0;display:flex;justify-content:space-between;align-items:center;cursor:pointer}
-.chan:hover{background:rgba(255,255,255,0.1)}
-.chModal{position:fixed;inset:0;background:rgba(0,0,0,0.8);backdrop-filter:blur(12px);z-index:60;display:none;align-items:center;justify-content:center;padding:12px}
-.chBox{width:100%;max-width:460px;height:86vh;background:#0b141a;border:1px solid rgba(255,255,255,0.14);border-radius:22px;display:flex;flex-direction:column;overflow:hidden}
-.chHeader{background:#202c33;padding:12px 14px;display:flex;align-items:center;gap:10px;justify-content:space-between}
-.chAvatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#6ea8ff,#a78bfa);display:flex;align-items:center;justify-content:center;font-weight:900}
-.chMsgs{flex:1;overflow-y:auto;padding:12px;background:#0b141a;display:flex;flex-direction:column;gap:8px}
-.bub{max-width:78%;padding:9px 13px;border-radius:16px;font-size:13px;line-height:1.5;position:relative}
-.bub.me{align-self:flex-end;background:#005c4b;color:#e9edef;border-bottom-right-radius:4px}
-.bub.other{align-self:flex-start;background:#202c33;color:#e9edef;border-bottom-left-radius:4px}
-.chInput{display:flex;gap:8px;padding:10px;background:#202c33;border-top:1px solid rgba(255,255,255,0.1);align-items:center}
-.adminTag{background:#ff4d6d;padding:2px 6px;border-radius:99px;font-size:10px;margin-left:6px}
-.delBtn{background:rgba(255,77,109,0.15);border:1px solid rgba(255,77,109,0.3);color:#ff8da1;padding:4px 8px;border-radius:999px;font-size:10px;cursor:pointer;margin-top:4px}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:#050507;color:#e6e8eb;overflow-x:hidden}
+a{color:#6ea8ff;text-decoration:none}
+.layout{max-width:1300px;margin:0 auto;display:grid;grid-template-columns:275px 640px 360px;min-height:100vh}
+@media(max-width:1280px){.layout{grid-template-columns:72px 640px 1fr}}
+@media(max-width:1024px){.layout{grid-template-columns:1fr}.right{display:none}}
+@media(max-width:640px){.layout{grid-template-columns:1fr}.left{display:none}.right{display:none}}
+
+.left{position:sticky;top:0;height:100vh;padding:8px 10px;display:flex;flex-direction:column;justify-content:space-between;border-right:1px solid #1e1f24}
+.nav{display:flex;flex-direction:column;gap:2px}
+.nav-item{display:flex;align-items:center;gap:16px;padding:12px 14px;border-radius:12px;font-size:19px;cursor:pointer;color:#a1a1aa}
+.nav-item:hover{background:#121316;color:#fff}
+.nav-item.active{font-weight:700;color:#fff;background:#121316}
+.nav-icon{font-size:24px;width:28px;text-align:center}
+.logo{font-size:22px;padding:12px;font-weight:900;letter-spacing:-0.04em}
+.logo sub{font-size:10px;color:#6ea8ff;display:block;font-weight:500;letter-spacing:0.1em}
+.post-btn{margin-top:14px;background:#fff;color:#000;border:0;padding:14px;border-radius:999px;font-weight:800;font-size:15px;cursor:pointer}
+.post-btn:hover{background:#e4e4e7}
+.user-bar{margin-top:auto;padding:10px;border-radius:12px;display:flex;align-items:center;gap:10px;cursor:pointer;background:#0e0e10;border:1px solid #1e1f24}
+.user-bar:hover{background:#121316}
+.avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#6ea8ff,#a78bfa);display:flex;align-items:center;justify-content:center;font-weight:900;color:#fff;flex:0 0 36px}
+
+.center{border-right:1px solid #1e1f24;border-left:1px solid #1e1f24;min-height:100vh}
+.top-tabs{position:sticky;top:0;z-index:10;background:rgba(5,5,7,0.85);backdrop-filter:blur(12px);display:flex;border-bottom:1px solid #1e1f24}
+.tab{flex:1;text-align:center;padding:16px;font-weight:600;font-size:14px;color:#71717a;cursor:pointer;position:relative}
+.tab.active{color:#fff}
+.tab.active::after{content:'';position:absolute;bottom:0;left:30%;right:30%;height:2px;background:#fff;border-radius:999px}
+.composer{padding:12px 16px;border-bottom:1px solid #1e1f24;display:flex;gap:12px}
+.composer textarea{flex:1;background:transparent;border:0;color:#e6e8eb;font-size:18px;resize:none;outline:none;min-height:50px;font-family:inherit}
+.composer textarea::placeholder{color:#71717a}
+.composer-actions{display:flex;justify-content:space-between;align-items:center;margin-top:8px;border-top:1px solid #1e1f24;padding-top:8px}
+.composer-icons{display:flex;gap:8px;color:#6ea8ff;font-size:18px}
+.btn-tweet{background:#fff;color:#000;border:0;padding:8px 18px;border-radius:999px;font-weight:800;cursor:pointer}
+.trinity-x{background:#0e0e10;border:1px solid #1e1f24;border-radius:12px;margin:12px;padding:12px;font-size:12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.counter-x{background:#6ea8ff;color:#000;padding:4px 10px;border-radius:999px;font-weight:800;font-size:11px}
+.tweet{padding:12px 16px;border-bottom:1px solid #1e1f24;display:flex;gap:12px;cursor:pointer;transition:0.1s}
+.tweet:hover{background:#0a0a0c}
+.tweet-content{flex:1;min-width:0}
+.tweet-head{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.tweet-name{font-weight:800;font-size:14px}
+.tweet-handle{color:#71717a;font-size:13px}
+.tweet-text{font-size:14px;line-height:20px;margin-top:4px;white-space:pre-wrap;word-break:break-word;color:#d4d4d8}
+.tweet-media{margin-top:10px;border:1px solid #1e1f24;border-radius:12px;overflow:hidden;max-width:100%}
+.tweet-media img{width:100%;display:block}
+.tweet-actions{display:flex;justify-content:space-between;max-width:425px;margin-top:10px;color:#71717a;font-size:13px}
+.tweet-actions span{cursor:pointer;display:flex;align-items:center;gap:4px;padding:4px 8px;border-radius:999px}
+.tweet-actions span:hover{background:rgba(110,168,255,0.1);color:#6ea8ff}
+.pinned{font-size:11px;color:#71717a;margin-bottom:6px;display:flex;gap:6px;align-items:center}
+.braid-x{height:200px;background:radial-gradient(400px 200px at 50% 0%, rgba(110,168,255,0.15), transparent), #050507;border:1px solid #1e1f24;border-radius:12px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;margin-top:10px}
+.profLine{position:absolute;width:2px;height:160px;border-radius:4px;background:linear-gradient(180deg,#6ea8ff,#a78bfa,#f472b6);animation:braid 3s ease-in-out infinite alternate}
+@keyframes braid{0%{transform:translateY(-20px)}100%{transform:translateY(20px)}}
+
+.right{padding:8px 16px;position:sticky;top:0;height:100vh;overflow-y:auto}
+.search{position:sticky;top:8px;z-index:5;background:#0e0e10;border:1px solid #1e1f24;border-radius:999px;padding:10px 16px;display:flex;gap:10px;color:#71717a;margin-bottom:14px}
+.search input{background:transparent;border:0;color:#fff;outline:none;width:100%;font-size:14px}
+.widget{background:#0e0e10;border:1px solid #1e1f24;border-radius:16px;padding:12px 16px;margin-bottom:14px}
+.widget h3{font-size:15px;font-weight:800;margin-bottom:8px}
+.widget-item{padding:10px 0;cursor:pointer}
+.widget-item:hover{background:rgba(255,255,255,0.03)}
+.widget-title{font-weight:700;font-size:13px}
+.widget-sub{color:#71717a;font-size:11px;margin-top:2px}
+.input{width:100%;background:#050507;border:1px solid #27272a;border-radius:10px;padding:10px 12px;color:#fff;margin:6px 0;font-size:13px;outline:none}
+.input:focus{border-color:#6ea8ff}
+.btn{border:0;padding:8px 16px;border-radius:999px;font-weight:700;cursor:pointer;background:#fff;color:#000}
+.btn2{background:#050507;border:1px solid #27272a;color:#fff}
+.fileLabel{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;background:#050507;border:1px solid #27272a;font-size:12px;cursor:pointer;color:#6ea8ff}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,0.6);backdrop-filter:blur(8px);z-index:50;display:none;align-items:center;justify-content:center;padding:16px}
+.modalBox{width:100%;max-width:520px;background:#0e0e10;border:1px solid #27272a;border-radius:20px;padding:20px}
+.forceModal{position:fixed;inset:0;background:rgba(0,0,0,0.92);backdrop-filter:blur(20px);z-index:200;display:flex;align-items:center;justify-content:center;padding:16px}
+.chModal{position:fixed;inset:0;background:rgba(0,0,0,0.6);backdrop-filter:blur(8px);z-index:60;display:none;align-items:center;justify-content:center;padding:12px}
+.chBox{width:100%;max-width:520px;height:84vh;background:#050507;border:1px solid #27272a;border-radius:16px;display:flex;flex-direction:column;overflow:hidden}
+.chHeader{background:#0e0e10;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #1e1f24}
+.chMsgs{flex:1;overflow-y:auto;padding:12px;background:#050507;display:flex;flex-direction:column;gap:8px}
+.bub{max-width:78%;padding:10px 14px;border-radius:16px;font-size:13px;line-height:18px}
+.bub.me{align-self:flex-end;background:#fff;color:#000;border-bottom-right-radius:4px}
+.bub.other{align-self:flex-start;background:#1e1f24;color:#e6e8eb;border-bottom-left-radius:4px}
+.chInput{display:flex;gap:8px;padding:10px;background:#0e0e10;border-top:1px solid #1e1f24;align-items:center}
+.note{padding:10px;border:1px solid #1e1f24;background:#0e0e10;border-radius:12px;margin:8px 0;font-size:13px;line-height:18px}
+.delBtn{background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);color:#f87171;padding:4px 10px;border-radius:999px;font-size:10px;cursor:pointer;font-weight:700}
+.dot-grid{display:grid;grid-template-columns:repeat(20,1fr);gap:3px}
+.dot{aspect-ratio:1;border-radius:2px;background:#1e1f24}
+.dot.filled{background:#6ea8ff;box-shadow:0 0 6px #6ea8ff}
 </style>
 </head>
 <body>
-<div class="bg"></div>
-<canvas id="main"></canvas>
-<canvas id="orb"></canvas>
 
-<!-- ADDED: FORCED LOGIN + NO RE-LOGIN -->
 <div id="forceLogin" class="forceModal">
-<div class="modalBox" style="text-align:center;max-width:460px;padding:24px;border-radius:26px">
-<h2 style="font-size:23px;font-weight:900">◈ Join the 1000 People Project</h2>
-<p class="mono" style="font-size:13px;color:#8ea0c0;margin:12px 0;line-height:1.6">
-<span class="trinity-dot"></span> <b style="color:#6ea8ff">Trinity:</b> 3 points = minimum stable reality<br>
-<b style="color:#fff">One email = One spot forever — no re-login allowed.</b><br>
-Login required to enter SIEL.
-</p>
-<div style="background:rgba(110,168,255,0.12);border:1px solid rgba(110,168,255,0.25);border-radius:14px;padding:10px;margin:12px 0">
-<span id="forceCounter" style="font-weight:800;color:#6ea8ff">0 / 1000 joined</span>
-<div style="width:100%;height:6px;background:rgba(255,255,255,0.1);border-radius:99px;margin-top:8px"><div id="forceBar" style="height:6px;background:#6ea8ff;border-radius:99px;width:0%"></div></div>
+<div class="modalBox" style="text-align:center;max-width:420px;padding:24px;border-radius:20px">
+<div style="font-size:32px">◈</div>
+<h2 style="font-size:20px;font-weight:900;margin-top:8px">Join the 1000 Intersections</h2>
+<p style="font-size:13px;color:#71717a;margin:12px 0;line-height:18px">Trinity: 3 points = minimum stable reality. Subjectivity needs intersection to exist.<br><b style="color:#fff">One email = One spot forever. No re-login.</b></p>
+<div style="background:#050507;border:1px solid #1e1f24;border-radius:12px;padding:10px;margin:12px 0;text-align:left">
+<div style="display:flex;justify-content:space-between"><span id="forceCounter" style="font-weight:800;color:#6ea8ff;font-size:13px">0 / 1000 joined</span><span style="font-size:11px;color:#71717a">◈ LIVE</span></div>
+<div style="width:100%;height:4px;background:#1e1f24;border-radius:99px;margin-top:8px"><div id="forceBar" style="height:4px;background:#6ea8ff;border-radius:99px;width:0%"></div></div>
+<div id="dotsPreview" class="dot-grid" style="margin-top:10px"></div>
 </div>
-<input id="forceEmail" class="input" type="email" placeholder="your@email.com" style="text-align:center;font-size:16px">
-<button class="btn" style="width:100%;margin-top:12px;padding:14px;font-size:16px" onclick="doForceLogin()">Claim Spot #<span id="nextNum">1</span></button>
-<div id="forceError" style="display:none;margin-top:10px;padding:8px;background:rgba(255,77,109,0.15);border:1px solid rgba(255,77,109,0.3);border-radius:10px;color:#ff8da1;font-size:12px"></div>
-<p class="mono" style="font-size:10px;color:#6a7a90;margin-top:10px">Admin: admin@skiii.com</p>
+<input id="forceEmail" class="input" type="email" placeholder="Email — becomes your @handle">
+<button class="btn" style="width:100%;margin-top:12px;height:44px;font-size:14px;font-weight:800;background:#fff;color:#000" onclick="doForceLogin()">Claim spot #<span id="nextNum">1</span> — Intersect</button>
+<div id="forceError" style="display:none;margin-top:10px;padding:8px;background:rgba(239,68,68,0.1);border-radius:10px;color:#f87171;font-size:12px"></div>
+<p style="font-size:11px;color:#52525b;margin-top:10px">Admin: admin@skiii.com</p>
 </div>
 </div>
 
-<header>
-<div class="logo">SIEL <span>◈ Braid QG Lab</span></div>
-<div style="display:flex;gap:6px;align-items:center">
-<span id="userEmailLabel" class="mono" style="font-size:11px;color:#8ea0c0"></span>
-<button class="btn2 btn" style="padding:8px 12px" onclick="toggleWhite()">⚪ White</button>
-<button class="btn2 btn" style="padding:8px 12px" onclick="openLogin()">Login</button>
-<a class="btn2 btn" href="https://www.researchgate.net/publication/414975934_Subjectivity-Intersection_Braid_Quantum_Gravity_From_a_Finite_Pointed-Braid_Source_to_Quantum_Structure_Lorentz_Geometry_and_Strong-Curvature_Spacetime_A_Constructive_Refutation_of_Objectivist_Primacy" target="_blank">Paper 1</a>
-<a class="btn" style="background:#a78bfa" href="https://x.gd/hAQQ1" target="_blank">Paper 2</a>
-</div>
-</header>
-
-<div class="trinity-banner">
-<div><span class="trinity-dot"></span> <b>Trinity Principle:</b> 3 points = minimum stable reality — subjectivity needs intersection to exist</div>
-<div style="opacity:0.6">—</div>
-<div><b>1000 People Project:</b> When 1000 subjectivities intersect, we build a new shared spacetime — you are one of the 1000 ◈</div>
-<div class="counter" id="topCounter">0 / 1000</div>
-</div>
-
-<div class="wrap locked" id="mainWrap">
+<div class="layout">
+<div class="left">
 <div>
-<div class="card" style="padding:0;overflow:hidden">
-<img src="23de654b-9e60-483f-825d-b76250152f61.jpeg" style="width:100%;display:block;border-radius:22px" alt="Subjectivity-Intersection Braid Quantum Gravity">
-<div style="padding:14px 16px;background:linear-gradient(180deg, #0b141a, #111827)">
-<div style="font-weight:900;font-size:18px">Subjectivity-Intersection Braid Quantum Gravity</div>
-<div class="mono" style="font-size:11px;color:#8ea0c0;margin-top:6px">The world emerges when different subjectivities intersect — Channel is a platform for conversations</div>
+<div class="logo">SIEL ◈<sub>SUBJECTIVE INTERSECTION</sub></div>
+<div class="nav">
+<div class="nav-item active" onclick="switchTab('foryou')"><span class="nav-icon">◍</span> Intersections</div>
+<div class="nav-item" onclick="alert('Explore — coming')"><span class="nav-icon">◎</span> Explore Braids</div>
+<div class="nav-item" onclick="openChannelList()"><span class="nav-icon">◧</span> Communities</div>
+<div class="nav-item"><span class="nav-icon">◈</span> Trinity</div>
+<div class="nav-item"><span class="nav-icon">✉️</span> Messages</div>
+<div class="nav-item" onclick="openLogin()"><span class="nav-icon">◐</span> Profile</div>
+</div>
+<button class="post-btn" onclick="document.getElementById('qTitle').focus()">+ New Subjectivity</button>
+</div>
+<div class="user-bar" onclick="openLogin()">
+<div class="avatar" id="leftAvatar">S</div>
+<div style="flex:1;min-width:0"><div id="userEmailLabel" style="font-weight:700;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:120px">Not logged in</div><div style="color:#71717a;font-size:11px" id="leftHandle">@guest • subjectivity</div></div>
+<div style="font-size:14px">•••</div>
 </div>
 </div>
 
-<div class="card" style="margin-top:14px">
-<h3>Simple Notes — Easy to Understand</h3>
-<div class="note"><b>🎯 Subjectivity:</b> You need a way of looking before something can exist for you. Like glasses to see.</div>
-<div class="note"><b>🔗 Intersection:</b> Two people watch same movie but remember different parts. Same probabilities, different private story.</div>
-<div class="note"><b>🌌 Result:</b> Space and time are built from tiny braids twisting, like building a house from threads.</div>
-<textarea id="myNote" class="input" style="height:68px" placeholder="Write your own simple note..."></textarea>
-<button class="btn" onclick="saveNote()">Save Note</button>
+<div class="center">
+<div class="top-tabs"><div class="tab active" id="tabForYou" onclick="switchTab('foryou')">For you — Intersecting</div><div class="tab" id="tabFollowing" onclick="switchTab('following')">Following — Your Braids</div></div>
+
+<div class="trinity-x">
+<span>🔵 <b>Trinity:</b> 3 points = minimum stable reality</span>
+<span style="opacity:0.4">•</span>
+<span><b>1000 Intersections:</b> you are one of the 1000 ◈</span>
+<span class="counter-x" id="topCounter">0 / 1000</span>
 </div>
 
-<div class="card" style="margin-top:14px">
-<h3>📢 Channels — Tap to open & chat <span id="adminBadge"></span></h3>
-<p class="mono" style="font-size:11px;color:#b8c6e0;margin:6px 0">Login with email. Admin can delete channels & messages.</p>
-<input id="chanName" class="input" placeholder="Channel name e.g. Braid Beginners">
-<button class="btn" onclick="createChan()">Create Group</button>
+<div class="composer">
+<div class="avatar">◈</div>
+<div style="flex:1;min-width:0">
+<textarea id="qBody" placeholder="Share a subjectivity... how does reality look from your angle?"></textarea>
+<input id="qTitle" class="input" placeholder="Title (optional) — your subjectivity lens" style="margin-top:6px">
+<div id="qPreview"></div><div id="qAudioPreview"></div>
+<div class="composer-actions">
+<div class="composer-icons">
+<label class="fileLabel">🖼️ Image<input type="file" id="qImage" accept="image/*" hidden></label>
+<span style="cursor:pointer;display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:999px;border:1px solid #27272a" onclick="toggleRec('q')">🎙️</span>
+<span style="cursor:pointer;display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:999px;border:1px solid #27272a" onclick="saveNotePrompt()">📝</span>
+</div>
+<button class="btn-tweet" style="background:#fff;color:#000" onclick="postQ()">Intersect → Post</button>
+</div>
+</div>
+</div>
+
+<div class="tweet" style="border-bottom:1px solid #1e1f24">
+<div class="avatar">◈</div>
+<div class="tweet-content">
+<div class="pinned">📌 Pinned • Trinity Source — 7 Braids Intersecting</div>
+<div class="tweet-head"><span class="tweet-name">SIEL Lab</span><span style="background:#6ea8ff;color:#000;border-radius:999px;padding:1px 5px;font-size:9px;font-weight:800">TRINITY</span><span class="tweet-handle">@braidQG • Subjective Intersection</span></div>
+<div class="tweet-text">Subjectivity-Intersection Braid Quantum Gravity — The world emerges when different subjectivities intersect. Space and time are built from tiny braids twisting. Your way of seeing creates what can exist for you.</div>
+<div class="braid-x" id="stage">
+<div class="profLine" style="left:14%"></div><div class="profLine" style="left:28%"></div><div class="profLine" style="left:42%"></div><div class="profLine" style="left:56%"></div><div class="profLine" style="left:70%"></div><div class="profLine" style="left:84%"></div>
+</div>
+<div class="tweet-actions"><span>◍ 12 intersections</span><span>↗ 34 braids</span><span>♡ 128 resonances</span><span>👁️ 2.1K views</span><span>🔖</span></div>
+</div>
+</div>
+
+<div id="qList"></div>
+
+<div style="padding:24px 16px;text-align:center;color:#71717a;border-top:1px solid #1e1f24">
+<img src="23de654b-9e60-483f-825d-b76250152f61.jpeg" style="width:100%;max-width:460px;border-radius:12px;border:1px solid #1e1f24" alt="paper">
+<div style="margin-top:12px;font-size:12px;line-height:18px">Simple Notes: 🎯 Subjectivity = glasses to see • 🔗 Intersection = same movie, different memory • 🌌 Result = house from threads</div>
+</div>
+</div>
+
+<div class="right">
+<div class="search"><span>🔍</span><input placeholder="Search intersections"></div>
+
+<div class="widget">
+<h3>1000 Intersections</h3>
+<div style="background:#050507;border:1px solid #1e1f24;border-radius:12px;padding:10px;margin:8px 0">
+<div style="display:flex;justify-content:space-between"><span id="rightCounter" style="font-weight:800;color:#6ea8ff;font-size:13px">0 / 1000 joined</span><span style="font-size:11px;color:#71717a">◈ LIVE</span></div>
+<div style="width:100%;height:4px;background:#1e1f24;border-radius:99px;margin-top:8px"><div id="rightBar" style="height:4px;background:#6ea8ff;border-radius:99px;width:0%"></div></div>
+<div id="mainDots" class="dot-grid" style="margin-top:10px"></div>
+</div>
+<div class="widget-item"><div class="widget-title">Trinity Principle</div><div class="widget-sub">3 points = minimum stable reality — intersection creates existence</div></div>
+</div>
+
+<div class="widget">
+<h3>◧ Communities — Intersections</h3>
+<p style="font-size:11px;color:#71717a;margin:6px 0">Tap to open & intersect — Subjective spaces</p>
+<input id="chanName" class="input" placeholder="Create community e.g. Braid Beginners">
+<button class="btn" style="width:100%;margin-top:6px;background:#fff;color:#000" onclick="createChan()">Create Intersection</button>
 <div id="chanList" style="margin-top:10px"></div>
 </div>
+
+<div class="widget">
+<h3>📄 Papers — Source</h3>
+<a href="https://www.researchgate.net/publication/414975934_Subjectivity-Intersection_Braid_Quantum_Gravity_From_a_Finite_Pointed-Braid_Source_to_Quantum_Structure_Lorentz_Geometry_and_Strong-Curvature_Spacetime_A_Constructive_Refutation_of_Objectivist_Primacy" target="_blank"><div class="widget-item"><div class="widget-title">Paper 1 — ResearchGate 📄</div><div class="widget-sub">Download PDF — Trinity source</div></div></a>
+<a href="https://x.gd/hAQQ1" target="_blank"><div class="widget-item"><div class="widget-title">Paper 2 — x.gd/hAQQ1 💜</div><div class="widget-sub">Second publication</div></div></a>
+<div class="widget-item" onclick="saveNotePrompt()"><div class="widget-title">📝 My Simple Note</div><div class="widget-sub" id="notePreview" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Write your note — easy explanation</div></div>
 </div>
 
-<div>
-<div class="card">
-<h3>Professional Braid Visualization — 7 Braids</h3>
-<div class="animStage" id="stage">
-<div class="profLine" style="left:14%;height:280px"></div>
-<div class="profLine" style="left:26%;height:300px"></div>
-<div class="profLine" style="left:38%;height:320px"></div>
-<div class="profLine" style="left:50%;height:340px"></div>
-<div class="profLine" style="left:62%;height:320px"></div>
-<div class="profLine" style="left:74%;height:300px"></div>
-<div class="profLine" style="left:86%;height:280px"></div>
-<div class="bubble" style="left:18%;top:65%"></div>
-<div class="bubble" style="left:72%;top:28%"></div>
-<div class="bubble" style="left:50%;top:72%"></div>
-</div>
-</div>
-
-<div class="card" id="forum" style="margin-top:14px">
-<h3>Forum — Q&A</h3>
-<input id="qTitle" class="input" placeholder="Question title...">
-<textarea id="qBody" class="input" placeholder="Ask in detail..."></textarea>
-<div style="display:flex;gap:6px;margin-top:4px">
-<label class="fileLabel">📷 Pic <input type="file" id="qImage" accept="image/*" hidden></label>
-<button id="qRecBtn" class="rec" onclick="toggleRec('q')">🎤</button>
-</div>
-<div id="qPreview"></div>
-<div id="qAudioPreview"></div>
-<button class="btn" style="margin-top:8px" onclick="postQ()">Post Question</button>
-<div style="margin-top:14px;display:flex;justify-content:space-between"><b>Discussions — Oldest first</b><span id="qCount" class="mono" style="font-size:11px"></span></div>
-<div id="qList"></div>
+<div class="widget">
+<div class="widget-item" style="font-size:11px;color:#71717a">© 2026 SIEL Lab • Admin can delete • One email = one intersection forever</div>
+<div id="allEmails" style="max-height:100px;overflow-y:auto;font-size:10px;color:#52525b;margin-top:6px"></div>
 </div>
 </div>
 </div>
 
-<div id="loginModal" class="modal">
-<div class="modalBox">
-<h3>Email Login</h3>
-<p class="mono" style="font-size:12px;color:#8ea0c0;margin:8px 0">Login with email to become part of 1000. One email = one spot, no re-login. Use admin@skiii.com for admin access.</p>
-<input id="loginEmail" class="input" type="email" placeholder="your@email.com">
-<div id="loginError" style="display:none;margin-top:8px;padding:8px;background:rgba(255,77,109,0.15);border:1px solid rgba(255,77,109,0.3);border-radius:10px;color:#ff8da1;font-size:12px"></div>
-<div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">
-<button class="btn" onclick="doLogin()">Login</button>
-<button class="btn2 btn" onclick="toggleWhite()">⚪ White/Dark</button>
-<button class="btn btn2" onclick="closeLogin()">Cancel</button>
-<button class="btn btn2" onclick="doLogout()">Logout & Lock</button>
-</div>
-<div id="allEmails" style="margin-top:10px;max-height:120px;overflow-y:auto;font-size:11px;color:#8ea0c0"></div>
-</div>
-</div>
-
-<div id="ansModal" class="modal">
-<div class="modalBox">
-<h3>Answer</h3>
-<input id="aName" class="input" placeholder="Your name">
-<textarea id="aText" class="input" placeholder="Write answer..."></textarea>
-<div style="display:flex;gap:6px">
-<label class="fileLabel">📷 Pic <input type="file" id="aImage" accept="image/*" hidden></label>
-<button id="aRecBtn" class="rec" onclick="toggleRec('a')">🎤</button>
-</div>
-<div id="aPreview"></div>
-<div id="aAudioPreview"></div>
-<div style="display:flex;gap:8px;margin-top:10px"><button class="btn" onclick="submitAns()">Post Answer</button><button class="btn btn2" onclick="closeAns()">Cancel</button></div>
-</div>
-</div>
-
-<div id="chModal" class="chModal">
-<div class="chBox">
-<div class="chHeader">
-<div style="display:flex;align-items:center;gap:10px">
-<div id="chAvatar" class="chAvatar">📢</div>
-<div><div id="chName" style="font-weight:700;font-size:14px">Channel</div><div id="chInfo" class="mono" style="font-size:11px;color:#8696a0"></div></div>
-</div>
-<div style="display:flex;gap:6px"><button id="deleteChanBtn" class="btn" style="background:#ff4d6d;display:none" onclick="adminDeleteChannel()">Delete</button><button class="btn2 btn" style="padding:6px 10px;font-size:12px" onclick="leaveChannel()">Leave</button><button class="btn btn2" style="padding:6px 12px" onclick="closeChannel()">✕</button></div>
-</div>
-<div id="chMsgs" class="chMsgs"></div>
-<div id="chFollowBlock" style="padding:12px;background:#202c33;text-align:center;display:none">
-<div class="mono" style="font-size:12px;margin-bottom:8px">Follow this channel to send messages</div>
-<button class="btn" onclick="followCurrent()">Follow Channel</button>
-</div>
-<div class="chInput" id="chInputBar">
-<label class="fileLabel" style="margin:0">📷<input type="file" id="chImage" accept="image/*" hidden></label>
-<button class="rec" style="width:38px;height:38px" onclick="toggleRecCh()">🎤</button>
-<input id="chInput" class="input" style="margin:0" placeholder="Type a message..." onkeydown="if(event.key==='Enter')sendChMsg()">
-<button class="btn" onclick="sendChMsg()">Send</button>
-</div>
-<div id="chImagePreview" style="padding:0 10px"></div>
-<div id="chAudioPreview" style="padding:0 10px"></div>
-</div>
-</div>
+<div id="loginModal" class="modal"><div class="modalBox"><h3>Switch Subjectivity / Login</h3><p style="font-size:12px;color:#71717a;margin:8px 0">One email = one intersection forever. No re-login. Admin: admin@skiii.com</p><input id="loginEmail" class="input" type="email" placeholder="new@email.com"><div id="loginError" style="display:none;margin-top:8px;padding:8px;background:rgba(239,68,68,0.1);border-radius:10px;color:#f87171;font-size:12px"></div><div style="display:flex;gap:8px;margin-top:10px"><button class="btn" style="background:#fff;color:#000" onclick="doLogin()">Intersect</button><button class="btn btn2" onclick="closeLogin()">Cancel</button><button class="btn btn2" onclick="doLogout()">Leave</button></div></div></div>
+<div id="ansModal" class="modal"><div class="modalBox"><h3>Intersect — Reply with your subjectivity</h3><input id="aName" class="input" placeholder="Your name"><textarea id="aText" class="input" placeholder="How does it look from your angle?"></textarea><div style="display:flex;gap:6px;margin-top:8px"><label class="fileLabel">🖼️<input type="file" id="aImage" accept="image/*" hidden></label><button class="btn2" style="padding:6px 12px;border-radius:999px;border:1px solid #27272a;background:#050507;color:#fff;cursor:pointer" onclick="toggleRec('a')">🎙️</button></div><div id="aPreview"></div><div id="aAudioPreview"></div><div style="display:flex;gap:8px;margin-top:10px"><button class="btn" style="background:#fff;color:#000" onclick="submitAns()">Intersect → Reply</button><button class="btn btn2" onclick="closeAns()">Cancel</button></div></div></div>
+<div id="chModal" class="chModal"><div class="chBox"><div class="chHeader"><div style="display:flex;align-items:center;gap:10px"><div class="avatar">◧</div><div><div id="chName" style="font-weight:800">Intersection</div><div id="chInfo" style="font-size:11px;color:#71717a"></div></div></div><div style="display:flex;gap:6px"><button id="deleteChanBtn" class="btn" style="background:#ef4444;display:none" onclick="adminDeleteChannel()">Delete</button><button class="btn btn2" onclick="closeChannel()">✕</button></div></div><div id="chMsgs" class="chMsgs"></div><div class="chInput"><input id="chInput" class="input" style="margin:0;border-radius:999px" placeholder="Share your subjectivity..." onkeydown="if(event.key==='Enter')sendChMsg()"><button class="btn" style="background:#fff;color:#000" onclick="sendChMsg()">Intersect</button></div></div></div>
 
 <script>
-const bg=document.getElementById('main'); const bctx=bg.getContext('2d');
-function rsize(){bg.width=innerWidth; bg.height=innerHeight; orb.width=innerWidth; orb.height=innerHeight;} 
-const orb=document.getElementById('orb'); const octx=orb.getContext('2d');
-rsize(); addEventListener('resize',rsize);
-let t=0;
-function drawBG(){
- t+=0.008;
- bctx.clearRect(0,0,bg.width,bg.height);
- for(let k=0;k<9;k++){
-  bctx.beginPath(); bctx.strokeStyle=`hsla(${220+k*14},90%,62%,${0.2 + Math.sin(t+k)*0.08})`; bctx.lineWidth=2.2 + Math.sin(t+k)*1;
-  for(let x=0;x<bg.width;x+=10){ const y=bg.height*0.5 + Math.sin(x*0.008 + t*1.2 + k*0.9)*(80+k*14) + Math.cos(t*0.5 + k)*28; if(x===0)bctx.moveTo(x,y); else bctx.lineTo(x,y); }
-  bctx.stroke();
- }
- octx.clearRect(0,0,orb.width,orb.height);
- for(let i=0;i<24;i++){ const x=(Math.sin(t*0.3+i)*0.5+0.5)*orb.width; const y=(Math.cos(t*0.5+i*1.3)*0.5+0.5)*orb.height; const r=2+Math.sin(t+i)*1.6; octx.beginPath(); octx.arc(x,y,r,0,Math.PI*2); octx.fillStyle=`hsla(${210+i*10},90%,70%,0.95)`; octx.fill(); }
- requestAnimationFrame(drawBG);
-}
-drawBG();
-
-// === NEW: WHITE MODE + FORCED LOGIN + NO RE-LOGIN ===
 let people = JSON.parse(localStorage.getItem('siel1000People')||'[]');
 let currentUser = localStorage.getItem('sielEmail') || '';
-let whiteMode = localStorage.getItem('sielWhite')==='1';
-function applyWhite(){ if(whiteMode) document.body.classList.add('white-mode'); else document.body.classList.remove('white-mode'); localStorage.setItem('sielWhite', whiteMode?'1':'0'); }
-function toggleWhite(){ whiteMode=!whiteMode; applyWhite(); }
-applyWhite();
-
-function isAdmin(){ return currentUser && (currentUser.toLowerCase()==='admin@skiii.com' || currentUser.toLowerCase().includes('admin')); }
+function isAdmin(){ return currentUser && currentUser.toLowerCase()==='admin@skiii.com'; }
+function handle(){ return '@' + (currentUser.split('@')[0]||'guest').slice(0,12); }
 function updateLoginUI(){
- document.getElementById('userEmailLabel').textContent = currentUser ? currentUser + (isAdmin()?' [ADMIN]':'') : 'Not logged in';
- document.getElementById('adminBadge').innerHTML = isAdmin() ? '<span class="adminTag">ADMIN MODE</span>' : '';
- document.getElementById('deleteChanBtn').style.display = isAdmin() ? 'block' : 'none';
+ document.getElementById('userEmailLabel').textContent = currentUser ? currentUser : 'Not logged in';
+ document.getElementById('leftHandle').textContent = currentUser ? handle()+' • subjectivity' : '@guest';
+ document.getElementById('leftAvatar').textContent = currentUser ? currentUser[0].toUpperCase() : 'S';
  document.getElementById('topCounter').textContent = people.length + ' / 1000';
  document.getElementById('forceCounter').textContent = people.length + ' / 1000 joined';
+ document.getElementById('rightCounter').textContent = people.length + ' / 1000 joined';
  document.getElementById('forceBar').style.width = (Math.min(100, people.length/1000*100))+'%';
+ document.getElementById('rightBar').style.width = (Math.min(100, people.length/1000*100))+'%';
  document.getElementById('nextNum').textContent = people.length+1;
  document.getElementById('allEmails').innerHTML = people.map(p=>`<div>${p}</div>`).join('');
+ document.getElementById('deleteChanBtn').style.display = isAdmin() ? 'block' : 'none';
+ const mk=n=>Array.from({length:n},(_,i)=>`<div class="dot ${i<people.length?'filled':''}"></div>`).join('');
+ document.getElementById('mainDots').innerHTML = mk(80);
+ document.getElementById('dotsPreview').innerHTML = mk(60);
 }
-function checkLock(){
- if(!currentUser){ document.getElementById('forceLogin').style.display='flex'; document.getElementById('mainWrap').classList.add('locked'); }
- else { document.getElementById('forceLogin').style.display='none'; document.getElementById('mainWrap').classList.remove('locked'); }
- updateLoginUI();
-}
-function showForceError(msg){ const el=document.getElementById('forceError'); el.textContent=msg; el.style.display='block'; setTimeout(()=>el.style.display='none',4000); }
-function showLoginError(msg){ const el=document.getElementById('loginError'); el.textContent=msg; el.style.display='block'; setTimeout(()=>el.style.display='none',4000); }
+function checkLock(){ if(!currentUser){ document.getElementById('forceLogin').style.display='flex'; } else { document.getElementById('forceLogin').style.display='none'; } updateLoginUI(); }
+function showForceError(m){ const el=document.getElementById('forceError'); el.textContent=m; el.style.display='block'; setTimeout(()=>el.style.display='none',4000); }
+function showLoginError(m){ const el=document.getElementById('loginError'); el.textContent=m; el.style.display='block'; setTimeout(()=>el.style.display='none',4000); }
 function doForceLogin(){
  const e=document.getElementById('forceEmail').value.trim().toLowerCase();
  if(!e.includes('@')) return showForceError('Enter valid email');
- if(people.map(p=>p.toLowerCase()).includes(e)){ return showForceError('⛔ Account already exists! '+e+' cannot login again. One email = one spot.'); }
+ if(people.map(p=>p.toLowerCase()).includes(e)){ return showForceError('⛔ Account exists! '+e+' cannot login again.'); }
  currentUser=e; localStorage.setItem('sielEmail',e); people.push(e); localStorage.setItem('siel1000People', JSON.stringify(people)); checkLock(); saveAll(); render();
 }
 function openLogin(){ document.getElementById('loginModal').style.display='flex'; document.getElementById('loginEmail').value=''; }
@@ -292,128 +251,87 @@ function closeLogin(){ document.getElementById('loginModal').style.display='none
 function doLogin(){
  const e=document.getElementById('loginEmail').value.trim().toLowerCase();
  if(!e.includes('@')) return showLoginError('Enter valid email');
- if(people.map(p=>p.toLowerCase()).includes(e)){ return showLoginError('⛔ Account already exists! '+e+' cannot login again.'); }
+ if(people.map(p=>p.toLowerCase()).includes(e)){ return showLoginError('⛔ Account exists! Cannot login again.'); }
  currentUser=e; localStorage.setItem('sielEmail',e); people.push(e); localStorage.setItem('siel1000People', JSON.stringify(people)); updateLoginUI(); closeLogin(); checkLock(); saveAll(); render();
 }
 function doLogout(){ currentUser=''; localStorage.removeItem('sielEmail'); updateLoginUI(); closeLogin(); checkLock(); render(); }
 checkLock();
 
-// === ORIGINAL FULL CODE (kept) ===
-myNote.value=localStorage.getItem('sielNote')||'';
-function saveNote(){localStorage.setItem('sielNote',myNote.value); alert('Saved');}
+let myNote = localStorage.getItem('sielNote')||'';
+function saveNotePrompt(){ const n=prompt('Simple note — easy to understand', myNote); if(n!==null){ myNote=n; localStorage.setItem('sielNote',n); document.getElementById('notePreview').textContent=n.slice(0,40)||'Empty'; } }
+document.getElementById('notePreview').textContent = myNote.slice(0,40)||'Write your note...';
+
 let qs=JSON.parse(localStorage.getItem('sielQsV2')||'[]');
-let rawChans=JSON.parse(localStorage.getItem('sielChansV3')||localStorage.getItem('sielChans')||'[]');
-let chans=rawChans.map(c=>{
-  if(typeof c==='string') return {name:c,followers:1,followed:true,created:Date.now(),msgs:[{me:false,name:'System',text:'Welcome to '+c,time:Date.now()}]};
-  return {name:c.name||'Channel',followers:c.followers||1,followed:c.followed!==undefined?c.followed:true,created:c.created||Date.now(),msgs:Array.isArray(c.msgs)?c.msgs:[{me:false,name:'System',text:'Welcome',time:Date.now()}]};
-});
-let pendingQImg=null, pendingAImg=null, pendingQAudio=null, pendingAAudio=null, curAnsIndex=null, editTarget=null, curCh=null, pendingChImg=null, pendingChAudio=null;
-let mediaRecorder=null, recChunks=[], recType=null, recStream=null;
-qImage.addEventListener('change',e=>{ const f=e.target.files[0]; if(!f)return; const r=new FileReader(); r.onload=ev=>{pendingQImg=ev.target.result; qPreview.innerHTML=`<img src="${pendingQImg}" class="pic"><button class="btn btn2" onclick="clearQImg()">Remove</button>`}; r.readAsDataURL(f); });
-function clearQImg(){pendingQImg=null; qImage.value=''; qPreview.innerHTML='';}
-aImage.addEventListener('change',e=>{ const f=e.target.files[0]; if(!f)return; const r=new FileReader(); r.onload=ev=>{pendingAImg=ev.target.result; aPreview.innerHTML=`<img src="${pendingAImg}" class="pic">`}; r.readAsDataURL(f); });
-document.getElementById('chImage').addEventListener('change',e=>{ const f=e.target.files[0]; if(!f)return; const r=new FileReader(); r.onload=ev=>{pendingChImg=ev.target.result; document.getElementById('chImagePreview').innerHTML=`<img src="${pendingChImg}" class="pic"><button class="btn btn2" onclick="clearChImg()">Remove</button>`}; r.readAsDataURL(f); });
-function clearChImg(){pendingChImg=null; document.getElementById('chImage').value=''; document.getElementById('chImagePreview').innerHTML='';}
+let rawChans=JSON.parse(localStorage.getItem('sielChansV3')||'[]');
+let chans=rawChans.map(c=> typeof c==='string'?{name:c,followers:1,msgs:[{me:false,name:'System',text:'Welcome to '+c+' — intersection created',time:Date.now()}]}:{...c, msgs:c.msgs||[]});
+let pendingQImg=null, pendingAImg=null, pendingQAudio=null, pendingAAudio=null, curAnsIndex=null, editTarget=null, curCh=null;
+let mediaRecorder=null, recChunks=[], recType=null;
+
+const qImage=document.getElementById('qImage');
+qImage.addEventListener('change',e=>{ const f=e.target.files[0]; if(!f)return; const r=new FileReader(); r.onload=ev=>{pendingQImg=ev.target.result; document.getElementById('qPreview').innerHTML=`<img src="${pendingQImg}" style="width:100%;border-radius:12px;margin-top:8px;border:1px solid #1e1f24">`;}; r.readAsDataURL(f);});
+const aImage=document.getElementById('aImage');
+aImage?.addEventListener('change',e=>{ const f=e.target.files[0]; if(!f)return; const r=new FileReader(); r.onload=ev=>{pendingAImg=ev.target.result; document.getElementById('aPreview').innerHTML=`<img src="${pendingAImg}" style="width:100%;border-radius:12px">`;}; r.readAsDataURL(f);});
+
 async function toggleRec(type){
- const btn=document.getElementById(type==='q'?'qRecBtn':'aRecBtn');
- if(mediaRecorder && mediaRecorder.state==='recording'){ mediaRecorder.stop(); btn.classList.remove('recording'); return; }
- try{ recType=type; recStream=await navigator.mediaDevices.getUserMedia({audio:true}); recChunks=[]; mediaRecorder=new MediaRecorder(recStream); mediaRecorder.ondataavailable=e=>{if(e.data.size>0)recChunks.push(e.data)}; mediaRecorder.onstop=()=>{ const blob=new Blob(recChunks,{type:'audio/webm'}); const reader=new FileReader(); reader.onload=ev=>{ const data=ev.target.result; if(recType==='q'){pendingQAudio=data; document.getElementById('qAudioPreview').innerHTML=`<audio controls src="${data}"></audio>`} else {pendingAAudio=data; document.getElementById('aAudioPreview').innerHTML=`<audio controls src="${data}"></audio>`}}; reader.readAsDataURL(blob); recStream.getTracks().forEach(t=>t.stop()); }; mediaRecorder.start(); btn.classList.add('recording'); }catch(err){alert('Mic needed');}
+ if(mediaRecorder && mediaRecorder.state==='recording'){ mediaRecorder.stop(); return; }
+ try{ recType=type; const s=await navigator.mediaDevices.getUserMedia({audio:true}); recChunks=[]; mediaRecorder=new MediaRecorder(s); mediaRecorder.ondataavailable=e=>{if(e.data.size>0)recChunks.push(e.data)}; mediaRecorder.onstop=()=>{ const blob=new Blob(recChunks,{type:'audio/webm'}); const reader=new FileReader(); reader.onload=ev=>{ const data=ev.target.result; if(recType==='q'){pendingQAudio=data; document.getElementById('qAudioPreview').innerHTML=`<audio controls src="${data}" style="width:100%"></audio>`} else {pendingAAudio=data; document.getElementById('aAudioPreview').innerHTML=`<audio controls src="${data}" style="width:100%"></audio>`}}; reader.readAsDataURL(blob); s.getTracks().forEach(t=>t.stop()); }; mediaRecorder.start(); }catch{alert('Mic needed — allow microphone');}
 }
-async function toggleRecCh(){
- const btn=document.querySelector('#chInputBar .rec');
- if(mediaRecorder && mediaRecorder.state==='recording'){ mediaRecorder.stop(); btn.classList.remove('recording'); return; }
- try{ recStream=await navigator.mediaDevices.getUserMedia({audio:true}); recChunks=[]; mediaRecorder=new MediaRecorder(recStream); mediaRecorder.ondataavailable=e=>{if(e.data.size>0)recChunks.push(e.data)}; mediaRecorder.onstop=()=>{ const blob=new Blob(recChunks,{type:'audio/webm'}); const reader=new FileReader(); reader.onload=ev=>{ pendingChAudio=ev.target.result; document.getElementById('chAudioPreview').innerHTML=`<audio controls src="${pendingChAudio}"></audio><button class="btn btn2" onclick="clearChAudio()">Remove</button>`}; reader.readAsDataURL(blob); recStream.getTracks().forEach(t=>t.stop()); }; mediaRecorder.start(); btn.classList.add('recording'); }catch(err){alert('Mic needed');}
-}
-function clearChAudio(){pendingChAudio=null; document.getElementById('chAudioPreview').innerHTML='';}
+
 function render(){
- qCount.textContent=qs.length+' posts';
- let sorted=[...qs].sort((a,b)=>a.time-b.time);
- qList.innerHTML=sorted.map((q,qi)=>{
+ let sorted=[...qs].sort((a,b)=>b.time-a.time);
+ document.getElementById('qList').innerHTML=sorted.map((q,i)=>{
   let oi=qs.indexOf(q);
-  return `<div class="q"><div style="display:flex;justify-content:space-between"><b>Q${qi+1}: ${q.title}</b><span class="mono" style="font-size:10px;color:#8ea0c0">${new Date(q.time).toLocaleTimeString()}</span></div><div style="font-size:13px;color:#c2d0e8;margin:6px 0;white-space:pre-wrap">${q.body}</div>${q.image?`<img src="${q.image}" class="pic">`:''}${q.audio?`<audio controls src="${q.audio}"></audio>`:''}<div class="vote"><button class="${q.myVote==='up'?'activeUp':''}" onclick="voteQ(${oi},'up')">👍 ${q.likes}</button><button class="${q.myVote==='down'?'activeDown':''}" onclick="voteQ(${oi},'down')">👎 ${q.dislikes}</button><button onclick="openAns(${oi})">Reply</button><button onclick="editQ(${oi})">Edit</button></div>${q.answers.length?`<div style="margin-top:8px">${q.answers.map(a=>`<div class="ans"><b>${a.name}:</b> ${a.text}${a.image?`<img src="${a.image}" class="pic">`:''}${a.audio?`<audio controls src="${a.audio}"></audio>`:''}</div>`).join('')}</div>`:''}</div>`;
- }).join('')||'<div style="text-align:center;color:#8ea0c0;padding:14px">No questions yet</div>';
+  let name = (q.email||'SIEL').split('@')[0] || 'siel';
+  let handle = '@'+name;
+  return `<div class="tweet" onclick="openAns(${oi})">
+   <div class="avatar">${name[0].toUpperCase()}</div>
+   <div class="tweet-content">
+    <div class="tweet-head"><span class="tweet-name">${q.title||'Subjectivity'}</span><span class="tweet-handle">${handle} • ${new Date(q.time).toLocaleTimeString()}</span><span style="margin-left:auto">${isAdmin()?`<button class="delBtn" onclick="event.stopPropagation();deleteQ(${oi})">🗑 Delete</button>`:''}</span></div>
+    <div class="tweet-text">${q.body||''}</div>
+    ${q.image?`<div class="tweet-media"><img src="${q.image}"></div>`:''}
+    ${q.audio?`<audio controls src="${q.audio}" style="width:100%;margin-top:8px"></audio>`:''}
+    <div class="tweet-actions"><span>◍ ${q.answers?.length||0} intersections</span><span onclick="event.stopPropagation();voteQ(${oi},'up')">♡ ${q.likes||0} resonances</span><span>↗ braid</span><span>👁️</span><span>🔖</span></div>
+    ${q.answers?.length?`<div style="margin-top:10px;border-top:1px solid #1e1f24;padding-top:8px">${q.answers.map(a=>`<div style="display:flex;gap:8px;padding:6px 0"><div class="avatar" style="width:28px;height:28px;font-size:12px">${(a.name||'A')[0]}</div><div style="background:#0e0e10;border:1px solid #1e1f24;border-radius:12px;padding:8px 10px;font-size:13px"><b>${a.name||'Anon'}:</b> ${a.text||''}${a.image?`<img src="${a.image}" style="width:100%;border-radius:8px;margin-top:6px">`:''}${a.audio?`<audio controls src="${a.audio}" style="width:100%;margin-top:6px"></audio>`:''}</div></div>`).join('')}</div>`:''}
+   </div>
+  </div>`;
+ }).join('')||`<div style="padding:20px;text-align:center;color:#71717a;font-size:14px">No subjectivities yet — be first to intersect</div>`;
  renderChans();
 }
 function postQ(){
- const title=qTitle.value.trim(); const body=qBody.value.trim(); if(!title && !body && !pendingQImg && !pendingQAudio) return alert('Write something');
- if(editTarget && editTarget.type==='q'){ qs[editTarget.index].title=title||qs[editTarget.index].title; qs[editTarget.index].body=body||qs[editTarget.index].body; if(pendingQImg) qs[editTarget.index].image=pendingQImg; if(pendingQAudio) qs[editTarget.index].audio=pendingQAudio; editTarget=null; qTitle.value=''; qBody.value=''; clearQImg(); document.getElementById('qAudioPreview').innerHTML=''; pendingQAudio=null; saveAll(); return; }
- qs.push({title:title||'Question',body,image:pendingQImg,audio:pendingQAudio,time:Date.now(),likes:0,dislikes:0,myVote:null,answers:[]}); saveAll(); qTitle.value=''; qBody.value=''; clearQImg(); document.getElementById('qAudioPreview').innerHTML=''; pendingQAudio=null;
+ if(!currentUser) return alert('Login first — one email one spot');
+ const title=document.getElementById('qTitle').value.trim();
+ const body=document.getElementById('qBody').value.trim();
+ if(!title && !body && !pendingQImg && !pendingQAudio) return alert('Share a subjectivity');
+ if(editTarget!==null){ qs[editTarget].title=title||qs[editTarget].title; qs[editTarget].body=body||qs[editTarget].body; if(pendingQImg) qs[editTarget].image=pendingQImg; editTarget=null; } 
+ else { qs.push({title:title||'Subjectivity',body:body,email:currentUser,image:pendingQImg,audio:pendingQAudio,time:Date.now(),likes:0,myVote:null,answers:[]}); }
+ saveAll(); document.getElementById('qTitle').value=''; document.getElementById('qBody').value=''; document.getElementById('qPreview').innerHTML=''; document.getElementById('qAudioPreview').innerHTML=''; pendingQImg=null; pendingQAudio=null;
 }
-function editQ(i){ qTitle.value=qs[i].title; qBody.value=qs[i].body; editTarget={type:'q',index:i}; }
-function voteQ(i,type){ const q=qs[i]; if(q.myVote===type){ if(type==='up')q.likes--; else q.dislikes--; q.myVote=null; } else { if(q.myVote==='up')q.likes--; if(q.myVote==='down')q.dislikes--; if(type==='up')q.likes++; else q.dislikes++; q.myVote=type; } saveAll(); }
-function openAns(i){curAnsIndex=i; pendingAImg=null; pendingAAudio=null; aImage.value=''; aPreview.innerHTML=''; aAudioPreview.innerHTML=''; aName.value=''; aText.value=''; ansModal.style.display='flex';}
-function closeAns(){ansModal.style.display='none';}
-function submitAns(){ const name=aName.value.trim()||'Guest'; const text=aText.value.trim(); if(!text && !pendingAImg && !pendingAAudio) return alert('Add text'); qs[curAnsIndex].answers.push({name,text,image:pendingAImg,audio:pendingAAudio}); saveAll(); closeAns(); }
+function voteQ(i,type){ if(!currentUser) return alert('Login first'); const q=qs[i]; if(q.myVote===type){ q.likes--; q.myVote=null; } else { if(q.myVote) q.likes--; q.likes++; q.myVote=type; } saveAll(); }
+function deleteQ(i){ if(!isAdmin()) return; if(confirm('Delete post?')){ qs.splice(i,1); saveAll(); } }
+function openAns(i){ curAnsIndex=i; document.getElementById('ansModal').style.display='flex'; document.getElementById('aName').value=currentUser; document.getElementById('aText').value=''; document.getElementById('aPreview').innerHTML=''; document.getElementById('aAudioPreview').innerHTML=''; }
+function closeAns(){ document.getElementById('ansModal').style.display='none'; }
+function submitAns(){ const name=document.getElementById('aName').value.trim()||currentUser; const text=document.getElementById('aText').value.trim(); if(!text && !pendingAImg && !pendingAAudio) return alert('Add text'); qs[curAnsIndex].answers.push({name,text,image:pendingAImg,audio:pendingAAudio}); saveAll(); closeAns(); }
 function saveAll(){ localStorage.setItem('sielQsV2',JSON.stringify(qs)); localStorage.setItem('sielChansV3',JSON.stringify(chans)); localStorage.setItem('siel1000People', JSON.stringify(people)); render(); updateLoginUI(); }
 function createChan(){
- if(!currentUser) return alert('Please login with email first');
- const n=chanName.value.trim(); if(!n) return alert('Enter channel name');
- if(chans.some(c=>c.name.toLowerCase()===n.toLowerCase())) return alert('Channel already exists');
- chans.push({name:n,followers:1,followed:true,created:Date.now(),msgs:[{me:false,name:'System',text:'Welcome to '+n+' channel — created by '+currentUser,time:Date.now()}]}); 
- chanName.value=''; saveAll();
+ if(!currentUser) return alert('Login first');
+ const n=document.getElementById('chanName').value.trim(); if(!n) return alert('Enter community name');
+ if(chans.some(c=>c.name.toLowerCase()===n.toLowerCase())) return alert('Community exists');
+ chans.push({name:n,followers:1,msgs:[{me:false,name:'System',text:'Welcome to '+n+' — intersection created by '+currentUser,time:Date.now()}]}); document.getElementById('chanName').value=''; saveAll();
 }
 function renderChans(){
- if(chans.length===0){chanList.innerHTML='<div class="mono" style="font-size:11px;color:#8ea0c0">No channels yet — create one</div>'; return;}
- chanList.innerHTML=chans.map((c,i)=>`
-  <div class="chan" onclick="openChannel(${i})">
-   <div>
-    <div style="font-weight:700">📢 ${c.name} ${isAdmin()?'<span style="color:#ff8da1">[ADMIN]</span>':''}</div>
-    <div class="mono" style="font-size:11px;color:#8ea0c0">👥 ${c.followers} • 💬 ${c.msgs.length} • ${c.followed?'Following':'Tap to follow'}</div>
-    <div class="mono" style="font-size:11px;color:#6ea8ff;margin-top:2px">${(c.msgs[c.msgs.length-1]?.text||'').slice(0,40)}</div>
-   </div>
-   <div style="display:flex;gap:6px;align-items:center">
-   ${isAdmin()?`<button class="delBtn" onclick="event.stopPropagation(); adminDeleteChannelByIndex(${i})">🗑 Delete</button>`:''}
-   <div style="font-size:18px">↗</div>
-   </div>
-  </div>
- `).join('');
+ const el=document.getElementById('chanList');
+ if(chans.length===0){ el.innerHTML='<div style="font-size:12px;color:#71717a">No communities yet</div>'; return; }
+ el.innerHTML=chans.map((c,i)=>`<div class="widget-item" onclick="openChannel(${i})" style="display:flex;justify-content:space-between;align-items:center"><div><div class="widget-title">◧ ${c.name}</div><div class="widget-sub">◍ ${c.followers} • 💬 ${c.msgs.length} • ${c.msgs[c.msgs.length-1]?.text.slice(0,30)||'new'}</div></div><div>${isAdmin()?`<button class="delBtn" onclick="event.stopPropagation();adminDeleteChannelByIndex(${i})">🗑</button>`:''} →</div></div>`).join('');
 }
-function openChannel(i){
- curCh=i; const c=chans[i];
- document.getElementById('chName').textContent='📢 '+c.name;
- document.getElementById('chInfo').textContent='👥 '+c.followers+' followers • 💬 '+c.msgs.length+' messages • Logged as: '+(currentUser||'Guest');
- document.getElementById('chAvatar').textContent=c.name[0].toUpperCase();
- document.getElementById('chModal').style.display='flex';
- updateLoginUI();
- renderChMsgs();
- updateChAccess();
-}
-function closeChannel(){ document.getElementById('chModal').style.display='none'; curCh=null; clearChImg(); clearChAudio(); }
-function updateChAccess(){
- if(curCh===null) return;
- const c=chans[curCh];
- document.getElementById('chInputBar').style.display=c.followed?'flex':'none';
- document.getElementById('chFollowBlock').style.display=c.followed?'none':'block';
-}
-function renderChMsgs(){
- if(curCh===null) return;
- const c=chans[curCh];
- document.getElementById('chMsgs').innerHTML=c.msgs.map((m,mi)=>`
-  <div class="bub ${m.me?'me':'other'}">
-   ${m.name?`<div style="font-weight:700;font-size:11px;color:#6ea8ff">${m.name} ${m.email?`(${m.email})`:''}</div>`:''}
-   <div>${m.text}</div>
-   ${m.image?`<img src="${m.image}" class="pic" style="margin-top:6px">`:''}
-   ${m.audio?`<audio controls src="${m.audio}" style="margin-top:6px;height:32px"></audio>`:''}
-   <div class="mono" style="font-size:9px;opacity:0.6;margin-top:4px">${new Date(m.time).toLocaleTimeString()}</div>
-   ${isAdmin()?`<button class="delBtn" onclick="adminDeleteMsg(${mi})">🗑 Delete msg (Admin)</button>`:''}
-  </div>
- `).join('');
- document.getElementById('chMsgs').scrollTop=999999;
-}
-function sendChMsg(){
- if(curCh===null) return;
- if(!currentUser) return alert('Login with email first');
- const c=chans[curCh]; if(!c.followed) return;
- const txt=document.getElementById('chInput').value.trim(); 
- if(!txt && !pendingChImg && !pendingChAudio) return;
- c.msgs.push({me:true,name:'You',email:currentUser,text:txt||'📷',image:pendingChImg,audio:pendingChAudio,time:Date.now()});
- document.getElementById('chInput').value=''; clearChImg(); clearChAudio(); saveAll(); renderChMsgs();
-}
-function followCurrent(){ if(curCh!==null){ chans[curCh].followed=true; chans[curCh].followers++; saveAll(); updateChAccess(); } }
-function leaveChannel(){ if(curCh!==null){ chans[curCh].followed=false; chans[curCh].followers=Math.max(0,chans[curCh].followers-1); saveAll(); updateChAccess(); closeChannel(); } }
-function adminDeleteChannel(){ if(!isAdmin()) return; if(curCh===null) return; if(confirm('Admin: Delete channel '+chans[curCh].name+'?')){ chans.splice(curCh,1); saveAll(); closeChannel(); } }
-function adminDeleteChannelByIndex(i){ if(!isAdmin()) return; if(confirm('Admin: Delete channel '+chans[i].name+'?')){ chans.splice(i,1); saveAll(); } }
+function openChannel(i){ if(!currentUser) return alert('Login first'); curCh=i; const c=chans[i]; document.getElementById('chName').textContent='◧ '+c.name; document.getElementById('chInfo').textContent='◍ '+c.followers+' intersections • '+currentUser; document.getElementById('chModal').style.display='flex'; renderChMsgs(); }
+function closeChannel(){ document.getElementById('chModal').style.display='none'; curCh=null; }
+function renderChMsgs(){ if(curCh===null) return; const c=chans[curCh]; document.getElementById('chMsgs').innerHTML=c.msgs.map((m,mi)=>`<div class="bub ${m.me?'me':'other'}"><div style="font-weight:700;font-size:11px;color:#6ea8ff">${m.name||''}</div><div>${m.text}</div><div style="font-size:9px;opacity:0.6;margin-top:4px">${new Date(m.time).toLocaleTimeString()}</div>${isAdmin()?`<button class="delBtn" onclick="adminDeleteMsg(${mi})">🗑 Delete</button>`:''}</div>`).join(''); document.getElementById('chMsgs').scrollTop=999999; }
+function sendChMsg(){ if(curCh===null) return; const txt=document.getElementById('chInput').value.trim(); if(!txt) return; chans[curCh].msgs.push({me:true,name:'You',email:currentUser,text:txt,time:Date.now()}); document.getElementById('chInput').value=''; saveAll(); renderChMsgs(); }
+function adminDeleteChannel(){ if(!isAdmin()) return; chans.splice(curCh,1); saveAll(); closeChannel(); }
+function adminDeleteChannelByIndex(i){ if(!isAdmin()) return; if(confirm('Delete '+chans[i].name+'?')){ chans.splice(i,1); saveAll(); } }
 function adminDeleteMsg(mi){ if(!isAdmin()) return; chans[curCh].msgs.splice(mi,1); saveAll(); renderChMsgs(); }
+function openChannelList(){ document.querySelector('.right').scrollIntoView({behavior:'smooth'}); }
+function switchTab(t){ document.getElementById('tabForYou').classList.toggle('active', t==='foryou'); document.getElementById('tabFollowing').classList.toggle('active', t==='following'); render(); }
 render();
 </script>
 </body>
