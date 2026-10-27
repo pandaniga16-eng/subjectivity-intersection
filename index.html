@@ -3,360 +3,329 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>SIEL — Subjective Intersection / X</title>
+<title>SIEL TSC 2026 — Recent Posts Maintained</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:#000;color:#e7e9ea;overflow-x:hidden}
-.app{max-width:600px;margin:0 auto;min-height:100vh;background:#000;border-left:1px solid #1a1a1a;border-right:1px solid #1a1a1a;position:relative}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:#000;color:#e7e9ea}
+.app{max-width:620px;margin:0 auto;min-height:100vh;background:#000;border-left:1px solid #222;border-right:1px solid #222;position:relative}
 .top{position:sticky;top:0;z-index:20;background:#000;border-bottom:1px solid #2f3336}
 .top1{height:44px;display:flex;align-items:center;justify-content:space-between;padding:0 16px}
-.top1-left{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#6ea8ff,#a78bfa);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:12px;cursor:pointer}
-.top1-center{font-size:24px;font-weight:900}
-.tabs{display:flex;overflow-x:auto;scrollbar-width:none}
-.tab{flex:0 0 auto;padding:14px 16px;font-size:15px;font-weight:500;color:#71767b;white-space:nowrap;position:relative;cursor:pointer}
-.tab.active{color:#e7e9ea;font-weight:700}
-.tab.active::after{content:'';position:absolute;bottom:0;left:16px;right:16px;height:3px;background:#fff;border-radius:9999px}
-.composer{padding:12px 16px;border-bottom:1px solid #2f3336;display:flex;gap:10px}
 .avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#1d9bf0,#8a2be2);display:flex;align-items:center;justify-content:center;font-weight:900;flex:0 0 40px}
-.composer textarea{flex:1;background:transparent;border:0;color:#fff;font-size:18px;resize:none;outline:none;min-height:36px;padding:8px 0}
-.input{width:100%;background:#16181c;border:1px solid #2f3336;border-radius:8px;padding:12px;color:#fff;font-size:14px;margin-top:8px;outline:none}
-.btn{background:#1d9bf0;color:#fff;border:0;padding:0 16px;height:36px;border-radius:9999px;font-weight:700;font-size:14px;cursor:pointer}
+.tabs{display:flex;overflow-x:auto;scrollbar-width:none}
+.tab{flex:0 0 auto;padding:14px 12px;font-size:13px;color:#71767b;cursor:pointer;white-space:nowrap}
+.tab.active{color:#fff;font-weight:700;border-bottom:3px solid #fff}
+.input{width:100%;background:#16181c;border:1px solid #2f3336;border-radius:10px;padding:12px;color:#fff;font-size:14px;margin-top:8px}
+.btn{background:#1d9bf0;color:#fff;border:0;padding:0 16px;height:36px;border-radius:9999px;font-weight:700;cursor:pointer}
 .btn-white{background:#fff;color:#000}
-.btn-small{height:28px;font-size:12px}
-.tweet{padding:12px 16px;border-bottom:1px solid #2f3336;display:flex;gap:10px}
-.tweet:hover{background:#080808}
-.braid{height:140px;background:#000;border:1px solid #333639;border-radius:16px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;margin-top:10px}
-.profLine{position:absolute;width:2px;height:100px;background:linear-gradient(180deg,#1d9bf0,#8a2be2,#f91880);animation:braid 3s ease-in-out infinite alternate}
-@keyframes braid{0%{transform:translateY(-12px)}100%{transform:translateY(12px)}}
-.trinity{border-bottom:1px solid #2f3336;padding:10px 16px;display:flex;gap:8px;align-items:center;font-size:13px;flex-wrap:wrap}
-.counter{background:#1d9bf0;color:#fff;padding:2px 8px;border-radius:9999px;font-weight:700;font-size:12px}
-.widget{background:#16181c;border:1px solid #2f3336;border-radius:16px;padding:12px 16px;margin:12px 16px}
-.widget h3{font-size:16px;font-weight:800;display:flex;justify-content:space-between;align-items:center}
-.widget-item{padding:10px 0;border-bottom:1px solid #2f3336;display:flex;justify-content:space-between;align-items:center;cursor:pointer}
-.widget-item:last-child{border-bottom:0}
-.bottom{position:fixed;bottom:0;left:0;right:0;max-width:600px;margin:0 auto;background:#000;border-top:1px solid #2f3336;display:flex;justify-content:space-around;align-items:center;height:53px;z-index:30}
-.b-item{position:relative;width:40px;height:40px;display:flex;align-items:center;justify-content:center;font-size:22px;cursor:pointer}
-.badge-num{position:absolute;top:0;right:0;background:#1d9bf0;color:#fff;font-size:11px;font-weight:700;min-width:18px;height:18px;border-radius:9999px;display:flex;align-items:center;justify-content:center;padding:0 4px;border:2px solid #000}
-.fab{position:fixed;bottom:70px;right:16px;width:56px;height:56px;background:#1d9bf0;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:32px;color:#fff;box-shadow:0 2px 10px rgba(0,0,0,0.6);cursor:pointer;z-index:25}
-.forceModal{position:fixed;inset:0;background:#000;z-index:100;display:flex;align-items:center;justify-content:center;padding:20px}
-.modal{position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:90;display:none;align-items:flex-end;justify-content:center;padding:0}
-@media(min-width:600px){.modal{align-items:center}}
-.modalBox{width:100%;max-width:600px;background:#000;border:1px solid #2f3336;border-radius:16px 16px 0 0;max-height:90vh;overflow:hidden;display:flex;flex-direction:column}
-.chHeader{padding:12px 16px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #2f3336}
-.chMsgs{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px}
+.tweet{padding:14px 16px;border-bottom:1px solid #2f3336;display:flex;gap:12px}
+.braid{height:160px;background:radial-gradient(400px 120px at 50% 0%, rgba(29,155,240,0.2), transparent), #000;border:1px solid #333639;border-radius:16px;position:relative;display:flex;align-items:center;justify-content:center;margin-top:12px}
+.profLine{position:absolute;width:2px;height:110px;background:linear-gradient(180deg,#1d9bf0,#8a2be2,#f91880);animation:braid 3s ease-in-out infinite alternate}
+@keyframes braid{0%{transform:translateY(-14px)}100%{transform:translateY(14px)}}
+.formBadge{font-size:10px;padding:2px 6px;border-radius:9999px;font-weight:700}
+.f1{background:#0ea5e9;color:#000} .f2{background:#a78bfa;color:#000}
+.bottom{position:fixed;bottom:0;left:0;right:0;max-width:620px;margin:0 auto;background:#000;border-top:1px solid #2f3336;display:flex;justify-content:space-around;height:53px;z-index:5}
+.b-item{width:40px;height:40px;display:flex;align-items:center;justify-content:center;font-size:20px;cursor:pointer}
+#chModal{position:fixed;inset:0;background:#000;z-index:99999;display:none;flex-direction:column}
+#chModal.open{display:flex}
+.chHeader{height:60px;padding:0 16px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #2f3336;flex:0 0 60px}
+.chMsgs{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px}
 .bub{max-width:78%;padding:10px 14px;border-radius:16px;font-size:14px;line-height:18px}
 .bub.me{align-self:flex-end;background:#1d9bf0;color:#fff;border-bottom-right-radius:4px}
-.bub.other{align-self:flex-start;background:#2f3336;color:#fff;border-bottom-left-radius:4px}
-.delBtn{background:rgba(249,24,128,0.15);border:0;color:#f91880;padding:4px 8px;border-radius:9999px;font-size:11px;font-weight:700;cursor:pointer;margin-top:4px}
-.form-badge{font-size:10px;padding:2px 6px;border-radius:9999px;font-weight:700}
-.form1{background:#0ea5e9;color:#000}
-.form2{background:#a78bfa;color:#000}
+.bub.other{align-self:flex-start;background:#2f3336}
+.chInput{padding:12px 16px;border-top:1px solid #2f3336;display:flex;gap:8px;flex:0 0 72px;background:#000}
+.forceModal{position:fixed;inset:0;background:#000;z-index:100000;display:flex;align-items:center;justify-content:center;padding:20px}
+.modalSmall{position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:100001;display:none;align-items:center;justify-content:center;padding:20px}
+.modalSmall.open{display:flex}
+.box{width:100%;max-width:420px;background:#16181c;border:1px solid #2f3336;border-radius:16px;padding:20px}
+.adminBadge{background:#1d9bf0;color:#fff;font-size:10px;padding:2px 6px;border-radius:9999px;font-weight:700}
 </style>
 </head>
 <body>
 <div class="app">
 <div class="top">
-<div class="top1"><div class="top1-left" id="leftAvatar" onclick="openLogin()">S</div><div class="top1-center">𝕏</div><div style="width:32px"></div></div>
+<div class="top1"><div class="avatar" id="leftAvatar" style="width:32px;height:32px;font-size:12px" onclick="openLogin()">S</div><div style="font-weight:900;font-size:18px">𝕏 SIEL TSC 2026 — Maintained</div><div style="width:32px"></div></div>
 <div class="tabs">
-<div class="tab active" id="tabFeed" onclick="switchTab('feed',this)">For you ⌄</div>
-<div class="tab" id="tabNotes" onclick="switchTab('notes',this)">Simple Notes 📝</div>
-<div class="tab" onclick="switchTab('communities',this)">Communities</div>
-<div class="tab" onclick="switchTab('trinity',this)">Trinity</div>
+<div class="tab active" onclick="showTab('feed',this)">For you — Recent Maintained</div>
+<div class="tab" onclick="showTab('comm',this)">Communities ⧉</div>
+<div class="tab" onclick="showTab('share',this)">➕ Add</div>
+<div class="tab" onclick="showTab('notes',this)">Notes 📝</div>
 </div>
 </div>
 
-<div class="trinity"><span>🔵 <b>Trinity:</b> 3 points = reality</span><span style="color:#71767b">•</span><span id="topCounter">0 / 1000</span><span class="counter" id="forceCounter">0 joined</span></div>
-
-<!-- FEED -->
-<div id="feedTab">
-<div class="composer">
-<div class="avatar">◈</div>
-<div style="flex:1">
-<textarea id="qBody" placeholder="What is happening? Share subjectivity..."></textarea>
-<input id="qTitle" class="input" placeholder="Title (optional)">
-<div id="qPreview"></div><div id="qAudioPreview"></div>
-<div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px">
-<div style="display:flex;gap:8px"><label style="color:#1d9bf0;cursor:pointer;font-size:18px">🖼️<input type="file" id="qImage" hidden></label><span style="color:#1d9bf0;cursor:pointer;font-size:18px" onclick="toggleRec('q')">🎙️</span><span style="color:#1d9bf0;cursor:pointer;font-size:18px" onclick="openNotes()">📝</span></div>
-<button class="btn" onclick="postQ()">Post</button>
-</div>
-</div>
+<div style="padding:8px 16px;border-bottom:1px solid #2f3336;background:#0a0a0a;font-size:11px;display:flex;gap:12px;flex-wrap:wrap">
+<span id="counter">0 / 1000</span>
+<span>Recent posts maintained ✓</span>
+<a href="https://siel-tsc2026.netlify.app" target="_blank" style="color:#1d9bf0">siel-tsc2026 ↗</a>
+<a href="https://622622.substack.com/p/does-the-world-begin-with-subjectivity" target="_blank" style="color:#a78bfa">Substack ↗</a>
+<button onclick="clearOld()" style="background:#2f3336;border:0;color:#fff;padding:4px 8px;border-radius:9999px;font-size:10px">Reset Posts (admin)</button>
 </div>
 
-<div class="tweet" style="cursor:default">
-<div class="avatar">◈</div>
-<div style="flex:1">
-<div style="font-size:12px;color:#71767b">📌 Pinned • 7 Braids</div>
-<div style="font-weight:700;font-size:15px">SIEL Lab <span style="background:#1d9bf0;border-radius:50%;padding:0 4px;font-size:10px">✔</span> @braidQG · 2h</div>
-<div style="font-size:15px;line-height:20px;margin-top:4px">Subjectivity-Intersection Braid QG — The world emerges when subjectivities intersect.</div>
-<div class="braid"><div class="profLine" style="left:14%"></div><div class="profLine" style="left:28%"></div><div class="profLine" style="left:42%"></div><div class="profLine" style="left:56%"></div><div class="profLine" style="left:70%"></div><div class="profLine" style="left:84%"></div></div>
-</div>
-</div>
+<div id="feedTab"><div id="qList"></div></div>
 
-<div id="qList"></div>
-</div>
-
-<!-- SIMPLE NOTES - FORM ONE & FORM TWO MAINTAINED -->
-<div id="notesTab" style="display:none">
+<div id="commTab" style="display:none">
 <div style="padding:16px;border-bottom:1px solid #2f3336">
-<h3 style="font-size:18px;font-weight:800">📝 Simple Notes — Maintained</h3>
-<p style="font-size:13px;color:#71767b;margin-top:6px">Form One & Form Two with pictures. Add new notes with pictures, they stay forever.</p>
-
-<div style="display:flex;gap:8px;margin-top:12px">
-<select id="noteForm" class="input" style="margin:0;flex:1"><option value="Form 1">Form 1</option><option value="Form 2">Form 2</option><option value="Form 3">Form 3</option><option value="General">General</option></select>
-<button class="btn btn-white btn-small" onclick="document.getElementById('noteImage').click()">🖼️ Picture</button>
-<input type="file" id="noteImage" accept="image/*" hidden>
+<h3>⧉ Communities — Creator = Admin</h3>
+<p style="font-size:12px;color:#71767b;margin-top:4px">Tap to OPEN — fixed. Creator leads messages. Join free.</p>
+<div style="display:flex;gap:8px;margin-top:12px"><input id="chanName" class="input" style="margin:0;flex:1" placeholder="Create community"><button class="btn-white btn" onclick="createChan()">Create</button></div>
 </div>
-<textarea id="noteText" class="input" placeholder="Write simple note — easy to understand... Example: Subjectivity = glasses to see" style="min-height:80px"></textarea>
-<div id="noteImgPreview"></div>
-<button class="btn btn-white" style="width:100%;margin-top:8px;height:44px" onclick="saveNote()">Save Note to <span id="formLabel">Form 1</span></button>
+<div id="chanList"></div>
 </div>
 
-<div style="padding:0 16px;display:flex;gap:8px;margin-top:12px">
-<button class="btn-small btn" style="background:#fff;color:#000" onclick="filterNotes('all')">All</button>
-<button class="btn-small btn" style="background:#16181c;border:1px solid #2f3336" onclick="filterNotes('Form 1')">Form 1</button>
-<button class="btn-small btn" style="background:#16181c;border:1px solid #2f3336" onclick="filterNotes('Form 2')">Form 2</button>
+<div id="shareTab" style="display:none"><div style="padding:16px">
+<h3>➕ Add Things To Share — Maintains recent</h3>
+<input id="shareTitle" class="input" placeholder="Title"><textarea id="shareBody" class="input" placeholder="Body / question..." style="min-height:100px"></textarea>
+<div id="sharePreview"></div>
+<div style="display:flex;gap:8px;margin-top:8px"><button class="btn-white btn" onclick="document.getElementById('shareImage').click()">🖼️</button><input type="file" id="shareImage" hidden><button class="btn" style="flex:1" onclick="shareAsPost()">Share as Post — Maintained</button></div>
+<div id="sharedList" style="margin-top:12px"></div>
+</div></div>
+
+<div id="notesTab" style="display:none;padding:16px"><h3>📝 Notes — Form 1 & 2 Maintained</h3><div id="notesList" style="margin-top:12px"></div></div>
+
+<div style="height:70px"></div>
+<div class="bottom"><div class="b-item" onclick="showTab('feed',null)">⌂</div><div class="b-item" onclick="showTab('comm',null)">⧉</div><div class="b-item" onclick="showTab('share',null)">➕</div><div class="b-item" onclick="showTab('notes',null)">📝</div></div>
 </div>
 
-<div id="notesList" style="padding:12px 16px"></div>
+<div id="chModal">
+<div class="chHeader"><div style="display:flex;gap:10px;align-items:center"><div class="avatar" style="width:36px;height:36px">⧉</div><div><div id="chName" style="font-weight:800">Community</div><div id="chInfo" style="font-size:12px;color:#71767b"></div></div></div><div style="display:flex;gap:8px"><button class="btn" style="background:#fff;color:#000" id="joinBtn" onclick="joinCommunity()">Join Free</button><button id="delChanBtn" class="btn" style="background:#f4212e;display:none" onclick="adminDeleteChannel()">Delete</button><button class="btn" style="background:#2f3336" onclick="closeChannel()">✕</button></div></div>
+<div id="chMsgs" class="chMsgs"></div>
+<div class="chInput"><input id="chInput" class="input" style="margin:0;flex:1;border-radius:9999px" placeholder="Message..." onkeydown="if(event.key==='Enter')sendChMsg()"><button class="btn-white btn" onclick="sendChMsg()">Send</button></div>
 </div>
 
-<!-- COMMUNITIES - FULL FUNCTIONAL -->
-<div id="communitiesTab" style="display:none">
-<div style="padding:16px;border-bottom:1px solid #2f3336">
-<h3 style="font-size:18px;font-weight:800">⧉ Communities — Intersections</h3>
-<p style="font-size:13px;color:#71767b;margin-top:6px">Full functional — create, open, chat, images. Like X Communities.</p>
-<div style="display:flex;gap:8px;margin-top:12px">
-<input id="chanName" class="input" style="margin:0;flex:1" placeholder="Create community e.g. Braid Beginners">
-<button class="btn btn-white" onclick="createChan()">Create</button>
-</div>
-</div>
-<div id="chanListFull" style="padding:0 16px"></div>
-<div class="widget">
-<div style="font-size:13px;color:#71767b">👥 <span id="rightCounter">0 / 1000 joined</span></div>
-<div id="allEmails" style="max-height:80px;overflow:auto;font-size:11px;color:#71767b;margin-top:8px"></div>
-</div>
-</div>
-
-<div id="trinityTab" style="display:none;padding:16px">
-<div class="widget" style="margin:0"><h3>Trinity Principle</h3><p style="font-size:14px;color:#a1a1aa;margin-top:8px">3 points = minimum stable reality. Subjectivity needs intersection to exist.</p></div>
-<div class="widget"><h3>Papers</h3><a href="https://www.researchgate.net/publication/414975934" target="_blank"><div style="padding:10px 0"><div style="font-weight:700;font-size:14px">Paper 1 — ResearchGate 📄</div></div></a></div>
-</div>
-
-<div style="height:80px"></div>
-<div class="fab" onclick="document.getElementById('qBody').focus();switchTab('feed',document.getElementById('tabFeed'))">+</div>
-<div class="bottom">
-<div class="b-item" onclick="switchTab('feed',document.getElementById('tabFeed'))">⌂</div>
-<div class="b-item" onclick="switchTab('notes',document.getElementById('tabNotes'))">📝</div>
-<div class="b-item" onclick="switchTab('communities',null)">⧉<span class="badge-num" id="commBadge">2</span></div>
-<div class="b-item">🔔<span class="badge-num">8</span></div>
-<div class="b-item">✉️</div>
-</div>
-</div>
-
-<div id="forceLogin" class="forceModal">
-<div style="width:100%;max-width:380px;background:#16181c;border:1px solid #2f3336;border-radius:16px;padding:20px;text-align:center">
-<div style="font-size:28px">◈</div>
-<h2 style="font-size:20px;font-weight:800;margin-top:8px">Join 1000 Intersections</h2>
-<p style="font-size:14px;color:#71767b;margin:10px 0">One email = One spot forever.</p>
-<div style="background:#000;border:1px solid #2f3336;border-radius:12px;padding:10px;margin:12px 0;text-align:left">
-<div style="display:flex;justify-content:space-between;font-size:13px"><span id="forceCounter2">0 / 1000</span><span>◈ LIVE</span></div>
-<div style="width:100%;height:4px;background:#2f3336;border-radius:99px;margin-top:8px"><div id="forceBar" style="height:4px;background:#1d9bf0;border-radius:99px;width:0%"></div></div>
-</div>
-<input id="forceEmail" class="input" type="email" placeholder="Email → @handle">
-<button class="btn" style="width:100%;margin-top:12px;height:44px" onclick="doForceLogin()">Claim #<span id="nextNum">1</span> — Enter</button>
-<div id="forceError" style="display:none;margin-top:8px;color:#f91880;font-size:13px"></div>
-</div>
-</div>
-
-<div id="chModal" class="modal"><div class="modalBox"><div class="chHeader"><div style="display:flex;gap:10px;align-items:center"><div class="avatar" style="width:36px;height:36px">⧉</div><div><div id="chName" style="font-weight:800">Community</div><div id="chInfo" style="font-size:12px;color:#71767b"></div></div></div><div style="display:flex;gap:8px"><button id="deleteChanBtn" class="btn" style="background:#f4212e;display:none" onclick="adminDeleteChannel()">Delete</button><button class="btn" style="background:#2f3336" onclick="closeChannel()">✕</button></div></div><div id="chMsgs" class="chMsgs"></div><div class="chInput" style="padding:12px;display:flex;gap:8px;border-top:1px solid #2f3336"><label class="btn" style="background:#2f3336">🖼️<input type="file" id="chanImage" accept="image/*" hidden></label><input id="chInput" class="input" style="margin:0;flex:1;border-radius:9999px" placeholder="Post your reply..." onkeydown="if(event.key==='Enter')sendChMsg()"><button class="btn btn-white" onclick="sendChMsg()">Post</button></div></div></div>
-<div id="loginModal" class="modal"><div style="width:100%;max-width:400px;background:#16181c;border-radius:16px;padding:20px;margin:0 auto"><h3>Login</h3><input id="loginEmail" class="input" type="email" placeholder="new@email.com" style="margin-top:12px"><div id="loginError" style="display:none;margin-top:8px;color:#f91880"></div><div style="display:flex;gap:8px;margin-top:12px"><button class="btn" onclick="doLogin()">Login</button><button class="btn" style="background:#2f3336" onclick="closeLogin()">Cancel</button><button class="btn" style="background:#2f3336" onclick="doLogout()">Logout</button></div></div></div>
-<div id="ansModal" class="modal"><div style="width:100%;max-width:400px;background:#16181c;border-radius:16px;padding:20px;margin:0 auto"><h3>Reply</h3><textarea id="aText" class="input" placeholder="Post your reply" style="margin-top:10px;min-height:80px"></textarea><div style="display:flex;gap:8px;margin-top:12px"><button class="btn" style="background:#2f3336" onclick="closeAns()">Cancel</button><button class="btn" onclick="submitAns()">Reply</button></div></div></div>
+<div id="forceLogin" class="forceModal"><div class="box" style="text-align:center"><div style="font-size:28px">◈</div><h2 style="margin-top:8px">Join 1000 — Maintained</h2><input id="forceEmail" class="input" type="email" placeholder="Email"><button class="btn" style="width:100%;margin-top:12px;height:44px" onclick="doForceLogin()">Claim #<span id="nextNum">1</span></button><div id="forceError" style="display:none;color:#f91880;margin-top:8px"></div></div></div>
+<div id="loginModal" class="modalSmall"><div class="box"><h3>Login</h3><input id="loginEmail" class="input" type="email" placeholder="new@email.com"><div style="display:flex;gap:8px;margin-top:12px"><button class="btn" onclick="doLogin()">Login</button><button class="btn" style="background:#2f3336" onclick="closeLogin()">Cancel</button></div></div></div>
+<div id="ansModal" class="modalSmall"><div class="box"><h3>Comment</h3><textarea id="aText" class="input" placeholder="Your comment..." style="min-height:80px"></textarea><div style="display:flex;gap:8px;margin-top:12px"><button class="btn" style="background:#2f3336" onclick="closeAns()">Cancel</button><button class="btn" onclick="submitAns()">Comment</button></div></div></div>
 
 <script>
+// MAINTAIN RECENT POSTS - DO NOT RESET
 let people=JSON.parse(localStorage.getItem('siel1000People')||'[]');
 let currentUser=localStorage.getItem('sielEmail')||'';
-function isAdmin(){return currentUser.toLowerCase()==='admin@skiii.com'}
+let qs=JSON.parse(localStorage.getItem('sielQsV2')||'[]');
+let chans=JSON.parse(localStorage.getItem('sielChansV3')||'[]');
+let notes=JSON.parse(localStorage.getItem('sielNotes')||'[]');
+let sharedThings=JSON.parse(localStorage.getItem('sielSharedThings')||'[]');
+let curCh=null, pendingShareImg=null, curAnsIndex=null;
+
+// ONLY ADD NEW POSTS FROM LINKS IF NOT ALREADY EXIST - MAINTAINS RECENT
+let newPostsFromLinks = [
+ {
+  title:"Q1: Does the world begin with subjectivity?",
+  body:"From 622622.substack.com/p/does-the-world-begin-with-subjectivity\n\nIf there IS something, always according to a subject that refers to an object. Subject and object began at same time. Standpoint is NOT consciousness — typed mode of access to define event.\n\nQuestion: Can you imagine world independent of your consciousness?",
+  form:"Form 1 — Substack",
+  email:"satoru@siel.global",
+  time:Date.now()-600000,
+  likes:24,
+  answers:[]
+ },
+ {
+  title:"Q2: Trinity — 3 points = stable reality",
+  body:"From siel-tsc2026.netlify.app\n\nTrinity: 3 points = minimum stable reality. Same movie, different memory. Picture: 3 braids = volume → reality.\n\nQuestion: When did 2 subjectivities fail and need 3rd?",
+  form:"Form 1 — Trinity",
+  email:"satoru@siel.global",
+  time:Date.now()-500000,
+  likes:18,
+  answers:[]
+ },
+ {
+  title:"Q3: Finite Braid Source → Spacetime",
+  body:"From ResearchGate V1.1 — 7 Oct 2026\n\nFinite pointed involutive Yang-Baxter/Braid source supplies quantum + gravity. 8 signed representatives → V4 quotient diag(-1,+1,+1,+1). Spectrum (12/25,52/25...). pB=3/5. Spacetime NOT assumed — derived.\n\nQuestion: If spacetime derived from braids, what is objective reality?",
+  form:"Form 2 — Paper",
+  email:"satoru@siel.global",
+  time:Date.now()-400000,
+  likes:31,
+  answers:[]
+ },
+ {
+  title:"Q4: Cogito, ergo mundus est",
+  body:"From TSC 2026 Poster\n\nPhilosophy is genuine way of learning truths. Person = unique subject with irreducible I. Thinking creates world-structures stabilized by records.\n\nQuestion: Recycling views or finding what YOU can do?",
+  form:"Form 2 — Poster",
+  email:"satoru@siel.global",
+  time:Date.now()-300000,
+  likes:15,
+  answers:[]
+ },
+ {
+  title:"Q5: Glasses Analogy — Simple",
+  body:"Form 1 Easy: Subjectivity = glasses. Different glasses = different world. Intersection = same movie, different memory. Result = house from threads.\n\nQuestion: What glasses are you wearing?",
+  form:"Form 1 — Simple",
+  email:"system",
+  time:Date.now()-200000,
+  likes:42,
+  answers:[]
+ },
+ {
+  title:"Q6: Collection — Videos & Poster",
+  body:"From Facebook collection — paper PDF, poster A0, braid videos, Substack essays. All show: World does NOT start with objective spacetime. Starts with finite braid source + standpoint.\n\nQuestion: Which helped you most — paper, poster, video, Substack?",
+  form:"General — Collection",
+  email:"satoru@siel.global",
+  time:Date.now()-100000,
+  likes:9,
+  answers:[]
+ }
+];
+
+// MAINTAIN RECENT: only add if title not exists
+let existingTitles = qs.map(q=>q.title);
+newPostsFromLinks.forEach(p=>{
+ if(!existingTitles.includes(p.title)){
+  qs.push({...p, image:null, answers:p.answers||[]});
+ }
+});
+localStorage.setItem('sielQsV2',JSON.stringify(qs));
+
+if(chans.length===0){
+ chans=[
+  {name:"Does world begin with subjectivity? — Substack",admin:"satoru@siel.global",followers:["satoru@siel.global"],msgs:[{me:false,name:"System",email:"system",text:"Discuss Substack essay. Creator is admin, joining free.",time:Date.now()}]},
+  {name:"Braid QG Paper Q&A",admin:"satoru@siel.global",followers:["satoru@siel.global"],msgs:[{me:false,name:"System",email:"system",text:"Paper V1.1 Q&A — spectrum, pB. Ask here.",time:Date.now()}]},
+  {name:"TSC 2026 Poster Pictures",admin:"satoru@siel.global",followers:["satoru@siel.global"],msgs:[{me:false,name:"System",email:"system",text:"Share poster pictures, braid visuals.",time:Date.now()}]}
+ ];
+}
+
+function isGlobalAdmin(){return currentUser.toLowerCase()==='admin@skiii.com'}
+function isCommunityAdmin(c){ return c.admin===currentUser || isGlobalAdmin(); }
 function updateUI(){
  document.getElementById('leftAvatar').textContent=currentUser?currentUser[0].toUpperCase():'S';
- document.getElementById('topCounter').textContent=people.length+' / 1000';
- document.getElementById('forceCounter').textContent=people.length+' / 1000 joined';
- const f2=document.getElementById('forceCounter2'); if(f2) f2.textContent=people.length+' / 1000 joined';
- document.getElementById('rightCounter').textContent=people.length+' / 1000 joined';
- document.getElementById('forceBar').style.width=Math.min(100,people.length/10)+'%';
+ document.getElementById('counter').textContent=people.length+' / 1000';
  document.getElementById('nextNum').textContent=people.length+1;
- const all=document.getElementById('allEmails'); if(all) all.innerHTML=people.map(p=>`<div>${p}</div>`).join('');
- const del=document.getElementById('deleteChanBtn'); if(del) del.style.display=isAdmin()?'block':'none';
- const badge=document.getElementById('commBadge'); if(badge) badge.textContent=chans.length||0;
 }
 function checkLock(){ document.getElementById('forceLogin').style.display=currentUser?'none':'flex'; updateUI(); }
 function doForceLogin(){
- const e=document.getElementById('forceEmail').value.trim().toLowerCase();
+ let e=document.getElementById('forceEmail').value.trim().toLowerCase();
  if(!e.includes('@')) return alert('Enter email');
- if(people.map(p=>p.toLowerCase()).includes(e)) return document.getElementById('forceError').style.display='block', document.getElementById('forceError').textContent='⛔ Account exists! Cannot re-login.';
+ if(people.includes(e)) return document.getElementById('forceError').style.display='block', document.getElementById('forceError').textContent='Exists';
  currentUser=e; localStorage.setItem('sielEmail',e); people.push(e); localStorage.setItem('siel1000People',JSON.stringify(people)); checkLock(); saveAll(); render();
 }
-function openLogin(){document.getElementById('loginModal').style.display='flex'}
-function closeLogin(){document.getElementById('loginModal').style.display='none'}
+function openLogin(){ document.getElementById('loginModal').classList.add('open'); document.getElementById('loginModal').style.display='flex'; }
+function closeLogin(){ document.getElementById('loginModal').classList.remove('open'); document.getElementById('loginModal').style.display='none'; }
 function doLogin(){
- const e=document.getElementById('loginEmail').value.trim().toLowerCase();
+ let e=document.getElementById('loginEmail').value.trim().toLowerCase();
  if(!e.includes('@')) return;
- if(people.map(p=>p.toLowerCase()).includes(e)) return alert('Exists');
+ if(people.includes(e)) return alert('Exists');
  currentUser=e; localStorage.setItem('sielEmail',e); people.push(e); localStorage.setItem('siel1000People',JSON.stringify(people)); closeLogin(); checkLock(); saveAll(); render();
 }
-function doLogout(){currentUser=''; localStorage.removeItem('sielEmail'); checkLock(); closeLogin(); render();}
 checkLock();
 
-// DATA
-let qs=JSON.parse(localStorage.getItem('sielQsV2')||'[]');
-let rawChans=JSON.parse(localStorage.getItem('sielChansV3')||'[]');
-let chans=rawChans.map(c=>{
- if(typeof c==='string') return {name:c,followers:1,msgs:[{me:false,name:'System',text:'Welcome to '+c,text2:'',time:Date.now()}]};
- return {...c, followers:c.followers||1, msgs:c.msgs||[]};
+document.getElementById('shareImage')?.addEventListener('change',e=>{
+ let f=e.target.files[0]; if(!f)return;
+ let r=new FileReader(); r.onload=ev=>{ pendingShareImg=ev.target.result; document.getElementById('sharePreview').innerHTML=`<img src="${pendingShareImg}" style="width:100%;border-radius:12px;margin-top:10px">`; }; r.readAsDataURL(f);
 });
-if(chans.length===0){ chans=[{name:'Braid Beginners',followers:12,msgs:[{me:false,name:'System',text:'Welcome to Braid Beginners — ask about braids',time:Date.now()}]},{name:'Trinity Lab',followers:8,msgs:[{me:false,name:'System',text:'Trinity — 3 points = reality',time:Date.now()}]}]; }
-
-let simpleNotes=JSON.parse(localStorage.getItem('sielSimpleNotes')||'[]');
-let pendingQImg=null, pendingNoteImg=null, curAnsIndex=null, curCh=null, currentFilter='all';
-let mediaRecorder=null, recChunks=[];
-
-if(simpleNotes.length===0){
- simpleNotes=[
-  {form:'Form 1',text:'🎯 Subjectivity = glasses to see the world. Different glasses = different world.',image:null,time:Date.now()-100000,email:'system'},
-  {form:'Form 1',text:'🔗 Intersection = same movie, different memory. We intersect but remember different parts.',image:null,time:Date.now()-80000,email:'system'},
-  {form:'Form 2',text:'🌌 Result = house from threads. Space and time built from tiny braids twisting together. 3 points = minimum stable house.',image:null,time:Date.now()-60000,email:'system'},
-  {form:'Form 2',text:'📄 Paper Image: Subjectivity-Intersection Braid QG Lab — simple notes with pictures',image:null,time:Date.now()-40000,email:'system'}
- ];
- localStorage.setItem('sielSimpleNotes',JSON.stringify(simpleNotes));
-}
-
-document.getElementById('qImage')?.addEventListener('change',e=>{ const f=e.target.files[0]; if(!f)return; const r=new FileReader(); r.onload=ev=>{pendingQImg=ev.target.result; document.getElementById('qPreview').innerHTML=`<img src="${pendingQImg}" style="width:100%;border-radius:12px;margin-top:8px;border:1px solid #2f3336">`;}; r.readAsDataURL(f);});
-document.getElementById('noteImage')?.addEventListener('change',e=>{ const f=e.target.files[0]; if(!f)return; const r=new FileReader(); r.onload=ev=>{pendingNoteImg=ev.target.result; document.getElementById('noteImgPreview').innerHTML=`<img src="${pendingNoteImg}" style="width:100%;border-radius:12px;margin-top:8px;border:1px solid #2f3336">`;}; r.readAsDataURL(f);});
-document.getElementById('chanImage')?.addEventListener('change',e=>{ const f=e.target.files[0]; if(!f)return; const r=new FileReader(); r.onload=ev=>{ sendChMsgWithImage(ev.target.result); }; r.readAsDataURL(f);});
-document.getElementById('noteForm')?.addEventListener('change',e=>{ document.getElementById('formLabel').textContent=e.target.value; });
-
-async function toggleRec(type){
- if(mediaRecorder && mediaRecorder.state==='recording'){ mediaRecorder.stop(); return; }
- try{ const s=await navigator.mediaDevices.getUserMedia({audio:true}); recChunks=[]; mediaRecorder=new MediaRecorder(s); mediaRecorder.ondataavailable=e=>{if(e.data.size>0)recChunks.push(e.data)}; mediaRecorder.onstop=()=>{ const blob=new Blob(recChunks,{type:'audio/webm'}); const reader=new FileReader(); reader.onload=ev=>{ document.getElementById('qAudioPreview').innerHTML=`<audio controls src="${ev.target.result}" style="width:100%;margin-top:8px"></audio>`; pendingQImg=ev.target.result; }; reader.readAsDataURL(blob); s.getTracks().forEach(t=>t.stop()); }; mediaRecorder.start(); alert('Recording... tap again to stop'); }catch{alert('Mic needed');}
-}
 
 function render(){
  document.getElementById('qList').innerHTML=[...qs].sort((a,b)=>b.time-a.time).map(q=>{
-  let oi=qs.indexOf(q); let name=(q.email||'anon').split('@')[0];
-  return `<div class="tweet"><div class="avatar">${name[0].toUpperCase()}</div><div style="flex:1"><div style="font-weight:700;font-size:15px">${q.title||'Subjectivity'} <span style="color:#71767b;font-weight:400">@${name} · ${new Date(q.time).toLocaleTimeString()}</span></div><div style="font-size:15px;line-height:20px;margin-top:4px;white-space:pre-wrap">${q.body||''}</div>${q.image?`<div style="margin-top:10px;border:1px solid #333639;border-radius:16px;overflow:hidden"><img src="${q.image}" style="width:100%"></div>`:''}<div style="display:flex;gap:16px;margin-top:12px;color:#71767b;font-size:13px"><span onclick="openAns(${oi})">💬 ${q.answers?.length||0}</span><span onclick="like(${oi})">♡ ${q.likes||0}</span><span>♻️</span><span>📊</span></div></div></div>`;
- }).join('')||'';
+  let oi=qs.indexOf(q);
+  let name=(q.email||'anon').split('@')[0];
+  return `
+  <div class="tweet">
+   <div class="avatar">${name[0].toUpperCase()}</div>
+   <div style="flex:1;min-width:0">
+    <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
+     <span style="font-size:11px;padding:2px 6px;border-radius:9999px;background:#222;border:1px solid #333">Recent Maintained ✓</span>
+     <span class="formBadge ${q.form?.includes('Form 1')?'f1':'f2'}">${q.form||'Post'}</span>
+     <span style="font-weight:700;font-size:15px">${q.title||''}</span>
+    </div>
+    <div style="font-size:12px;color:#71767b;margin-top:2px">@${name} • ${new Date(q.time).toLocaleDateString()}</div>
+    <div style="font-size:15px;line-height:20px;margin-top:8px;white-space:pre-wrap">${q.body||''}</div>
+    ${(q.form?.includes('Trinity')||q.form?.includes('Paper')||q.title?.includes('Braid'))?`<div class="braid"><div class="profLine" style="left:15%"></div><div class="profLine" style="left:35%"></div><div class="profLine" style="left:55%"></div><div class="profLine" style="left:75%"></div></div>`:''}
+    ${q.image?`<img src="${q.image}" style="width:100%;border-radius:12px;margin-top:8px;border:1px solid #333">`:''}
+    <div style="display:flex;gap:16px;margin-top:12px;color:#71767b;font-size:13px">
+     <span style="cursor:pointer" onclick="openAns(${oi})">💬 ${q.answers?.length||0}</span>
+     <span style="cursor:pointer" onclick="like(${oi})">♡ ${q.likes||0}</span>
+     ${isGlobalAdmin()?`<span style="color:#f4212e;cursor:pointer" onclick="deleteQ(${oi})">🗑 Delete</span>`:''}
+    </div>
+    ${q.answers?.length?`<div style="margin-top:10px;border-top:1px solid #2f3336;padding-top:8px">${q.answers.map(a=>`<div style="display:flex;gap:8px;padding:4px 0"><div class="avatar" style="width:24px;height:24px;font-size:10px">${a.name[0]}</div><div style="background:#16181c;border:1px solid #2f3336;border-radius:10px;padding:6px 10px;font-size:13px"><b>${a.name}:</b> ${a.text}</div></div>`).join('')}</div>`:''}
+   </div>
+  </div>`;
+ }).join('');
 
- // Channels
- document.getElementById('chanListFull').innerHTML=chans.map((c,i)=>`
-  <div class="widget-item" onclick="openChannel(${i})">
-   <div><div style="font-weight:700;font-size:14px">⧉ ${c.name}</div><div style="font-size:12px;color:#71767b">👥 ${c.followers} • 💬 ${c.msgs.length} • ${c.msgs[c.msgs.length-1]?.text.slice(0,30)||'new'}</div></div>
-   <div style="display:flex;gap:8px"><span>›</span>${isAdmin()?`<button class="delBtn" onclick="event.stopPropagation();adminDeleteChannelByIndex(${i})">Delete</button>`:''}</div>
+ document.getElementById('chanList').innerHTML=chans.map((c,i)=>`
+  <div style="padding:16px;border-bottom:1px solid #2f3336;display:flex;justify-content:space-between;align-items:center;cursor:pointer;background:${isCommunityAdmin(c)?'#0e0e14':'#000'}" onclick="openChannel(${i})">
+   <div><div style="font-weight:800">⧉ ${c.name} ${c.admin===currentUser?'<span class="adminBadge">YOU ADMIN</span>':''}</div><div style="font-size:12px;color:#71767b">Admin: ${c.admin.split('@')[0]} • 👥 ${c.followers.length} • 💬 ${c.msgs.length} • TAP TO OPEN →</div></div><div>›</div>
   </div>
  `).join('');
 
- renderNotes();
+ document.getElementById('sharedList').innerHTML=sharedThings.slice().reverse().map(s=>`<div style="background:#16181c;border:1px solid #2f3336;border-radius:10px;padding:10px;margin-bottom:8px"><div style="font-weight:700">${s.title||''}</div><div style="font-size:13px;color:#a1a1aa">${s.body?.slice(0,60)||''}</div></div>`).join('');
+ document.getElementById('notesList').innerHTML=notes.slice().reverse().map(n=>`<div style="background:#16181c;border:1px solid #2f3336;border-radius:12px;padding:12px;margin-bottom:10px"><span class="formBadge ${n.form?.includes('Form 1')?'f1':'f2'}">${n.form||'Note'}</span><div style="font-weight:700;margin-top:6px">${n.title||''}</div><div style="margin-top:4px;white-space:pre-wrap">${n.body||n.text||''}</div>${n.image?`<img src="${n.image}" style="width:100%;border-radius:8px;margin-top:8px">`:''}</div>`).join('')||'<div style="color:#71767b">No notes</div>';
+
  updateUI();
 }
 
-function renderNotes(){
- let filtered=currentFilter==='all'? simpleNotes : simpleNotes.filter(n=>n.form===currentFilter);
- filtered=filtered.sort((a,b)=>b.time-a.time);
- document.getElementById('notesList').innerHTML=filtered.map((n,i)=>{
-  let oi=simpleNotes.indexOf(n);
-  return `<div style="background:#0e0e10;border:1px solid #2f3336;border-radius:12px;padding:12px;margin-bottom:10px">
-   <div style="display:flex;justify-content:space-between;align-items:center"><span class="form-badge ${n.form==='Form 1'?'form1':'form2'}">${n.form}</span><span style="font-size:11px;color:#71767b">${new Date(n.time).toLocaleDateString()} • ${n.email?.split('@')[0]||'system'}</span></div>
-   <div style="font-size:14px;line-height:20px;margin-top:8px;white-space:pre-wrap">${n.text}</div>
-   ${n.image?`<img src="${n.image}" style="width:100%;border-radius:10px;margin-top:8px;border:1px solid #2f3336">`:''}
-   <div style="margin-top:8px;display:flex;gap:8px">${isAdmin()?`<button class="delBtn" onclick="deleteNote(${oi})">Delete</button>`:''}<button class="delBtn" style="color:#1d9bf0;background:rgba(29,155,240,0.1)" onclick="shareNote(${oi})">Share to Feed</button></div>
-  </div>`;
- }).join('')||'<div style="padding:20px;text-align:center;color:#71767b">No notes yet — add Form 1 & Form 2 notes with pictures</div>';
+window.shareAsPost = function(){
+ if(!currentUser) return alert('Login');
+ let title=document.getElementById('shareTitle').value.trim();
+ let body=document.getElementById('shareBody').value.trim();
+ if(!title&&!body&&!pendingShareImg) return alert('Add something');
+ let item={title,body,image:pendingShareImg,email:currentUser,time:Date.now()};
+ sharedThings.push(item); notes.push({title,body,text:body,image:pendingShareImg,email:currentUser,time:Date.now(),form:'Shared'});
+ qs.push({title,body,image:pendingShareImg,email:currentUser,time:Date.now(),likes:0,answers:[],form:'User Shared — Maintained'});
+ saveAll(); document.getElementById('shareTitle').value=''; document.getElementById('shareBody').value=''; document.getElementById('sharePreview').innerHTML=''; pendingShareImg=null;
+ showTab('feed');
 }
 
-function saveNote(){
- if(!currentUser) return alert('Login first');
- const text=document.getElementById('noteText').value.trim();
- const form=document.getElementById('noteForm').value;
- if(!text && !pendingNoteImg) return alert('Write note or add picture');
- simpleNotes.push({form,text,email:currentUser,image:pendingNoteImg,time:Date.now()});
- localStorage.setItem('sielSimpleNotes',JSON.stringify(simpleNotes));
- document.getElementById('noteText').value=''; document.getElementById('noteImgPreview').innerHTML=''; pendingNoteImg=null;
- renderNotes();
- // also post to feed as option
- if(confirm('Also post this note to main feed?')){ qs.push({title:form+' Note',body:text,email:currentUser,image:pendingNoteImg,time:Date.now(),likes:0,answers:[]}); saveAll(); }
-}
-function filterNotes(f){ currentFilter=f; renderNotes(); }
-function deleteNote(i){ if(!isAdmin() && simpleNotes[i].email!==currentUser) return alert('Only owner or admin'); simpleNotes.splice(i,1); localStorage.setItem('sielSimpleNotes',JSON.stringify(simpleNotes)); renderNotes(); }
-function shareNote(i){ const n=simpleNotes[i]; qs.push({title:n.form+' — Simple Note',body:n.text,email:n.email,image:n.image,time:Date.now(),likes:0,answers:[]}); saveAll(); alert('Shared to feed'); }
-function openNotes(){ switchTab('notes',document.getElementById('tabNotes')); }
+function saveAll(){ localStorage.setItem('sielQsV2',JSON.stringify(qs)); localStorage.setItem('sielChansV3',JSON.stringify(chans)); localStorage.setItem('siel1000People',JSON.stringify(people)); localStorage.setItem('sielSharedThings',JSON.stringify(sharedThings)); localStorage.setItem('sielNotes',JSON.stringify(notes)); render(); }
 
-function postQ(){
- if(!currentUser) return alert('Login first');
- const t=document.getElementById('qTitle').value.trim(); const b=document.getElementById('qBody').value.trim();
- if(!t&&!b&&!pendingQImg) return alert('What is happening?');
- qs.push({title:t||'Subjectivity',body:b,email:currentUser,image:pendingQImg,time:Date.now(),likes:0,answers:[]}); saveAll(); document.getElementById('qTitle').value=''; document.getElementById('qBody').value=''; document.getElementById('qPreview').innerHTML=''; document.getElementById('qAudioPreview').innerHTML=''; pendingQImg=null;
-}
-function like(i){ qs[i].likes=(qs[i].likes||0)+1; saveAll(); }
-function openAns(i){ curAnsIndex=i; document.getElementById('ansModal').style.display='flex'; }
-function closeAns(){ document.getElementById('ansModal').style.display='none'; }
-function submitAns(){ const txt=document.getElementById('aText').value.trim(); if(!txt) return; qs[curAnsIndex].answers.push({text:txt}); saveAll(); closeAns(); }
-function saveAll(){ localStorage.setItem('sielQsV2',JSON.stringify(qs)); localStorage.setItem('sielChansV3',JSON.stringify(chans)); localStorage.setItem('siel1000People',JSON.stringify(people)); localStorage.setItem('sielSimpleNotes',JSON.stringify(simpleNotes)); render(); updateUI(); }
-
-function createChan(){
- if(!currentUser) return alert('Login first');
- const input=document.getElementById('chanName');
- const n=(input?.value||'').trim();
- if(!n) return alert('Enter community name');
+window.createChan = function(){
+ if(!currentUser) return alert('Login');
+ let n=document.getElementById('chanName').value.trim() || prompt('Community name');
+ if(!n) return;
  if(chans.some(c=>c.name.toLowerCase()===n.toLowerCase())) return alert('Exists');
- chans.push({name:n,followers:1,msgs:[{me:false,name:'System',text:'Welcome to '+n+' — created by '+currentUser,time:Date.now()}]}); if(input) input.value=''; saveAll();
+ chans.push({name:n,admin:currentUser,followers:[currentUser],msgs:[{me:false,name:'System',email:'system',text:'Welcome to '+n+' — Admin: '+currentUser+' (creator). Join free.',time:Date.now()}]}); 
+ document.getElementById('chanName').value=''; saveAll(); openChannel(chans.length-1);
 }
-function openChannel(i){
- if(!currentUser) return alert('Login first');
- curCh=i; const c=chans[i];
+window.openChannel = function(i){
+ if(!currentUser) return alert('Login');
+ curCh=i; let c=chans[i];
  document.getElementById('chName').textContent='⧉ '+c.name;
- document.getElementById('chInfo').textContent=`👥 ${c.followers} followers • ${c.msgs.length} messages`;
- document.getElementById('chModal').style.display='flex';
+ document.getElementById('chInfo').textContent=`Admin: ${c.admin.split('@')[0]} • 👥 ${c.followers.length} members`;
+ document.getElementById('joinBtn').style.display=c.followers.includes(currentUser)?'none':'block';
+ document.getElementById('delChanBtn').style.display=isCommunityAdmin(c)?'block':'none';
+ document.getElementById('chModal').classList.add('open'); document.getElementById('chModal').style.display='flex';
  renderChMsgs();
 }
-function closeChannel(){ document.getElementById('chModal').style.display='none'; curCh=null; }
+window.closeChannel = function(){ document.getElementById('chModal').classList.remove('open'); document.getElementById('chModal').style.display='none'; curCh=null; }
+window.joinCommunity = function(){
+ if(curCh===null) return;
+ let c=chans[curCh];
+ if(!c.followers.includes(currentUser)) c.followers.push(currentUser);
+ c.msgs.push({me:false,name:'System',email:'system',text:currentUser.split('@')[0]+' joined free',time:Date.now()});
+ saveAll(); renderChMsgs(); document.getElementById('joinBtn').style.display='none';
+}
 function renderChMsgs(){
  if(curCh===null) return;
- const c=chans[curCh];
+ let c=chans[curCh];
+ let isAdminC=isCommunityAdmin(c);
  document.getElementById('chMsgs').innerHTML=c.msgs.map((m,mi)=>`
-  <div class="bub ${m.me?'me':'other'}">
-   <div style="font-weight:700;font-size:11px;color:${m.me?'#fff':'#1d9bf0'}">${m.name||'System'}</div>
-   <div>${m.text}</div>
-   ${m.image?`<img src="${m.image}" style="width:100%;border-radius:8px;margin-top:6px">`:''}
+  <div class="bub ${m.me||m.email===currentUser?'me':'other'}">
+   <div style="font-weight:700;font-size:11px">${m.name||m.email?.split('@')[0]||'System'} ${m.email===c.admin?'<span class="adminBadge">ADMIN</span>':''}</div>
+   <div style="margin-top:2px">${m.text}</div>
    <div style="font-size:10px;opacity:0.6;margin-top:4px">${new Date(m.time).toLocaleTimeString()}</div>
-   ${isAdmin()?`<button class="delBtn" onclick="adminDeleteMsg(${mi})">Delete</button>`:''}
+   ${isAdminC?`<button style="background:rgba(249,24,128,0.2);border:0;color:#f91880;padding:2px 6px;border-radius:9999px;font-size:10px;margin-top:4px;cursor:pointer" onclick="deleteMsg(${mi})">Delete</button>`:''}
   </div>
  `).join('');
- const box=document.getElementById('chMsgs'); box.scrollTop=box.scrollHeight;
+ let box=document.getElementById('chMsgs'); box.scrollTop=box.scrollHeight;
 }
-function sendChMsg(){
+window.sendChMsg = function(){
  if(curCh===null) return;
- const inp=document.getElementById('chInput');
- const txt=inp.value.trim(); if(!txt) return;
- chans[curCh].msgs.push({me:true,name:'You',email:currentUser,text:txt,time:Date.now()});
+ let inp=document.getElementById('chInput'); let txt=inp.value.trim(); if(!txt) return;
+ if(!chans[curCh].followers.includes(currentUser)) chans[curCh].followers.push(currentUser);
+ chans[curCh].msgs.push({me:true,name:currentUser.split('@')[0],email:currentUser,text:txt,time:Date.now()});
  inp.value=''; saveAll(); renderChMsgs();
 }
-function sendChMsgWithImage(img){
- if(curCh===null) return;
- chans[curCh].msgs.push({me:true,name:'You',email:currentUser,text:'📷 Picture',image:img,time:Date.now()});
- saveAll(); renderChMsgs();
-}
-function adminDeleteChannel(){ if(!isAdmin()) return; chans.splice(curCh,1); saveAll(); closeChannel(); }
-function adminDeleteChannelByIndex(i){ if(!isAdmin()) return; if(confirm('Delete '+chans[i].name+'?')){ chans.splice(i,1); saveAll(); } }
-function adminDeleteMsg(mi){ if(!isAdmin()) return; chans[curCh].msgs.splice(mi,1); saveAll(); renderChMsgs(); }
-
-function switchTab(name, el){
+window.adminDeleteChannel = function(){ if(!isCommunityAdmin(chans[curCh])) return alert('Only admin'); if(confirm('Delete '+chans[curCh].name+'?')){ chans.splice(curCh,1); saveAll(); closeChannel(); } }
+window.deleteMsg = function(mi){ if(!isCommunityAdmin(chans[curCh])) return; chans[curCh].msgs.splice(mi,1); saveAll(); renderChMsgs(); }
+window.showTab = function(name,el){
  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
  if(el) el.classList.add('active');
- else { document.getElementById('tabFeed').classList.toggle('active',name==='feed'); document.getElementById('tabNotes').classList.toggle('active',name==='notes'); }
  document.getElementById('feedTab').style.display=name==='feed'?'block':'none';
+ document.getElementById('commTab').style.display=name==='comm'?'block':'none';
+ document.getElementById('shareTab').style.display=name==='share'?'block':'none';
  document.getElementById('notesTab').style.display=name==='notes'?'block':'none';
- document.getElementById('communitiesTab').style.display=name==='communities'?'block':'none';
- document.getElementById('trinityTab').style.display=name==='trinity'?'block':'none';
- if(name==='notes') renderNotes();
+ render();
 }
+window.like = function(i){ qs[i].likes=(qs[i].likes||0)+1; saveAll(); }
+window.openAns = function(i){ curAnsIndex=i; document.getElementById('ansModal').classList.add('open'); document.getElementById('ansModal').style.display='flex'; }
+window.closeAns = function(){ document.getElementById('ansModal').classList.remove('open'); document.getElementById('ansModal').style.display='none'; }
+window.submitAns = function(){ let txt=document.getElementById('aText').value.trim(); if(!txt) return; qs[curAnsIndex].answers.push({name:currentUser.split('@')[0],text:txt}); saveAll(); closeAns(); }
+window.deleteQ = function(i){ if(!isGlobalAdmin()) return; qs.splice(i,1); saveAll(); }
+window.clearOld = function(){ if(!isGlobalAdmin()) return alert('Admin only'); if(confirm('Clear all old posts? Recent will be lost.')){ localStorage.removeItem('sielQsV2'); qs=[]; render(); } }
 
 render();
 </script>
