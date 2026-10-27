@@ -3,188 +3,182 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>SIEL TSC 2026 — Recent Posts Maintained</title>
+<title>SIEL — For You | Communities | Simple Notes — Fixed</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:#000;color:#e7e9ea}
-.app{max-width:620px;margin:0 auto;min-height:100vh;background:#000;border-left:1px solid #222;border-right:1px solid #222;position:relative}
+.app{max-width:620px;margin:0 auto;min-height:100vh;background:#000;border-left:1px solid #1a1a1a;border-right:1px solid #1a1a1a;position:relative}
 .top{position:sticky;top:0;z-index:20;background:#000;border-bottom:1px solid #2f3336}
-.top1{height:44px;display:flex;align-items:center;justify-content:space-between;padding:0 16px}
-.avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#1d9bf0,#8a2be2);display:flex;align-items:center;justify-content:center;font-weight:900;flex:0 0 40px}
+.top1{height:48px;display:flex;align-items:center;justify-content:space-between;padding:0 16px}
+/* P avatar like screenshot — no X logo */
+.top1-left{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#8b9eff,#b9a6ff);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:14px;color:#fff}
 .tabs{display:flex;overflow-x:auto;scrollbar-width:none}
-.tab{flex:0 0 auto;padding:14px 12px;font-size:13px;color:#71767b;cursor:pointer;white-space:nowrap}
-.tab.active{color:#fff;font-weight:700;border-bottom:3px solid #fff}
-.input{width:100%;background:#16181c;border:1px solid #2f3336;border-radius:10px;padding:12px;color:#fff;font-size:14px;margin-top:8px}
-.btn{background:#1d9bf0;color:#fff;border:0;padding:0 16px;height:36px;border-radius:9999px;font-weight:700;cursor:pointer}
+.tab{flex:0 0 auto;padding:14px 16px;font-size:15px;color:#71767b;cursor:pointer;white-space:nowrap;position:relative}
+.tab.active{color:#e7e9ea;font-weight:700}
+.tab.active::after{content:'';position:absolute;bottom:0;left:16px;right:16px;height:3px;background:#fff;border-radius:9999px}
+.trinity{padding:10px 16px;border-bottom:1px solid #2f3336;display:flex;gap:8px;align-items:center;font-size:14px;flex-wrap:wrap}
+.counter{background:#1d9bf0;color:#fff;padding:3px 10px;border-radius:9999px;font-weight:700;font-size:12px}
+.input{width:100%;background:#202327;border:1px solid #2f3336;border-radius:10px;padding:14px 16px;color:#fff;font-size:15px;outline:none}
+.btn{background:#1d9bf0;color:#fff;border:0;padding:0 20px;height:40px;border-radius:9999px;font-weight:700;cursor:pointer}
 .btn-white{background:#fff;color:#000}
 .tweet{padding:14px 16px;border-bottom:1px solid #2f3336;display:flex;gap:12px}
-.braid{height:160px;background:radial-gradient(400px 120px at 50% 0%, rgba(29,155,240,0.2), transparent), #000;border:1px solid #333639;border-radius:16px;position:relative;display:flex;align-items:center;justify-content:center;margin-top:12px}
-.profLine{position:absolute;width:2px;height:110px;background:linear-gradient(180deg,#1d9bf0,#8a2be2,#f91880);animation:braid 3s ease-in-out infinite alternate}
-@keyframes braid{0%{transform:translateY(-14px)}100%{transform:translateY(14px)}}
-.formBadge{font-size:10px;padding:2px 6px;border-radius:9999px;font-weight:700}
-.f1{background:#0ea5e9;color:#000} .f2{background:#a78bfa;color:#000}
-.bottom{position:fixed;bottom:0;left:0;right:0;max-width:620px;margin:0 auto;background:#000;border-top:1px solid #2f3336;display:flex;justify-content:space-around;height:53px;z-index:5}
-.b-item{width:40px;height:40px;display:flex;align-items:center;justify-content:center;font-size:20px;cursor:pointer}
+.bottom{position:fixed;bottom:0;left:0;right:0;max-width:620px;margin:0 auto;background:#000;border-top:1px solid #2f3336;display:flex;justify-content:space-around;align-items:center;height:60px;z-index:30}
+.b-item{position:relative;width:48px;height:48px;display:flex;align-items:center;justify-content:center;font-size:22px;cursor:pointer}
+.badge-num{position:absolute;top:4px;right:6px;background:#1d9bf0;color:#fff;font-size:11px;font-weight:700;min-width:18px;height:18px;border-radius:9999px;display:flex;align-items:center;justify-content:center;padding:0 4px}
+.fab{position:fixed;bottom:78px;right:16px;width:56px;height:56px;background:#1d9bf0;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:32px;color:#fff;box-shadow:0 2px 10px rgba(0,0,0,0.6);cursor:pointer;z-index:25}
+
+/* COMMUNITIES MODAL - FIXED TO OPEN */
 #chModal{position:fixed;inset:0;background:#000;z-index:99999;display:none;flex-direction:column}
-#chModal.open{display:flex}
-.chHeader{height:60px;padding:0 16px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #2f3336;flex:0 0 60px}
-.chMsgs{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px}
+#chModal.open{display:flex !important}
+.chHeader{height:60px;padding:0 16px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #2f3336;flex:0 0 60px;background:#000}
+.chMsgs{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px;background:#000}
 .bub{max-width:78%;padding:10px 14px;border-radius:16px;font-size:14px;line-height:18px}
 .bub.me{align-self:flex-end;background:#1d9bf0;color:#fff;border-bottom-right-radius:4px}
-.bub.other{align-self:flex-start;background:#2f3336}
+.bub.other{align-self:flex-start;background:#2f3336;color:#fff}
 .chInput{padding:12px 16px;border-top:1px solid #2f3336;display:flex;gap:8px;flex:0 0 72px;background:#000}
 .forceModal{position:fixed;inset:0;background:#000;z-index:100000;display:flex;align-items:center;justify-content:center;padding:20px}
 .modalSmall{position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:100001;display:none;align-items:center;justify-content:center;padding:20px}
 .modalSmall.open{display:flex}
 .box{width:100%;max-width:420px;background:#16181c;border:1px solid #2f3336;border-radius:16px;padding:20px}
-.adminBadge{background:#1d9bf0;color:#fff;font-size:10px;padding:2px 6px;border-radius:9999px;font-weight:700}
+.formBadge{font-size:10px;padding:2px 6px;border-radius:9999px;font-weight:700}
+.f1{background:#0ea5e9;color:#000} .f2{background:#a78bfa;color:#000}
 </style>
 </head>
 <body>
 <div class="app">
 <div class="top">
-<div class="top1"><div class="avatar" id="leftAvatar" style="width:32px;height:32px;font-size:12px" onclick="openLogin()">S</div><div style="font-weight:900;font-size:18px">𝕏 SIEL TSC 2026 — Maintained</div><div style="width:32px"></div></div>
+<div class="top1">
+<div class="top1-left" id="leftAvatar">P</div>
+<div style="width:34px"></div>
+</div>
+<!-- ORDER FIXED: For you | Communities | Simple Notes -->
 <div class="tabs">
-<div class="tab active" onclick="showTab('feed',this)">For you — Recent Maintained</div>
-<div class="tab" onclick="showTab('comm',this)">Communities ⧉</div>
-<div class="tab" onclick="showTab('share',this)">➕ Add</div>
-<div class="tab" onclick="showTab('notes',this)">Notes 📝</div>
+<div class="tab active" id="tabFeed" onclick="showTab('feed',this)">For you ⌄</div>
+<div class="tab" id="tabComm" onclick="showTab('comm',this)">Communities</div>
+<div class="tab" id="tabNotes" onclick="showTab('notes',this)">Simple Notes 📝</div>
 </div>
 </div>
 
-<div style="padding:8px 16px;border-bottom:1px solid #2f3336;background:#0a0a0a;font-size:11px;display:flex;gap:12px;flex-wrap:wrap">
-<span id="counter">0 / 1000</span>
-<span>Recent posts maintained ✓</span>
-<a href="https://siel-tsc2026.netlify.app" target="_blank" style="color:#1d9bf0">siel-tsc2026 ↗</a>
-<a href="https://622622.substack.com/p/does-the-world-begin-with-subjectivity" target="_blank" style="color:#a78bfa">Substack ↗</a>
-<button onclick="clearOld()" style="background:#2f3336;border:0;color:#fff;padding:4px 8px;border-radius:9999px;font-size:10px">Reset Posts (admin)</button>
+<div class="trinity">
+<span>🔵 <b>Trinity:</b> 3 points = reality</span>
+<span style="color:#71767b">•</span>
+<span id="topCounter">1 / 1000</span>
+<span class="counter">1 / 1000 joined</span>
 </div>
 
-<div id="feedTab"><div id="qList"></div></div>
+<!-- 1. FOR YOU -->
+<div id="feedTab">
+<div id="qList"></div>
+</div>
 
+<!-- 2. COMMUNITIES — NEXT, MORE FUNCTIONAL, OPENS -->
 <div id="commTab" style="display:none">
 <div style="padding:16px;border-bottom:1px solid #2f3336">
-<h3>⧉ Communities — Creator = Admin</h3>
-<p style="font-size:12px;color:#71767b;margin-top:4px">Tap to OPEN — fixed. Creator leads messages. Join free.</p>
-<div style="display:flex;gap:8px;margin-top:12px"><input id="chanName" class="input" style="margin:0;flex:1" placeholder="Create community"><button class="btn-white btn" onclick="createChan()">Create</button></div>
+<h2 style="font-size:20px;font-weight:800;display:flex;gap:8px;align-items:center"><span>⧉</span> Communities — Intersections</h2>
+<p style="font-size:14px;color:#71767b;margin-top:8px">Full functional — create, open, chat, images. Like X Communities. Tap to open.</p>
+<div style="display:flex;gap:10px;margin-top:16px">
+<input id="chanName" class="input" style="margin:0;flex:1" placeholder="East Africa" value="East Africa">
+<button class="btn-white btn" style="height:48px" onclick="createChan()">Create</button>
 </div>
-<div id="chanList"></div>
-</div>
-
-<div id="shareTab" style="display:none"><div style="padding:16px">
-<h3>➕ Add Things To Share — Maintains recent</h3>
-<input id="shareTitle" class="input" placeholder="Title"><textarea id="shareBody" class="input" placeholder="Body / question..." style="min-height:100px"></textarea>
-<div id="sharePreview"></div>
-<div style="display:flex;gap:8px;margin-top:8px"><button class="btn-white btn" onclick="document.getElementById('shareImage').click()">🖼️</button><input type="file" id="shareImage" hidden><button class="btn" style="flex:1" onclick="shareAsPost()">Share as Post — Maintained</button></div>
-<div id="sharedList" style="margin-top:12px"></div>
-</div></div>
-
-<div id="notesTab" style="display:none;padding:16px"><h3>📝 Notes — Form 1 & 2 Maintained</h3><div id="notesList" style="margin-top:12px"></div></div>
-
-<div style="height:70px"></div>
-<div class="bottom"><div class="b-item" onclick="showTab('feed',null)">⌂</div><div class="b-item" onclick="showTab('comm',null)">⧉</div><div class="b-item" onclick="showTab('share',null)">➕</div><div class="b-item" onclick="showTab('notes',null)">📝</div></div>
 </div>
 
+<div style="padding:16px">
+<div style="background:#16181c;border:1px solid #2f3336;border-radius:16px;padding:16px">
+<div style="display:flex;gap:8px;align-items:center;font-size:14px;color:#71767b"><span>👥</span> <span id="rightCounter">1 / 1000 joined</span></div>
+<div id="allEmails" style="font-size:14px;color:#71767b;margin-top:4px;word-break:break-all">pandaniga16@gmail.com</div>
+</div>
+</div>
+
+<div id="chanList" style="padding:0 16px"></div>
+<div style="height:100px"></div>
+</div>
+
+<!-- 3. SIMPLE NOTES — LAST -->
+<div id="notesTab" style="display:none">
+<div style="padding:16px;border-bottom:1px solid #2f3336">
+<h3>📝 Simple Notes — Form 1 & Form 2 Maintained</h3>
+<p style="font-size:13px;color:#71767b;margin-top:6px">Recent posts maintained ✓</p>
+<div style="display:flex;gap:8px;margin-top:12px">
+<select id="noteForm" class="input" style="margin:0;flex:1"><option>Form 1</option><option>Form 2</option><option>General</option></select>
+<button class="btn-white btn" onclick="document.getElementById('noteImage').click()">🖼️</button>
+<input type="file" id="noteImage" hidden>
+</div>
+<textarea id="noteText" class="input" placeholder="Write simple note..."></textarea>
+<div id="noteImgPreview"></div>
+<button class="btn-white btn" style="width:100%;margin-top:8px;height:44px" onclick="saveNote()">Save Note</button>
+</div>
+<div id="notesList" style="padding:12px 16px"></div>
+</div>
+
+<div class="fab" onclick="openShare()">+</div>
+
+<div class="bottom">
+<div class="b-item" onclick="showTab('feed',document.getElementById('tabFeed'))">⌂</div>
+<div class="b-item" onclick="showTab('notes',document.getElementById('tabNotes'))">📝</div>
+<div class="b-item" onclick="showTab('comm',document.getElementById('tabComm'))">⧉<span class="badge-num">2</span></div>
+<div class="b-item">🔔<span class="badge-num">8</span></div>
+<div class="b-item">✉️</div>
+</div>
+</div>
+
+<!-- CHANNEL MODAL — NOW MORE FUNCTIONAL -->
 <div id="chModal">
-<div class="chHeader"><div style="display:flex;gap:10px;align-items:center"><div class="avatar" style="width:36px;height:36px">⧉</div><div><div id="chName" style="font-weight:800">Community</div><div id="chInfo" style="font-size:12px;color:#71767b"></div></div></div><div style="display:flex;gap:8px"><button class="btn" style="background:#fff;color:#000" id="joinBtn" onclick="joinCommunity()">Join Free</button><button id="delChanBtn" class="btn" style="background:#f4212e;display:none" onclick="adminDeleteChannel()">Delete</button><button class="btn" style="background:#2f3336" onclick="closeChannel()">✕</button></div></div>
+<div class="chHeader">
+<div style="display:flex;gap:10px;align-items:center">
+<div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#1d9bf0,#8a2be2);display:flex;align-items:center;justify-content:center;font-weight:900">⧉</div>
+<div>
+<div id="chName" style="font-weight:800">Community</div>
+<div id="chInfo" style="font-size:12px;color:#71767b"></div>
+</div>
+</div>
+<div style="display:flex;gap:8px">
+<button class="btn" style="background:#fff;color:#000" id="joinBtn" onclick="joinCommunity()">Join Free</button>
+<button id="delChanBtn" class="btn" style="background:#f4212e;display:none" onclick="adminDeleteChannel()">Delete</button>
+<button class="btn" style="background:#2f3336" onclick="closeChannel()">✕</button>
+</div>
+</div>
 <div id="chMsgs" class="chMsgs"></div>
-<div class="chInput"><input id="chInput" class="input" style="margin:0;flex:1;border-radius:9999px" placeholder="Message..." onkeydown="if(event.key==='Enter')sendChMsg()"><button class="btn-white btn" onclick="sendChMsg()">Send</button></div>
+<div class="chInput">
+<input id="chInput" class="input" style="margin:0;flex:1;border-radius:9999px" placeholder="Post your reply in this community..." onkeydown="if(event.key==='Enter')sendChMsg()">
+<button class="btn-white btn" onclick="sendChMsg()">Post</button>
+</div>
 </div>
 
-<div id="forceLogin" class="forceModal"><div class="box" style="text-align:center"><div style="font-size:28px">◈</div><h2 style="margin-top:8px">Join 1000 — Maintained</h2><input id="forceEmail" class="input" type="email" placeholder="Email"><button class="btn" style="width:100%;margin-top:12px;height:44px" onclick="doForceLogin()">Claim #<span id="nextNum">1</span></button><div id="forceError" style="display:none;color:#f91880;margin-top:8px"></div></div></div>
+<div id="forceLogin" class="forceModal"><div class="box" style="text-align:center"><div style="font-size:28px">◈</div><h2 style="margin-top:8px">Join 1000</h2><input id="forceEmail" class="input" type="email" placeholder="Email"><button class="btn" style="width:100%;margin-top:12px;height:44px" onclick="doForceLogin()">Claim #<span id="nextNum">1</span></button><div id="forceError" style="display:none;color:#f91880;margin-top:8px"></div></div></div>
 <div id="loginModal" class="modalSmall"><div class="box"><h3>Login</h3><input id="loginEmail" class="input" type="email" placeholder="new@email.com"><div style="display:flex;gap:8px;margin-top:12px"><button class="btn" onclick="doLogin()">Login</button><button class="btn" style="background:#2f3336" onclick="closeLogin()">Cancel</button></div></div></div>
-<div id="ansModal" class="modalSmall"><div class="box"><h3>Comment</h3><textarea id="aText" class="input" placeholder="Your comment..." style="min-height:80px"></textarea><div style="display:flex;gap:8px;margin-top:12px"><button class="btn" style="background:#2f3336" onclick="closeAns()">Cancel</button><button class="btn" onclick="submitAns()">Comment</button></div></div></div>
+<div id="shareModal" class="modalSmall"><div class="box"><h3>➕ Add Things To Share — Maintains recent</h3><input id="shareTitle" class="input" placeholder="Title"><textarea id="shareBody" class="input" placeholder="Body..." style="min-height:80px"></textarea><div id="sharePreview"></div><div style="display:flex;gap:8px;margin-top:8px"><button class="btn-white btn" onclick="document.getElementById('shareImage').click()">🖼️</button><input type="file" id="shareImage" hidden><button class="btn" style="flex:1" onclick="shareAsPost()">Share</button></div><button class="btn" style="background:#2f3336;width:100%;margin-top:8px" onclick="closeShare()">Close</button></div></div>
+<div id="ansModal" class="modalSmall"><div class="box"><h3>Comment</h3><textarea id="aText" class="input" placeholder="Comment..." style="min-height:80px"></textarea><div style="display:flex;gap:8px;margin-top:12px"><button class="btn" style="background:#2f3336" onclick="closeAns()">Cancel</button><button class="btn" onclick="submitAns()">Comment</button></div></div></div>
 
 <script>
-// MAINTAIN RECENT POSTS - DO NOT RESET
 let people=JSON.parse(localStorage.getItem('siel1000People')||'[]');
-let currentUser=localStorage.getItem('sielEmail')||'';
+if(people.length===0){ people=['pandaniga16@gmail.com']; localStorage.setItem('siel1000People',JSON.stringify(people)); }
+let currentUser=localStorage.getItem('sielEmail')||people[0]||'';
 let qs=JSON.parse(localStorage.getItem('sielQsV2')||'[]');
 let chans=JSON.parse(localStorage.getItem('sielChansV3')||'[]');
 let notes=JSON.parse(localStorage.getItem('sielNotes')||'[]');
 let sharedThings=JSON.parse(localStorage.getItem('sielSharedThings')||'[]');
-let curCh=null, pendingShareImg=null, curAnsIndex=null;
+let curCh=null, pendingShareImg=null, pendingNoteImg=null, curAnsIndex=null;
 
-// ONLY ADD NEW POSTS FROM LINKS IF NOT ALREADY EXIST - MAINTAINS RECENT
-let newPostsFromLinks = [
- {
-  title:"Q1: Does the world begin with subjectivity?",
-  body:"From 622622.substack.com/p/does-the-world-begin-with-subjectivity\n\nIf there IS something, always according to a subject that refers to an object. Subject and object began at same time. Standpoint is NOT consciousness — typed mode of access to define event.\n\nQuestion: Can you imagine world independent of your consciousness?",
-  form:"Form 1 — Substack",
-  email:"satoru@siel.global",
-  time:Date.now()-600000,
-  likes:24,
-  answers:[]
- },
- {
-  title:"Q2: Trinity — 3 points = stable reality",
-  body:"From siel-tsc2026.netlify.app\n\nTrinity: 3 points = minimum stable reality. Same movie, different memory. Picture: 3 braids = volume → reality.\n\nQuestion: When did 2 subjectivities fail and need 3rd?",
-  form:"Form 1 — Trinity",
-  email:"satoru@siel.global",
-  time:Date.now()-500000,
-  likes:18,
-  answers:[]
- },
- {
-  title:"Q3: Finite Braid Source → Spacetime",
-  body:"From ResearchGate V1.1 — 7 Oct 2026\n\nFinite pointed involutive Yang-Baxter/Braid source supplies quantum + gravity. 8 signed representatives → V4 quotient diag(-1,+1,+1,+1). Spectrum (12/25,52/25...). pB=3/5. Spacetime NOT assumed — derived.\n\nQuestion: If spacetime derived from braids, what is objective reality?",
-  form:"Form 2 — Paper",
-  email:"satoru@siel.global",
-  time:Date.now()-400000,
-  likes:31,
-  answers:[]
- },
- {
-  title:"Q4: Cogito, ergo mundus est",
-  body:"From TSC 2026 Poster\n\nPhilosophy is genuine way of learning truths. Person = unique subject with irreducible I. Thinking creates world-structures stabilized by records.\n\nQuestion: Recycling views or finding what YOU can do?",
-  form:"Form 2 — Poster",
-  email:"satoru@siel.global",
-  time:Date.now()-300000,
-  likes:15,
-  answers:[]
- },
- {
-  title:"Q5: Glasses Analogy — Simple",
-  body:"Form 1 Easy: Subjectivity = glasses. Different glasses = different world. Intersection = same movie, different memory. Result = house from threads.\n\nQuestion: What glasses are you wearing?",
-  form:"Form 1 — Simple",
-  email:"system",
-  time:Date.now()-200000,
-  likes:42,
-  answers:[]
- },
- {
-  title:"Q6: Collection — Videos & Poster",
-  body:"From Facebook collection — paper PDF, poster A0, braid videos, Substack essays. All show: World does NOT start with objective spacetime. Starts with finite braid source + standpoint.\n\nQuestion: Which helped you most — paper, poster, video, Substack?",
-  form:"General — Collection",
-  email:"satoru@siel.global",
-  time:Date.now()-100000,
-  likes:9,
-  answers:[]
- }
+// MAINTAIN RECENT POSTS
+let linkPosts=[
+ {title:"Does world begin with subjectivity?",body:"From 622622.substack.com — Standpoint is NOT consciousness — typed mode of access. Question: Can you imagine world independent of your consciousness?",form:"Form 1 — Substack",email:"satoru@siel.global",time:Date.now()-600000,likes:24,answers:[]},
+ {title:"Trinity: 3 points = reality",body:"From siel-tsc2026.netlify.app — 3 points = minimum stable reality. Picture: braids twisting create house.",form:"Form 1 — Trinity",email:"satoru@siel.global",time:Date.now()-500000,likes:18,answers:[]},
+ {title:"Finite Braid Source → Spacetime",body:"ResearchGate V1.1 — V4 quotient diag(-1,+1,+1,+1). Spectrum (12/25...). pB=3/5. Spacetime derived.",form:"Form 2 — Paper",email:"satoru@siel.global",time:Date.now()-400000,likes:31,answers:[]}
 ];
-
-// MAINTAIN RECENT: only add if title not exists
-let existingTitles = qs.map(q=>q.title);
-newPostsFromLinks.forEach(p=>{
- if(!existingTitles.includes(p.title)){
-  qs.push({...p, image:null, answers:p.answers||[]});
- }
-});
+let existing=qs.map(q=>q.title);
+linkPosts.forEach(p=>{ if(!existing.includes(p.title)) qs.push({...p,image:null,answers:[]}); });
 localStorage.setItem('sielQsV2',JSON.stringify(qs));
 
 if(chans.length===0){
- chans=[
-  {name:"Does world begin with subjectivity? — Substack",admin:"satoru@siel.global",followers:["satoru@siel.global"],msgs:[{me:false,name:"System",email:"system",text:"Discuss Substack essay. Creator is admin, joining free.",time:Date.now()}]},
-  {name:"Braid QG Paper Q&A",admin:"satoru@siel.global",followers:["satoru@siel.global"],msgs:[{me:false,name:"System",email:"system",text:"Paper V1.1 Q&A — spectrum, pB. Ask here.",time:Date.now()}]},
-  {name:"TSC 2026 Poster Pictures",admin:"satoru@siel.global",followers:["satoru@siel.global"],msgs:[{me:false,name:"System",email:"system",text:"Share poster pictures, braid visuals.",time:Date.now()}]}
- ];
+ chans=[{name:"East Africa",admin:currentUser,followers:[currentUser],msgs:[{me:false,name:"System",email:"system",text:"Welcome to East Africa — creator is admin, joining is free. Tap messages below to chat.",time:Date.now()},{me:false,name:"Panda",email:currentUser,text:"East Africa community started!",time:Date.now()}]}];
 }
 
-function isGlobalAdmin(){return currentUser.toLowerCase()==='admin@skiii.com'}
-function isCommunityAdmin(c){ return c.admin===currentUser || isGlobalAdmin(); }
+function isAdmin(c){ return c.admin===currentUser || currentUser.toLowerCase()==='admin@skiii.com' || currentUser==='pandaniga16@gmail.com'; }
 function updateUI(){
- document.getElementById('leftAvatar').textContent=currentUser?currentUser[0].toUpperCase():'S';
- document.getElementById('counter').textContent=people.length+' / 1000';
+ document.getElementById('leftAvatar').textContent=currentUser?currentUser[0].toUpperCase():'P';
+ document.getElementById('topCounter').textContent=people.length+' / 1000';
+ document.getElementById('rightCounter').textContent=people.length+' / 1000 joined';
+ document.getElementById('allEmails').textContent=people.join(', ');
  document.getElementById('nextNum').textContent=people.length+1;
 }
 function checkLock(){ document.getElementById('forceLogin').style.display=currentUser?'none':'flex'; updateUI(); }
@@ -208,42 +202,29 @@ document.getElementById('shareImage')?.addEventListener('change',e=>{
  let f=e.target.files[0]; if(!f)return;
  let r=new FileReader(); r.onload=ev=>{ pendingShareImg=ev.target.result; document.getElementById('sharePreview').innerHTML=`<img src="${pendingShareImg}" style="width:100%;border-radius:12px;margin-top:10px">`; }; r.readAsDataURL(f);
 });
+document.getElementById('noteImage')?.addEventListener('change',e=>{
+ let f=e.target.files[0]; if(!f)return;
+ let r=new FileReader(); r.onload=ev=>{ pendingNoteImg=ev.target.result; document.getElementById('noteImgPreview').innerHTML=`<img src="${pendingNoteImg}" style="width:100%;border-radius:12px;margin-top:8px">`; }; r.readAsDataURL(f);
+});
 
 function render(){
  document.getElementById('qList').innerHTML=[...qs].sort((a,b)=>b.time-a.time).map(q=>{
-  let oi=qs.indexOf(q);
-  let name=(q.email||'anon').split('@')[0];
-  return `
-  <div class="tweet">
-   <div class="avatar">${name[0].toUpperCase()}</div>
-   <div style="flex:1;min-width:0">
-    <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
-     <span style="font-size:11px;padding:2px 6px;border-radius:9999px;background:#222;border:1px solid #333">Recent Maintained ✓</span>
-     <span class="formBadge ${q.form?.includes('Form 1')?'f1':'f2'}">${q.form||'Post'}</span>
-     <span style="font-weight:700;font-size:15px">${q.title||''}</span>
-    </div>
-    <div style="font-size:12px;color:#71767b;margin-top:2px">@${name} • ${new Date(q.time).toLocaleDateString()}</div>
-    <div style="font-size:15px;line-height:20px;margin-top:8px;white-space:pre-wrap">${q.body||''}</div>
-    ${(q.form?.includes('Trinity')||q.form?.includes('Paper')||q.title?.includes('Braid'))?`<div class="braid"><div class="profLine" style="left:15%"></div><div class="profLine" style="left:35%"></div><div class="profLine" style="left:55%"></div><div class="profLine" style="left:75%"></div></div>`:''}
-    ${q.image?`<img src="${q.image}" style="width:100%;border-radius:12px;margin-top:8px;border:1px solid #333">`:''}
-    <div style="display:flex;gap:16px;margin-top:12px;color:#71767b;font-size:13px">
-     <span style="cursor:pointer" onclick="openAns(${oi})">💬 ${q.answers?.length||0}</span>
-     <span style="cursor:pointer" onclick="like(${oi})">♡ ${q.likes||0}</span>
-     ${isGlobalAdmin()?`<span style="color:#f4212e;cursor:pointer" onclick="deleteQ(${oi})">🗑 Delete</span>`:''}
-    </div>
-    ${q.answers?.length?`<div style="margin-top:10px;border-top:1px solid #2f3336;padding-top:8px">${q.answers.map(a=>`<div style="display:flex;gap:8px;padding:4px 0"><div class="avatar" style="width:24px;height:24px;font-size:10px">${a.name[0]}</div><div style="background:#16181c;border:1px solid #2f3336;border-radius:10px;padding:6px 10px;font-size:13px"><b>${a.name}:</b> ${a.text}</div></div>`).join('')}</div>`:''}
-   </div>
-  </div>`;
- }).join('');
+  let oi=qs.indexOf(q); let name=(q.email||'anon').split('@')[0];
+  return `<div class="tweet"><div style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#1d9bf0,#8a2be2);display:flex;align-items:center;justify-content:center;font-weight:900;flex:0 0 40px">${name[0].toUpperCase()}</div><div style="flex:1"><div style="font-weight:700"><span class="formBadge ${q.form?.includes('Form 1')?'f1':'f2'}">${q.form||'Post'}</span> ${q.title||''} <span style="color:#71767b">@${name}</span></div><div style="margin-top:6px;white-space:pre-wrap">${q.body||''}</div>${q.image?`<img src="${q.image}" style="width:100%;border-radius:12px;margin-top:8px">`:''}<div style="display:flex;gap:16px;margin-top:10px;color:#71767b;font-size:13px"><span onclick="openAns(${oi})">💬 ${q.answers?.length||0}</span><span onclick="like(${oi})">♡ ${q.likes||0}</span></div></div></div>`;
+ }).join('')||'<div style="padding:40px;text-align:center;color:#71767b">No posts — tap + to add</div>';
 
  document.getElementById('chanList').innerHTML=chans.map((c,i)=>`
-  <div style="padding:16px;border-bottom:1px solid #2f3336;display:flex;justify-content:space-between;align-items:center;cursor:pointer;background:${isCommunityAdmin(c)?'#0e0e14':'#000'}" onclick="openChannel(${i})">
-   <div><div style="font-weight:800">⧉ ${c.name} ${c.admin===currentUser?'<span class="adminBadge">YOU ADMIN</span>':''}</div><div style="font-size:12px;color:#71767b">Admin: ${c.admin.split('@')[0]} • 👥 ${c.followers.length} • 💬 ${c.msgs.length} • TAP TO OPEN →</div></div><div>›</div>
+  <div style="background:#16181c;border:1px solid #2f3336;border-radius:16px;padding:16px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;cursor:pointer" onclick="openChannel(${i})">
+   <div style="flex:1">
+    <div style="font-weight:800;display:flex;align-items:center;gap:6px">⧉ ${c.name} ${isAdmin(c)?'<span style="background:#fff;color:#000;font-size:10px;padding:2px 6px;border-radius:9999px">YOU ADMIN</span>':''}</div>
+    <div style="font-size:12px;color:#71767b;margin-top:4px">Admin: ${c.admin.split('@')[0]} • 👥 ${c.followers.length} members • 💬 ${c.msgs.length} messages • <b style="color:#1d9bf0">TAP TO OPEN →</b></div>
+    <div style="font-size:12px;color:#a1a1aa;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${c.msgs[c.msgs.length-1]?.text||''}</div>
+   </div>
+   <div style="font-size:24px;margin-left:12px">›</div>
   </div>
  `).join('');
 
- document.getElementById('sharedList').innerHTML=sharedThings.slice().reverse().map(s=>`<div style="background:#16181c;border:1px solid #2f3336;border-radius:10px;padding:10px;margin-bottom:8px"><div style="font-weight:700">${s.title||''}</div><div style="font-size:13px;color:#a1a1aa">${s.body?.slice(0,60)||''}</div></div>`).join('');
- document.getElementById('notesList').innerHTML=notes.slice().reverse().map(n=>`<div style="background:#16181c;border:1px solid #2f3336;border-radius:12px;padding:12px;margin-bottom:10px"><span class="formBadge ${n.form?.includes('Form 1')?'f1':'f2'}">${n.form||'Note'}</span><div style="font-weight:700;margin-top:6px">${n.title||''}</div><div style="margin-top:4px;white-space:pre-wrap">${n.body||n.text||''}</div>${n.image?`<img src="${n.image}" style="width:100%;border-radius:8px;margin-top:8px">`:''}</div>`).join('')||'<div style="color:#71767b">No notes</div>';
+ document.getElementById('notesList').innerHTML=notes.slice().reverse().map(n=>`<div style="background:#16181c;border:1px solid #2f3336;border-radius:12px;padding:12px;margin-bottom:10px"><span class="formBadge ${n.form?.includes('Form 1')?'f1':'f2'}">${n.form||'Note'}</span><div style="font-weight:700;margin-top:6px">${n.title||''}</div><div style="margin-top:4px;white-space:pre-wrap">${n.body||n.text||''}</div>${n.image?`<img src="${n.image}" style="width:100%;border-radius:8px;margin-top:8px">`:''}</div>`).join('')||'<div style="color:#71767b;text-align:center;padding:20px">No notes yet — Simple Notes maintained</div>';
 
  updateUI();
 }
@@ -253,81 +234,110 @@ window.shareAsPost = function(){
  let title=document.getElementById('shareTitle').value.trim();
  let body=document.getElementById('shareBody').value.trim();
  if(!title&&!body&&!pendingShareImg) return alert('Add something');
- let item={title,body,image:pendingShareImg,email:currentUser,time:Date.now()};
- sharedThings.push(item); notes.push({title,body,text:body,image:pendingShareImg,email:currentUser,time:Date.now(),form:'Shared'});
- qs.push({title,body,image:pendingShareImg,email:currentUser,time:Date.now(),likes:0,answers:[],form:'User Shared — Maintained'});
- saveAll(); document.getElementById('shareTitle').value=''; document.getElementById('shareBody').value=''; document.getElementById('sharePreview').innerHTML=''; pendingShareImg=null;
- showTab('feed');
+ qs.push({title,body,image:pendingShareImg,email:currentUser,time:Date.now(),likes:0,answers:[],form:'Shared — Maintained'});
+ sharedThings.push({title,body,image:pendingShareImg,email:currentUser,time:Date.now()});
+ saveAll();
+ document.getElementById('shareTitle').value=''; document.getElementById('shareBody').value=''; document.getElementById('sharePreview').innerHTML=''; pendingShareImg=null;
+ closeShare(); showTab('feed',document.getElementById('tabFeed'));
+}
+window.saveNote = function(){
+ if(!currentUser) return alert('Login');
+ let text=document.getElementById('noteText').value.trim(); let form=document.getElementById('noteForm').value;
+ if(!text&&!pendingNoteImg) return alert('Write note');
+ notes.push({form,title:form+' Note',body:text,text,image:pendingNoteImg,email:currentUser,time:Date.now()});
+ saveAll(); document.getElementById('noteText').value=''; document.getElementById('noteImgPreview').innerHTML=''; pendingNoteImg=null;
 }
 
-function saveAll(){ localStorage.setItem('sielQsV2',JSON.stringify(qs)); localStorage.setItem('sielChansV3',JSON.stringify(chans)); localStorage.setItem('siel1000People',JSON.stringify(people)); localStorage.setItem('sielSharedThings',JSON.stringify(sharedThings)); localStorage.setItem('sielNotes',JSON.stringify(notes)); render(); }
+function saveAll(){ localStorage.setItem('sielQsV2',JSON.stringify(qs)); localStorage.setItem('sielChansV3',JSON.stringify(chans)); localStorage.setItem('siel1000People',JSON.stringify(people)); localStorage.setItem('sielNotes',JSON.stringify(notes)); localStorage.setItem('sielSharedThings',JSON.stringify(sharedThings)); render(); }
 
 window.createChan = function(){
- if(!currentUser) return alert('Login');
- let n=document.getElementById('chanName').value.trim() || prompt('Community name');
- if(!n) return;
- if(chans.some(c=>c.name.toLowerCase()===n.toLowerCase())) return alert('Exists');
- chans.push({name:n,admin:currentUser,followers:[currentUser],msgs:[{me:false,name:'System',email:'system',text:'Welcome to '+n+' — Admin: '+currentUser+' (creator). Join free.',time:Date.now()}]}); 
+ if(!currentUser) return alert('Login first');
+ let n=document.getElementById('chanName').value.trim();
+ if(!n) return alert('Enter community name');
+ if(chans.some(c=>c.name.toLowerCase()===n.toLowerCase())) return alert('Exists — tap it to open');
+ chans.push({name:n,admin:currentUser,followers:[currentUser],msgs:[{me:false,name:"System",email:"system",text:"Welcome to "+n+" — Admin: "+currentUser+" (creator). Joining is free for all. Creator leads messages.",time:Date.now()}]}); 
  document.getElementById('chanName').value=''; saveAll(); openChannel(chans.length-1);
 }
+
+// FIXED — MORE FUNCTIONAL, OPENS
 window.openChannel = function(i){
- if(!currentUser) return alert('Login');
- curCh=i; let c=chans[i];
+ console.log('Opening community', i);
+ if(!currentUser){ alert('Login first — one email one spot'); return; }
+ curCh=i; 
+ let c=chans[i];
  document.getElementById('chName').textContent='⧉ '+c.name;
- document.getElementById('chInfo').textContent=`Admin: ${c.admin.split('@')[0]} • 👥 ${c.followers.length} members`;
+ document.getElementById('chInfo').textContent=`Admin: ${c.admin.split('@')[0]} • 👥 ${c.followers.length} members • ${isAdmin(c)?'YOU ARE ADMIN':''} • Tap messages`;
  document.getElementById('joinBtn').style.display=c.followers.includes(currentUser)?'none':'block';
- document.getElementById('delChanBtn').style.display=isCommunityAdmin(c)?'block':'none';
- document.getElementById('chModal').classList.add('open'); document.getElementById('chModal').style.display='flex';
+ document.getElementById('delChanBtn').style.display=isAdmin(c)?'block':'none';
+ let modal=document.getElementById('chModal');
+ modal.classList.add('open');
+ modal.style.display='flex';
  renderChMsgs();
 }
-window.closeChannel = function(){ document.getElementById('chModal').classList.remove('open'); document.getElementById('chModal').style.display='none'; curCh=null; }
+
+window.closeChannel = function(){ 
+ let modal=document.getElementById('chModal');
+ modal.classList.remove('open'); 
+ modal.style.display='none'; 
+ curCh=null; 
+}
+
 window.joinCommunity = function(){
  if(curCh===null) return;
  let c=chans[curCh];
  if(!c.followers.includes(currentUser)) c.followers.push(currentUser);
- c.msgs.push({me:false,name:'System',email:'system',text:currentUser.split('@')[0]+' joined free',time:Date.now()});
+ c.msgs.push({me:false,name:"System",email:"system",text:currentUser.split('@')[0]+' joined — free join ✓',time:Date.now()});
  saveAll(); renderChMsgs(); document.getElementById('joinBtn').style.display='none';
 }
+
 function renderChMsgs(){
  if(curCh===null) return;
  let c=chans[curCh];
- let isAdminC=isCommunityAdmin(c);
+ let adminC=isAdmin(c);
  document.getElementById('chMsgs').innerHTML=c.msgs.map((m,mi)=>`
   <div class="bub ${m.me||m.email===currentUser?'me':'other'}">
-   <div style="font-weight:700;font-size:11px">${m.name||m.email?.split('@')[0]||'System'} ${m.email===c.admin?'<span class="adminBadge">ADMIN</span>':''}</div>
+   <div style="font-weight:700;font-size:11px;display:flex;align-items:center;gap:4px">${m.name||m.email?.split('@')[0]||'System'} ${m.email===c.admin?'<span style="background:#1d9bf0;color:#fff;font-size:10px;padding:2px 6px;border-radius:9999px">ADMIN</span>':''}</div>
    <div style="margin-top:2px">${m.text}</div>
-   <div style="font-size:10px;opacity:0.6;margin-top:4px">${new Date(m.time).toLocaleTimeString()}</div>
-   ${isAdminC?`<button style="background:rgba(249,24,128,0.2);border:0;color:#f91880;padding:2px 6px;border-radius:9999px;font-size:10px;margin-top:4px;cursor:pointer" onclick="deleteMsg(${mi})">Delete</button>`:''}
+   ${m.image?`<img src="${m.image}" style="width:100%;border-radius:8px;margin-top:6px">`:''}
+   <div style="font-size:10px;opacity:0.6;margin-top:4px">${new Date(m.time).toLocaleTimeString()} • ${m.email||''}</div>
+   ${adminC?`<button style="background:rgba(249,24,128,0.2);border:0;color:#f91880;padding:4px 8px;border-radius:9999px;font-size:11px;margin-top:6px;cursor:pointer" onclick="deleteMsg(${mi})">Delete (admin)</button>`:''}
   </div>
  `).join('');
- let box=document.getElementById('chMsgs'); box.scrollTop=box.scrollHeight;
+ let box=document.getElementById('chMsgs'); setTimeout(()=>{ box.scrollTop=box.scrollHeight; },50);
 }
+
 window.sendChMsg = function(){
- if(curCh===null) return;
+ if(curCh===null) return alert('Open community first');
  let inp=document.getElementById('chInput'); let txt=inp.value.trim(); if(!txt) return;
  if(!chans[curCh].followers.includes(currentUser)) chans[curCh].followers.push(currentUser);
  chans[curCh].msgs.push({me:true,name:currentUser.split('@')[0],email:currentUser,text:txt,time:Date.now()});
  inp.value=''; saveAll(); renderChMsgs();
 }
-window.adminDeleteChannel = function(){ if(!isCommunityAdmin(chans[curCh])) return alert('Only admin'); if(confirm('Delete '+chans[curCh].name+'?')){ chans.splice(curCh,1); saveAll(); closeChannel(); } }
-window.deleteMsg = function(mi){ if(!isCommunityAdmin(chans[curCh])) return; chans[curCh].msgs.splice(mi,1); saveAll(); renderChMsgs(); }
+
+window.adminDeleteChannel = function(){ if(!isAdmin(chans[curCh])) return alert('Only admin of this community'); if(confirm('Delete community '+chans[curCh].name+'?')){ chans.splice(curCh,1); saveAll(); closeChannel(); } }
+window.deleteMsg = function(mi){ if(!isAdmin(chans[curCh])) return alert('Only community admin'); chans[curCh].msgs.splice(mi,1); saveAll(); renderChMsgs(); }
+
 window.showTab = function(name,el){
  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
  if(el) el.classList.add('active');
  document.getElementById('feedTab').style.display=name==='feed'?'block':'none';
  document.getElementById('commTab').style.display=name==='comm'?'block':'none';
- document.getElementById('shareTab').style.display=name==='share'?'block':'none';
  document.getElementById('notesTab').style.display=name==='notes'?'block':'none';
+ if(name==='comm') document.getElementById('tabComm')?.classList.add('active');
  render();
 }
+
 window.like = function(i){ qs[i].likes=(qs[i].likes||0)+1; saveAll(); }
 window.openAns = function(i){ curAnsIndex=i; document.getElementById('ansModal').classList.add('open'); document.getElementById('ansModal').style.display='flex'; }
 window.closeAns = function(){ document.getElementById('ansModal').classList.remove('open'); document.getElementById('ansModal').style.display='none'; }
 window.submitAns = function(){ let txt=document.getElementById('aText').value.trim(); if(!txt) return; qs[curAnsIndex].answers.push({name:currentUser.split('@')[0],text:txt}); saveAll(); closeAns(); }
-window.deleteQ = function(i){ if(!isGlobalAdmin()) return; qs.splice(i,1); saveAll(); }
-window.clearOld = function(){ if(!isGlobalAdmin()) return alert('Admin only'); if(confirm('Clear all old posts? Recent will be lost.')){ localStorage.removeItem('sielQsV2'); qs=[]; render(); } }
+window.openShare = function(){ document.getElementById('shareModal').classList.add('open'); document.getElementById('shareModal').style.display='flex'; }
+window.closeShare = function(){ document.getElementById('shareModal').classList.remove('open'); document.getElementById('shareModal').style.display='none'; }
 
 render();
+// Default show Communities as in screenshot? Show feed first as per order
+showTab('comm', document.getElementById('tabComm'));
+showTab('feed', document.getElementById('tabFeed'));
 </script>
 </body>
 </html>
