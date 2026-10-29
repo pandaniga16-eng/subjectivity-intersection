@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>SIEL — Posting Fixed Final</title>
+<title>SIEL — Trinity ONLINE FINAL</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:#000;color:#e7e9ea}
@@ -51,152 +51,72 @@ body{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:#
 </head>
 <body>
 <div class="app">
-<div class="top">
-<div class="tabs">
-<div class="tab active" id="tab-feed" onclick="switchTab('feed')">For you</div>
-<div class="tab" id="tab-comm" onclick="switchTab('comm')">Communities</div>
-<div class="tab" id="tab-notes" onclick="switchTab('notes')">Simple Notes</div>
+<div class="top"><div class="tabs"><div class="tab active" id="tab-feed" onclick="switchTab('feed')">For you</div><div class="tab" id="tab-comm" onclick="switchTab('comm')">Communities</div><div class="tab" id="tab-notes" onclick="switchTab('notes')">Simple Notes</div></div></div>
+<div class="trinity"><span>🔵 Trinity ONLINE</span><span id="topCounter">0 / 1000</span><span class="counter" id="badgeCounter">LIVE</span><span id="onlineStatus" style="margin-left:8px;font-size:11px;color:#25D366">● Connecting...</span></div>
+<div id="view-feed"><div class="header"><div style="font-weight:800">For you</div><div style="font-size:12px" id="postCount">0 posts</div></div><div id="postsList"></div><div id="emptyFeed" style="padding:60px 20px;text-align:center;color:#555"><div style="font-size:40px">📝</div><div style="margin-top:8px">No posts yet — be first to post LIVE</div></div><div style="height:100px"></div></div>
+<div id="view-comm" style="display:none"><div class="header"><div style="font-weight:800">Communities</div><div style="font-size:12px" id="groupCount">0 groups</div></div><div style="padding:12px 16px;display:flex;gap:10px;border-bottom:1px solid #2f3336"><input id="newGroupName" class="input" placeholder="Create community LIVE" style="flex:1"><button type="button" class="btn-white btn" id="createGroupBtn">Create</button></div><div id="groupsList"></div><div id="emptyGroups" style="padding:40px;text-align:center;color:#555;display:none">No communities</div><div style="height:100px"></div></div>
+<div id="view-notes" style="display:none"><div class="header"><div style="font-weight:800">Simple Notes</div><div style="font-size:12px" id="notesCount">0 notes</div></div><div style="padding:16px;border-bottom:1px solid #2f3336;background:#000"><div style="display:flex;gap:8px"><select id="noteForm" class="input" style="flex:1;border-radius:12px"><option>Form 1</option><option>Form 2</option><option>General</option></select><button type="button" class="btn-white btn" onclick="document.getElementById('noteImage').click()">🖼️</button><input type="file" id="noteImage" accept="image/*" hidden></div><textarea id="noteText" class="input" placeholder="Write note LIVE..." style="margin-top:10px;border-radius:12px;min-height:80px"></textarea><div id="noteImgPreview"></div><button type="button" class="btn-white btn" style="width:100%;margin-top:10px;height:44px" id="saveNoteBtn">Save LIVE</button></div><div id="notesList"></div><div style="height:100px"></div></div>
+<div class="fab" id="fabBtn">+</div>
+<div class="bottom"><div class="b-item active" id="b-feed" onclick="switchTab('feed')"><span>⌂</span><span>For you</span></div><div class="b-item" id="b-comm" onclick="switchTab('comm')"><span>⧉</span><span>Communities</span></div><div class="b-item" id="b-notes" onclick="switchTab('notes')"><span>📝</span><span>Notes</span></div></div>
 </div>
-</div>
-<div class="trinity"><span>🔵 Trinity</span><span id="topCounter">0 / 1000</span><span class="counter" id="badgeCounter">0 joined</span></div>
+<div id="groupModal"><div class="gHeader"><button type="button" class="btn btn-dark" style="width:40px;height:40px;border-radius:50%" id="closeGroupBtn">←</button><div class="group-avatar">⧉</div><div style="flex:1"><div id="gName">Group</div><div id="gInfo" style="font-size:12px;color:#8696a0"></div></div><button type="button" class="btn btn-white" style="height:36px;display:none" id="joinBtn">Join</button><button type="button" class="btn" style="background:#f15c6d;height:36px;display:none" id="delGroupBtn">Delete</button></div><div id="gMsgs" class="gMsgs"></div><div class="gInputWrap"><textarea id="gInput" class="gInput" rows="1" placeholder="Message LIVE"></textarea><button type="button" class="btn-green btn" style="width:44px;height:44px;border-radius:50%;padding:0" id="sendGroupBtn">➤</button></div></div>
+<div id="forceLogin" class="forceModal"><div class="box"><h2>Join 1000 LIVE</h2><input id="forceEmail" class="input" type="email" placeholder="Your email" style="margin-top:12px"><button type="button" class="btn btn-green" style="width:100%;margin-top:14px;height:46px" id="loginBtn">Continue LIVE</button><div id="forceError" style="display:none;color:#f15c6d;margin-top:10px;font-size:13px"></div></div></div>
+<div id="postModal" class="smallModal"><div class="box2"><h3>Create Post LIVE</h3><textarea id="postBody" class="textarea" placeholder="What's happening? LIVE for all 1000" style="margin-top:12px"></textarea><div id="postImgPreview" style="margin-top:10px"></div><div style="display:flex;gap:8px;margin-top:14px"><button type="button" class="btn-white btn" onclick="document.getElementById('postImage').click()">🖼️ Picture</button><input type="file" id="postImage" accept="image/*" hidden><button type="button" class="btn-green btn" style="flex:1" id="publishBtn">Post LIVE</button></div><div id="postError" style="display:none;color:#f15c6d;font-size:12px;margin-top:8px"></div><button type="button" class="btn btn-dark" style="width:100%;margin-top:10px" id="closePostBtn">Cancel</button></div></div>
+<div id="commentModal" class="smallModal"><div class="box2"><h3>Comments LIVE</h3><div id="commentPostPreview" style="margin-top:12px;padding:12px;background:#000;border-radius:12px;border:1px solid #1a1a1a"></div><div id="commentsList" style="margin-top:12px;max-height:250px;overflow-y:auto"></div><textarea id="commentText" class="textarea" placeholder="Write a comment LIVE..." style="margin-top:12px;min-height:70px"></textarea><div style="display:flex;gap:8px;margin-top:10px"><button type="button" class="btn btn-dark" style="flex:1" id="closeCommentBtn">Close</button><button type="button" class="btn-green btn" style="flex:1" id="submitCommentBtn">Send LIVE</button></div><div id="commentError" style="display:none;color:#f15c6d;font-size:12px;margin-top:8px"></div></div></div>
 
-<div id="view-feed">
-<div class="header"><div style="font-weight:800">For you</div><div style="font-size:12px" id="postCount">0 posts</div></div>
-<div id="postsList"></div>
-<div id="emptyFeed" style="padding:60px 20px;text-align:center;color:#555"><div style="font-size:40px">📝</div><div style="margin-top:8px">No posts yet — tap + to post</div></div>
-<div style="height:100px"></div>
-</div>
-
-<div id="view-comm" style="display:none">
-<div class="header"><div style="font-weight:800">Communities</div><div style="font-size:12px" id="groupCount">0 groups</div></div>
-<div style="padding:12px 16px;display:flex;gap:10px;border-bottom:1px solid #2f3336"><input id="newGroupName" class="input" placeholder="Create community" style="flex:1"><button type="button" class="btn-white btn" onclick="createGroup()">Create</button></div>
-<div style="padding:8px 16px;background:#111;border-bottom:1px solid #222;font-size:12px;color:#71767b">Communities • messages visible • tap to open</div>
-<div id="groupsList"></div>
-<div id="emptyGroups" style="padding:40px;text-align:center;color:#555;display:none">No communities</div>
-<div style="height:100px"></div>
-</div>
-
-<div id="view-notes" style="display:none">
-<div class="header"><div style="font-weight:800">Simple Notes</div><div style="font-size:12px" id="notesCount">0 notes</div></div>
-<div style="padding:16px;border-bottom:1px solid #2f3336;background:#000">
-<div style="display:flex;gap:8px"><select id="noteForm" class="input" style="flex:1;border-radius:12px"><option>Form 1</option><option>Form 2</option><option>General</option></select><button type="button" class="btn-white btn" onclick="document.getElementById('noteImage').click()">🖼️</button><input type="file" id="noteImage" accept="image/*" hidden></div>
-<textarea id="noteText" class="input" placeholder="Write note..." style="margin-top:10px;border-radius:12px;min-height:80px"></textarea><div id="noteImgPreview"></div><button type="button" class="btn-white btn" style="width:100%;margin-top:10px;height:44px" onclick="saveNote()">Save</button>
-</div>
-<div id="notesList"></div>
-<div style="height:100px"></div>
-</div>
-
-<div class="fab" onclick="openPostModal()">+</div>
-
-<div class="bottom">
-<div class="b-item active" id="b-feed" onclick="switchTab('feed')"><span>⌂</span><span>For you</span></div>
-<div class="b-item" id="b-comm" onclick="switchTab('comm')"><span>⧉</span><span>Communities</span></div>
-<div class="b-item" id="b-notes" onclick="switchTab('notes')"><span>📝</span><span>Notes</span></div>
-</div>
-</div>
-
-<div id="groupModal">
-<div class="gHeader">
-<button type="button" class="btn btn-dark" style="width:40px;height:40px;border-radius:50%" onclick="closeGroup()">←</button>
-<div class="group-avatar">⧉</div>
-<div style="flex:1"><div id="gName" style="font-weight:700">Group</div><div id="gInfo" style="font-size:12px;color:#8696a0"></div></div>
-<button type="button" class="btn btn-white" style="height:36px;display:none" id="joinBtn" onclick="joinGroup()">Join</button>
-<button type="button" class="btn" style="background:#f15c6d;height:36px;display:none" id="delGroupBtn" onclick="deleteGroup()">Delete</button>
-</div>
-<div id="gMsgs" class="gMsgs"></div>
-<div class="gInputWrap"><textarea id="gInput" class="gInput" rows="1" placeholder="Message"></textarea><button type="button" class="btn-green btn" style="width:44px;height:44px;border-radius:50%;padding:0" onclick="sendGroupMsg()">➤</button></div>
-</div>
-
-<div id="forceLogin" class="forceModal"><div class="box"><h2>Join 1000</h2><input id="forceEmail" class="input" type="email" placeholder="Your email" style="margin-top:12px"><button type="button" class="btn btn-green" style="width:100%;margin-top:14px;height:46px" onclick="doForceLogin()">Continue</button><div id="forceError" style="display:none;color:#f15c6d;margin-top:10px;font-size:13px"></div></div></div>
-
-<div id="postModal" class="smallModal"><div class="box2"><h3 style="font-weight:800">Create Post</h3><textarea id="postBody" class="textarea" placeholder="What's happening? Words or picture — your desire" style="margin-top:12px"></textarea><div id="postImgPreview" style="margin-top:10px"></div><div style="display:flex;gap:8px;margin-top:14px"><button type="button" class="btn-white btn" onclick="document.getElementById('postImage').click()">🖼️ Picture</button><input type="file" id="postImage" accept="image/*" hidden><button type="button" class="btn-green btn" style="flex:1" onclick="publishPost()">Post</button></div><div id="postError" style="display:none;color:#f15c6d;font-size:12px;margin-top:8px"></div><button type="button" class="btn btn-dark" style="width:100%;margin-top:10px" onclick="closePostModal()">Cancel</button></div></div>
-
-<div id="commentModal" class="smallModal"><div class="box2"><h3 style="font-weight:800">Comments</h3><div id="commentPostPreview" style="margin-top:12px;padding:12px;background:#000;border-radius:12px;border:1px solid #1a1a1a"></div><div id="commentsList" style="margin-top:12px;max-height:250px;overflow-y:auto"></div><textarea id="commentText" class="textarea" placeholder="Write a comment..." style="margin-top:12px;min-height:70px"></textarea><div style="display:flex;gap:8px;margin-top:10px"><button type="button" class="btn btn-dark" style="flex:1" onclick="closeCommentModal()">Close</button><button type="button" class="btn-green btn" style="flex:1" onclick="submitComment()">Send</button></div><div id="commentError" style="display:none;color:#f15c6d;font-size:12px;margin-top:8px"></div></div></div>
-
-<script>
-let people = JSON.parse(localStorage.getItem('siel1000People')||'[]');
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, doc, updateDoc, arrayUnion, arrayRemove, increment, deleteDoc, serverTimestamp, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+const firebaseConfig = {
+  apiKey: "AIzaSyBxIpjPvzWkviC_PxsZGHh0HEDBHw-cpww",
+  authDomain: "siel-trinity.firebaseapp.com",
+  projectId: "siel-trinity",
+  storageBucket: "siel-trinity.firebasestorage.app",
+  messagingSenderId: "231955952674",
+  appId: "1:231955952674:web:e78f05e0f61c6af139467b",
+  measurementId: "G-XF5S5BWG1L"
+};
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 let currentUser = localStorage.getItem('sielEmail')||'';
-let posts = JSON.parse(localStorage.getItem('sielQsV2')||'[]');
-let groups = JSON.parse(localStorage.getItem('sielGroupsV2')||'[]');
-let notes = JSON.parse(localStorage.getItem('sielNotes')||'[]');
-let curGroup=null, pendingPostImg=null, pendingNoteImg=null, curCommentPost=null;
-
-posts = posts.filter(p=>{ let e=(p.email||'').toLowerCase(); if(e.includes('satoru')) return false; return true; });
-posts = posts.map(p=>({ body:p.body||p.text||'', image:p.image||null, email:p.email||'anon', time:p.time||Date.now(), likes:p.likes||0, likedBy:p.likedBy||[], comments:p.comments||p.answers||[] }));
-groups = groups.map(g=>({ name:g.name, admin:g.admin, members:g.members||[g.admin], msgs:g.msgs||[], updatedAt:g.updatedAt||Date.now(), createdAt:g.createdAt||Date.now() }));
-
+let peopleCache=[]; let postsCache=[]; let groupsCache=[]; let notesCache=[]; let curGroup=null, pendingPostImg=null, pendingNoteImg=null, curCommentPostId=null;
 function isGroupAdmin(g){ return g && g.admin===currentUser; }
-function isGlobalAdmin(){ return currentUser.toLowerCase()==='admin@skiii.com'||currentUser.toLowerCase()==='pandaniga16@gmail.com'; }
-function updateCounters(){
-  document.getElementById('topCounter').textContent = people.length+' / 1000';
-  document.getElementById('badgeCounter').textContent = people.length+' / 1000';
-  document.getElementById('postCount').textContent = posts.length+' posts';
-  document.getElementById('groupCount').textContent = groups.length+' groups';
-  document.getElementById('notesCount').textContent = notes.length+' notes';
-}
+function isGlobalAdmin(){ let l=(currentUser||'').toLowerCase(); return l==='admin@skiii.com'||l==='pandaniga16@gmail.com'; }
+function updateCounters(){ document.getElementById('topCounter').textContent = peopleCache.length+' / 1000'; document.getElementById('postCount').textContent = postsCache.length+' posts'; document.getElementById('groupCount').textContent = groupsCache.length+' groups'; document.getElementById('notesCount').textContent = notesCache.length+' notes'; }
 function checkLogin(){ document.getElementById('forceLogin').style.display = currentUser ? 'none' : 'flex'; updateCounters(); }
-function doForceLogin(){
+checkLogin();
+document.getElementById('loginBtn').onclick = async ()=>{
   let e=document.getElementById('forceEmail').value.trim().toLowerCase();
   let err=document.getElementById('forceError');
   if(!e.includes('@')){ err.style.display='block'; err.textContent='Enter valid email'; return; }
-  if(people.map(p=>p.toLowerCase()).includes(e)){ err.style.display='block'; err.textContent='Email exists'; return; }
-  currentUser=e; localStorage.setItem('sielEmail',e); people.push(e); localStorage.setItem('siel1000People',JSON.stringify(people)); checkLogin(); saveAll(); renderAll();
-}
-checkLogin();
-
-function renderAll(){
-  updateCounters();
-  let plist=document.getElementById('postsList');
-  let empty=document.getElementById('emptyFeed');
-  if(posts.length===0){ plist.innerHTML=''; empty.style.display='block'; }
-  else{
-    empty.style.display='none';
-    plist.innerHTML=[...posts].sort((a,b)=>b.time-a.time).map(p=>{
-      let idx=posts.indexOf(p);
-      let name=(p.email||'anon').split('@')[0];
-      let isLiked = p.likedBy && p.likedBy.includes(currentUser);
-      let comments = p.comments||[];
-      return `<div class="post-card">
-        <div style="display:flex;gap:12px">
-          <div class="avatar">${name[0].toUpperCase()}</div>
-          <div style="flex:1;min-width:0">
-            <div style="display:flex;justify-content:space-between"><div style="font-weight:700">@${name}</div><div style="font-size:11px;color:#555">${new Date(p.time).toLocaleString()}</div></div>
-            ${p.body?`<div style="margin-top:6px;white-space:pre-wrap;word-break:break-word">${p.body}</div>`:''}
-            ${p.image?`<img src="${p.image}" style="width:100%;border-radius:12px;margin-top:10px;border:1px solid #222;display:block">`:''}
-            <div class="post-actions">
-              <div class="action ${isLiked?'liked':''}" onclick="likePost(${idx})"><span>${isLiked?'❤️':'♡'}</span><span>${p.likes||0} Likes</span></div>
-              <div class="action" onclick="openCommentModal(${idx})"><span>💬</span><span>${comments.length} Comments • Tap to see</span></div>
-              <div class="action" onclick="deletePost(${idx})" style="margin-left:auto;color:#f15c6d">🗑 Delete</div>
-            </div>
-          </div>
-        </div>
-      </div>`;
-    }).join('');
-  }
-  let sorted=[...groups].sort((a,b)=>(b.updatedAt||0)-(a.updatedAt||0));
-  document.getElementById('groupsList').innerHTML=sorted.map(g=>{
-    let oi=groups.indexOf(g); 
-    let last=g.msgs[g.msgs.length-1];
-    let preview = last ? last.text.slice(0,60) : 'Tap to open messages';
-    return `<div class="group-item" onclick="openGroup(${oi})"><div class="group-avatar">⧉</div><div style="flex:1;min-width:0"><div style="display:flex;justify-content:space-between"><div style="font-weight:700">${g.name}</div><div style="font-size:11px;color:#555">${last?new Date(last.time).toLocaleTimeString():''}</div></div><div style="font-size:13px;color:#555;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px">${preview}</div></div></div>`;
+  currentUser=e; localStorage.setItem('sielEmail',e);
+  try{ await setDoc(doc(db,'trinity_users',e), { email:e, joinedAt: serverTimestamp() }, {merge:true}); }catch(ex){ console.log(ex); }
+  checkLogin();
+};
+function renderPosts(){
+  let plist=document.getElementById('postsList'); let empty=document.getElementById('emptyFeed');
+  if(postsCache.length===0){ plist.innerHTML=''; empty.style.display='block'; return; }
+  empty.style.display='none';
+  plist.innerHTML=postsCache.map(p=>{
+    let name=(p.email||'anon').split('@')[0]; let isLiked = p.likedBy && p.likedBy.includes(currentUser); let comments = p.comments||[]; let id = p.id;
+    return `<div class="post-card"><div style="display:flex;gap:12px"><div class="avatar">${name[0].toUpperCase()}</div><div style="flex:1;min-width:0"><div style="display:flex;justify-content:space-between"><div style="font-weight:700">@${name}</div><div style="font-size:11px;color:#555">${p.time? new Date(p.time.seconds? p.time.seconds*1000 : p.time).toLocaleString() : ''}</div></div>${p.body?`<div style="margin-top:6px;white-space:pre-wrap;word-break:break-word">${p.body}</div>`:''}${p.image?`<img src="${p.image}" style="width:100%;border-radius:12px;margin-top:10px;border:1px solid #222;display:block">`:''}<div class="post-actions"><div class="action ${isLiked?'liked':''}" data-like="${id}"><span>${isLiked?'❤️':'♡'}</span><span>${p.likes||0} Likes</span></div><div class="action" data-comment="${id}"><span>💬</span><span>${comments.length} Comments</span></div><div class="action" data-del="${id}" style="margin-left:auto;color:#f15c6d">🗑 Delete</div></div></div></div></div>`;
   }).join('');
-  document.getElementById('emptyGroups').style.display = groups.length===0 ? 'block' : 'none';
-  document.getElementById('notesList').innerHTML=notes.slice().reverse().map(n=>`<div style="padding:14px 16px;border-bottom:1px solid #222;display:flex;gap:12px"><div class="avatar" style="width:36px;height:36px;font-size:12px">${(n.form||'N')[0]}</div><div style="flex:1"><div style="font-weight:700">${n.form}</div><div style="margin-top:4px;white-space:pre-wrap">${n.body||''}</div>${n.image?`<img src="${n.image}" style="width:100%;border-radius:10px;margin-top:8px">`:''}</div></div>`).join('')||'<div style="padding:40px;text-align:center;color:#555">No notes</div>';
+  plist.querySelectorAll('[data-like]').forEach(el=> el.onclick=()=> likePost(el.getAttribute('data-like')));
+  plist.querySelectorAll('[data-comment]').forEach(el=> el.onclick=()=> openCommentModal(el.getAttribute('data-comment')));
+  plist.querySelectorAll('[data-del]').forEach(el=> el.onclick=()=> deletePost(el.getAttribute('data-del')));
 }
-
-function saveAll(){
-  try{
-    localStorage.setItem('sielQsV2',JSON.stringify(posts));
-  }catch(e){
-    posts.forEach(p=>{ if(p.image && p.image.length>10000) p.image=null; });
-    localStorage.setItem('sielQsV2',JSON.stringify(posts));
-  }
-  localStorage.setItem('sielGroupsV2',JSON.stringify(groups));
-  localStorage.setItem('siel1000People',JSON.stringify(people));
-  localStorage.setItem('sielNotes',JSON.stringify(notes));
-  renderAll();
+function renderGroups(){
+  let sorted=[...groupsCache].sort((a,b)=> (b.updatedAt?.seconds||0)-(a.updatedAt?.seconds||0));
+  document.getElementById('groupsList').innerHTML=sorted.map(g=>{
+    let last=g.msgs && g.msgs[g.msgs.length-1]; let preview = last ? last.text.slice(0,60) : 'Tap to open messages LIVE';
+    return `<div class="group-item" data-gid="${g.id}"><div class="group-avatar">⧉</div><div style="flex:1;min-width:0"><div style="display:flex;justify-content:space-between"><div style="font-weight:700">${g.name}</div><div style="font-size:11px;color:#555">${last?.time? new Date(last.time.seconds*1000).toLocaleTimeString():''}</div></div><div style="font-size:13px;color:#555;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px">${preview}</div></div></div>`;
+  }).join('');
+  document.querySelectorAll('[data-gid]').forEach(el=> el.onclick=()=> openGroup(el.getAttribute('data-gid')));
+  document.getElementById('emptyGroups').style.display = groupsCache.length===0 ? 'block' : 'none';
 }
-
+function renderNotes(){
+  document.getElementById('notesList').innerHTML=notesCache.slice().reverse().map(n=>`<div style="padding:14px 16px;border-bottom:1px solid #222;display:flex;gap:12px"><div class="avatar" style="width:36px;height:36px;font-size:12px">${(n.form||'N')[0]}</div><div style="flex:1"><div style="font-weight:700">${n.form}</div><div style="margin-top:4px;white-space:pre-wrap">${n.body||''}</div>${n.image?`<img src="${n.image}" style="width:100%;border-radius:10px;margin-top:8px">`:''}</div></div>`).join('')||'<div style="padding:40px;text-align:center;color:#555">No notes LIVE</div>';
+}
 window.switchTab = function(name){
   document.getElementById('tab-feed').classList.remove('active'); document.getElementById('tab-comm').classList.remove('active'); document.getElementById('tab-notes').classList.remove('active');
   document.getElementById('b-feed').classList.remove('active'); document.getElementById('b-comm').classList.remove('active'); document.getElementById('b-notes').classList.remove('active');
@@ -205,102 +125,46 @@ window.switchTab = function(name){
   if(name==='comm'){ document.getElementById('tab-comm').classList.add('active'); document.getElementById('b-comm').classList.add('active'); document.getElementById('view-comm').style.display='block'; }
   if(name==='notes'){ document.getElementById('tab-notes').classList.add('active'); document.getElementById('b-notes').classList.add('active'); document.getElementById('view-notes').style.display='block'; }
 }
-
 function compressImage(file, callback){
   let reader=new FileReader();
   reader.onload=function(e){
     let img=new Image();
     img.onload=function(){
-      let canvas=document.createElement('canvas');
-      let maxW=800;
-      let scale=Math.min(1, maxW/img.width);
-      canvas.width=img.width*scale;
-      canvas.height=img.height*scale;
-      let ctx=canvas.getContext('2d');
-      ctx.drawImage(img,0,0,canvas.width,canvas.height);
-      let compressed=canvas.toDataURL('image/jpeg',0.6);
-      callback(compressed);
-    };
-    img.src=e.target.result;
-  };
-  reader.readAsDataURL(file);
+      let canvas=document.createElement('canvas'); let maxW=600; let scale=Math.min(1, maxW/img.width); canvas.width=img.width*scale; canvas.height=img.height*scale; let ctx=canvas.getContext('2d'); ctx.drawImage(img,0,0,canvas.width,canvas.height); let compressed=canvas.toDataURL('image/jpeg',0.5); callback(compressed);
+    }; img.src=e.target.result;
+  }; reader.readAsDataURL(file);
 }
-
 document.getElementById('postImage').addEventListener('change',function(e){
-  let f=e.target.files[0]; if(!f) return;
-  compressImage(f,function(compressed){
-    pendingPostImg=compressed;
-    document.getElementById('postImgPreview').innerHTML='<img src="'+pendingPostImg+'" style="width:100%;border-radius:12px"><div style="font-size:11px;color:#25D366;margin-top:4px">Picture compressed — ready to post</div><button type="button" onclick="removeModalImg()" style="margin-top:6px;background:#f15c6d;color:#fff;border:0;padding:4px 10px;border-radius:9999px;font-size:11px">Remove</button>';
-  });
+  let f=e.target.files[0]; if(!f) return; compressImage(f,function(compressed){ pendingPostImg=compressed; document.getElementById('postImgPreview').innerHTML='<img src="'+pendingPostImg+'" style="width:100%;border-radius:12px"><div style="font-size:11px;color:#25D366;margin-top:4px">Picture compressed — ready LIVE</div><button type="button" id="rmImg" style="margin-top:6px;background:#f15c6d;color:#fff;border:0;padding:4px 10px;border-radius:9999px;font-size:11px">Remove</button>'; document.getElementById('rmImg').onclick=()=>{ pendingPostImg=null; document.getElementById('postImgPreview').innerHTML=''; document.getElementById('postImage').value=''; }; });
 });
-window.removeModalImg = function(){ pendingPostImg=null; document.getElementById('postImgPreview').innerHTML=''; document.getElementById('postImage').value=''; }
-window.openPostModal = function(){ document.getElementById('postError').style.display='none'; document.getElementById('postModal').classList.add('show'); }
-window.closePostModal = function(){ document.getElementById('postModal').classList.remove('show'); }
-
-window.publishPost = function(){
-  let bodyEl=document.getElementById('postBody');
-  let body=bodyEl.value.trim();
-  let err=document.getElementById('postError');
+document.getElementById('fabBtn').onclick=()=>{ document.getElementById('postError').style.display='none'; document.getElementById('postModal').classList.add('show'); }
+document.getElementById('closePostBtn').onclick=()=>{ document.getElementById('postModal').classList.remove('show'); }
+document.getElementById('closeCommentBtn').onclick=()=>{ document.getElementById('commentModal').classList.remove('show'); curCommentPostId=null; document.getElementById('commentText').value=''; }
+document.getElementById('publishBtn').onclick = async ()=>{
+  let bodyEl=document.getElementById('postBody'); let body=bodyEl.value.trim(); let err=document.getElementById('postError');
   if(!currentUser){ err.style.display='block'; err.textContent='Login first'; return; }
-  if(!body && !pendingPostImg){ err.style.display='block'; err.textContent='Write words or add picture — your desire'; return; }
-  try{
-    let newPost={ body:body, image:pendingPostImg, email:currentUser, time:Date.now(), likes:0, likedBy:[], comments:[] };
-    posts.unshift(newPost);
-    localStorage.setItem('sielQsV2',JSON.stringify(posts));
-    bodyEl.value=''; removeModalImg(); err.style.display='none';
-    closePostModal(); renderAll(); switchTab('feed');
-  }catch(e){
-    try{
-      let newPost={ body:body, image:null, email:currentUser, time:Date.now(), likes:0, likedBy:[], comments:[] };
-      posts.unshift(newPost);
-      localStorage.setItem('sielQsV2',JSON.stringify(posts));
-      bodyEl.value=''; removeModalImg(); err.style.display='none';
-      closePostModal(); renderAll(); switchTab('feed');
-      alert('Picture too large — posted words only.');
-    }catch(e2){
-      err.style.display='block'; err.textContent='Storage full — delete some old posts';
-    }
-  }
-}
-
-window.deletePost = function(i){ if(confirm('Delete post?')){ posts.splice(i,1); saveAll(); } }
-window.likePost = function(i){
-  if(!currentUser){ alert('Login first'); return; }
-  let p=posts[i]; p.likedBy=p.likedBy||[]; p.likes=p.likes||0;
-  if(p.likedBy.includes(currentUser)){ p.likedBy=p.likedBy.filter(e=>e!==currentUser); p.likes=Math.max(0,p.likes-1); }
-  else{ p.likedBy.push(currentUser); p.likes++; }
-  saveAll();
-}
-window.openCommentModal = function(i){
-  if(!currentUser){ alert('Login first'); return; }
-  curCommentPost=i; let p=posts[i]; let name=(p.email||'anon').split('@')[0];
-  document.getElementById('commentPostPreview').innerHTML=`<div style="display:flex;gap:8px"><div class="avatar" style="width:32px;height:32px;font-size:12px">${name[0].toUpperCase()}</div><div style="flex:1"><b>@${name}</b><div style="margin-top:4px;white-space:pre-wrap;font-size:14px">${p.body||''}</div>${p.image?`<img src="${p.image}" style="width:100%;border-radius:8px;margin-top:8px">`:''}</div></div>`;
-  let comments=p.comments||[]; document.getElementById('commentsList').innerHTML = comments.length? comments.map(c=>`<div class="comment-item"><div style="width:28px;height:28px;border-radius:50%;background:#2a3942;display:flex;align-items:center;justify-content:center;font-size:10px">${c.name[0].toUpperCase()}</div><div style="flex:1"><b style="font-size:13px">@${c.name}</b><div style="font-size:13px;margin-top:2px;white-space:pre-wrap">${c.text}</div></div></div>`).join('') : '<div style="padding:20px;text-align:center;color:#555">No comments yet</div>';
-  document.getElementById('commentError').style.display='none'; document.getElementById('commentModal').classList.add('show');
-}
-window.closeCommentModal = function(){ document.getElementById('commentModal').classList.remove('show'); curCommentPost=null; document.getElementById('commentText').value=''; }
-window.submitComment = function(){
-  let err=document.getElementById('commentError');
-  if(curCommentPost===null){ err.style.display='block'; err.textContent='Open a post first'; return; }
-  if(!currentUser){ err.style.display='block'; err.textContent='Login first'; return; }
-  let txt=document.getElementById('commentText').value.trim(); if(!txt){ err.style.display='block'; err.textContent='Write a comment'; return; }
-  let p=posts[curCommentPost]; p.comments=p.comments||[]; let comment={ name:currentUser.split('@')[0], text:txt, email:currentUser, time:Date.now() }; p.comments.push(comment); saveAll(); document.getElementById('commentText').value=''; openCommentModal(curCommentPost);
-}
-
-document.getElementById('noteImage').addEventListener('change',function(e){
-  let f=e.target.files[0]; if(!f)return; compressImage(f,function(c){ pendingNoteImg=c; document.getElementById('noteImgPreview').innerHTML='<img src="'+pendingNoteImg+'" style="width:100%;border-radius:12px;margin-top:8px">'; });
-});
-window.saveNote = function(){ if(!currentUser){ alert('Login'); return; } let text=document.getElementById('noteText').value.trim(); let form=document.getElementById('noteForm').value; if(!text&&!pendingNoteImg){ alert('Write note'); return; } notes.push({form,body:text,image:pendingNoteImg,email:currentUser,time:Date.now()}); saveAll(); document.getElementById('noteText').value=''; document.getElementById('noteImgPreview').innerHTML=''; pendingNoteImg=null; }
-
-window.createGroup = function(){ if(!currentUser){ alert('Login first'); return; } let name=document.getElementById('newGroupName').value.trim(); if(!name){ alert('Enter name'); return; } let now=Date.now(); groups.push({name,admin:currentUser,members:[currentUser],msgs:[{email:'system',name:'System',text:'Group created',time:now}],updatedAt:now,createdAt:now}); document.getElementById('newGroupName').value=''; saveAll(); openGroup(groups.length-1); }
-window.openGroup = function(i){ if(!currentUser){ alert('Login first'); return; } curGroup=i; let g=groups[i]; document.getElementById('gName').textContent=g.name; document.getElementById('gInfo').textContent=`${g.members.length} members`; document.getElementById('joinBtn').style.display=g.members.includes(currentUser)?'none':'block'; document.getElementById('delGroupBtn').style.display=(isGroupAdmin(g)||isGlobalAdmin())?'block':'none'; document.getElementById('groupModal').classList.add('show'); renderGroupMsgs(); }
-window.closeGroup = function(){ document.getElementById('groupModal').classList.remove('show'); curGroup=null; renderAll(); }
-window.joinGroup = function(){ if(curGroup===null)return; let g=groups[curGroup]; if(!g.members.includes(currentUser))g.members.push(currentUser); g.msgs.push({email:'system',name:'System',text:currentUser.split('@')[0]+' joined',time:Date.now()}); g.updatedAt=Date.now(); saveAll(); renderGroupMsgs(); document.getElementById('joinBtn').style.display='none'; }
-window.deleteGroup = function(){ if(curGroup===null)return; if(!(isGroupAdmin(groups[curGroup])||isGlobalAdmin()))return; if(confirm('Delete?')){ groups.splice(curGroup,1); saveAll(); closeGroup(); } }
-function renderGroupMsgs(){ if(curGroup===null)return; let g=groups[curGroup]; document.getElementById('gMsgs').innerHTML=g.msgs.map(function(m){ let isMe=m.email===currentUser; return '<div class="bub '+(isMe?'me':'other')+'"><div style="font-weight:700;font-size:12px">'+(m.name||m.email?.split('@')[0]||'System')+'</div><div style="margin-top:2px;white-space:pre-wrap">'+m.text+'</div></div>'; }).join(''); let box=document.getElementById('gMsgs'); setTimeout(function(){ box.scrollTop=box.scrollHeight; },30); }
-window.sendGroupMsg = function(){ if(curGroup===null)return; let inp=document.getElementById('gInput'); let txt=inp.value.trim(); if(!txt)return; let now=Date.now(); if(!groups[curGroup].members.includes(currentUser))groups[curGroup].members.push(currentUser); groups[curGroup].msgs.push({email:currentUser,name:currentUser.split('@')[0],text:txt,time:now}); groups[curGroup].updatedAt=now; inp.value=''; saveAll(); renderGroupMsgs(); }
-
-renderAll();
+  if(!body && !pendingPostImg){ err.style.display='block'; err.textContent='Write words or add picture'; return; }
+  err.style.display='none'; document.getElementById('publishBtn').textContent='Posting LIVE...';
+  try{ await addDoc(collection(db,'posts'), { body, image:pendingPostImg||null, email:currentUser, time:serverTimestamp(), likes:0, likedBy:[], comments:[] }); bodyEl.value=''; pendingPostImg=null; document.getElementById('postImgPreview').innerHTML=''; document.getElementById('postImage').value=''; document.getElementById('postModal').classList.remove('show'); }catch(e){ err.style.display='block'; err.textContent='Error: '+e.message; }
+  document.getElementById('publishBtn').textContent='Post LIVE';
+};
+async function likePost(id){ if(!currentUser){ alert('Login first'); return; } let post = postsCache.find(p=>p.id===id); if(!post) return; let ref=doc(db,'posts',id); if(post.likedBy && post.likedBy.includes(currentUser)){ await updateDoc(ref, { likedBy: arrayRemove(currentUser), likes: increment(-1) }); }else{ await updateDoc(ref, { likedBy: arrayUnion(currentUser), likes: increment(1) }); } }
+async function deletePost(id){ let post = postsCache.find(p=>p.id===id); if(!post) return; if(post.email!==currentUser && !isGlobalAdmin()){ alert('Only author or admin can delete'); return; } if(confirm('Delete this LIVE post for all?')) await deleteDoc(doc(db,'posts',id)); }
+function openCommentModal(id){ let p=postsCache.find(x=>x.id===id); if(!p) return; curCommentPostId=id; let name=(p.email||'anon').split('@')[0]; document.getElementById('commentPostPreview').innerHTML=`<div style="display:flex;gap:8px"><div class="avatar" style="width:32px;height:32px;font-size:12px">${name[0].toUpperCase()}</div><div style="flex:1"><b>@${name}</b><div style="margin-top:4px;white-space:pre-wrap;font-size:14px">${p.body||''}</div>${p.image?`<img src="${p.image}" style="width:100%;border-radius:8px;margin-top:8px">`:''}</div></div>`; let comments=p.comments||[]; document.getElementById('commentsList').innerHTML = comments.length? comments.map(c=>`<div class="comment-item"><div style="width:28px;height:28px;border-radius:50%;background:#2a3942;display:flex;align-items:center;justify-content:center;font-size:10px">${c.name[0].toUpperCase()}</div><div style="flex:1"><b style="font-size:13px">@${c.name}</b><div style="font-size:13px;margin-top:2px;white-space:pre-wrap">${c.text}</div></div></div>`).join('') : '<div style="padding:20px;text-align:center;color:#555">No comments yet - be first LIVE</div>'; document.getElementById('commentError').style.display='none'; document.getElementById('commentModal').classList.add('show'); }
+document.getElementById('submitCommentBtn').onclick = async ()=>{ let err=document.getElementById('commentError'); if(!curCommentPostId){ err.style.display='block'; err.textContent='Open a post first'; return; } if(!currentUser){ err.style.display='block'; err.textContent='Login first'; return; } let txt=document.getElementById('commentText').value.trim(); if(!txt){ err.style.display='block'; err.textContent='Write a comment'; return; } let ref=doc(db,'posts',curCommentPostId); let comment={ name:currentUser.split('@')[0], text:txt, email:currentUser, time:Date.now() }; await updateDoc(ref, { comments: arrayUnion(comment) }); document.getElementById('commentText').value=''; };
+document.getElementById('createGroupBtn').onclick = async ()=>{ if(!currentUser){ alert('Login first'); return; } let name=document.getElementById('newGroupName').value.trim(); if(!name){ alert('Enter name'); return; } await addDoc(collection(db,'groups'), { name, admin:currentUser, members:[currentUser], msgs:[{email:'system',name:'System',text:'Group created LIVE',time:{seconds:Date.now()/1000}}], updatedAt:serverTimestamp(), createdAt:serverTimestamp() }); document.getElementById('newGroupName').value=''; };
+function openGroup(id){ if(!currentUser){ alert('Login first'); return; } let g=groupsCache.find(x=>x.id===id); if(!g) return; curGroup=g; document.getElementById('gName').textContent=g.name; document.getElementById('gInfo').textContent=`${g.members.length} members • LIVE`; document.getElementById('joinBtn').style.display=g.members.includes(currentUser)?'none':'block'; document.getElementById('delGroupBtn').style.display=(isGroupAdmin(g)||isGlobalAdmin())?'block':'none'; document.getElementById('groupModal').classList.add('show'); renderGroupMsgs(); }
+document.getElementById('closeGroupBtn').onclick=()=>{ document.getElementById('groupModal').classList.remove('show'); curGroup=null; }
+document.getElementById('joinBtn').onclick= async ()=>{ if(!curGroup) return; if(!curGroup.members.includes(currentUser)){ await updateDoc(doc(db,'groups',curGroup.id), { members: arrayUnion(currentUser), msgs: arrayUnion({email:'system',name:'System',text:currentUser.split('@')[0]+' joined LIVE',time:{seconds:Date.now()/1000}}), updatedAt:serverTimestamp() }); } document.getElementById('joinBtn').style.display='none'; };
+document.getElementById('delGroupBtn').onclick= async ()=>{ if(!curGroup) return; if(!(isGroupAdmin(curGroup)||isGlobalAdmin())) return; if(confirm('Delete LIVE group for all?')){ await deleteDoc(doc(db,'groups',curGroup.id)); document.getElementById('groupModal').classList.remove('show'); } };
+function renderGroupMsgs(){ if(!curGroup) return; let fresh = groupsCache.find(x=>x.id===curGroup.id) || curGroup; document.getElementById('gMsgs').innerHTML=(fresh.msgs||[]).map(function(m){ let isMe=m.email===currentUser; return '<div class="bub '+(isMe?'me':'other')+'"><div style="font-weight:700;font-size:12px">'+(m.name||m.email?.split('@')[0]||'System')+'</div><div style="margin-top:2px;white-space:pre-wrap">'+m.text+'</div></div>'; }).join(''); let box=document.getElementById('gMsgs'); setTimeout(function(){ box.scrollTop=box.scrollHeight; },30); }
+document.getElementById('sendGroupBtn').onclick= async ()=>{ if(!curGroup) return; let inp=document.getElementById('gInput'); let txt=inp.value.trim(); if(!txt) return; await updateDoc(doc(db,'groups',curGroup.id), { msgs: arrayUnion({email:currentUser,name:currentUser.split('@')[0],text:txt,time:{seconds:Date.now()/1000}}), members: arrayUnion(currentUser), updatedAt:serverTimestamp() }); inp.value=''; };
+document.getElementById('noteImage').addEventListener('change',function(e){ let f=e.target.files[0]; if(!f)return; compressImage(f,function(c){ pendingNoteImg=c; document.getElementById('noteImgPreview').innerHTML='<img src="'+pendingNoteImg+'" style="width:100%;border-radius:12px;margin-top:8px">'; }); });
+document.getElementById('saveNoteBtn').onclick= async ()=>{ if(!currentUser){ alert('Login'); return; } let text=document.getElementById('noteText').value.trim(); let form=document.getElementById('noteForm').value; if(!text&&!pendingNoteImg){ alert('Write note'); return; } await addDoc(collection(db,'notes'), {form, body:text, image:pendingNoteImg||null, email:currentUser, time:serverTimestamp()}); document.getElementById('noteText').value=''; document.getElementById('noteImgPreview').innerHTML=''; pendingNoteImg=null; };
+onSnapshot(query(collection(db,'posts'), orderBy('time','desc')), (snap)=>{ postsCache = snap.docs.map(d=> ({id:d.id, ...d.data()})); document.getElementById('onlineStatus').textContent='● LIVE ONLINE'; document.getElementById('onlineStatus').style.color='#25D366'; updateCounters(); renderPosts(); if(curCommentPostId) openCommentModal(curCommentPostId); });
+onSnapshot(collection(db,'trinity_users'), (snap)=>{ peopleCache = snap.docs.map(d=> d.data()); updateCounters(); });
+onSnapshot(collection(db,'groups'), (snap)=>{ groupsCache = snap.docs.map(d=> ({id:d.id, ...d.data()})); updateCounters(); renderGroups(); if(curGroup) renderGroupMsgs(); });
+onSnapshot(collection(db,'notes'), (snap)=>{ notesCache = snap.docs.map(d=> ({id:d.id, ...d.data()})); updateCounters(); renderNotes(); });
 switchTab('feed');
 </script>
 </body>
