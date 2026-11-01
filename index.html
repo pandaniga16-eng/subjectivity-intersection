@@ -88,20 +88,20 @@ body{font-family:system-ui,sans-serif;background:#000;color:#e7e9ea}
 <div id="callModal">
 <div class="callHeader">
 <button type="button" class="btn btn-dark" style="width:40px;height:40px;border-radius:50%" onclick="endGroupCall()">←</button>
-<div style="flex:1"><div id="callGroupName" style="font-weight:700">Group Call</div><div style="font-size:11px;color:#25D366">● LIVE Call running in new tab</div></div>
+<div style="flex:1"><div id="callGroupName" style="font-weight:700">Group Call</div><div style="font-size:11px;color:#25D366">● LIVE Call running in new tab - No block</div></div>
 <button type="button" class="btn-white btn" style="height:36px" onclick="endGroupCall()">End</button>
 </div>
 <div style="text-align:center;max-width:400px;margin-top:80px">
 <div style="font-size:60px;margin-bottom:16px">📞</div>
 <h2 style="color:#fff">Call is LIVE</h2>
-<p style="color:#8696a0;margin-top:8px;font-size:14px">Call opened in new tab - fixes white screen with 🚫</p>
+<p style="color:#8696a0;margin-top:8px;font-size:14px">Call opened in new tab - that fixes the white screen with 🚫 you saw. Keep this open for LIVE banner.</p>
 <div style="background:#202c33;padding:16px;border-radius:12px;margin-top:20px;text-align:left">
 <div style="font-size:12px;color:#25D366;font-weight:700;margin-bottom:6px">CALL LINK:</div>
 <div id="callLinkText" style="font-size:12px;word-break:break-all;color:#fff"></div>
 </div>
 <button type="button" class="btn-green btn" style="width:100%;margin-top:20px" onclick="joinLiveCall()">Re-open Call Tab</button>
 <button type="button" class="btn-white btn" style="width:100%;margin-top:10px" onclick="copyCallLink()">Copy Link</button>
-<button type="button" class="btn btn-dark" style="width:100%;margin-top:10px" onclick="endGroupCall()">End Call</button>
+<button type="button" class="btn btn-dark" style="width:100%;margin-top:10px" onclick="endGroupCall()">End Call For Everyone</button>
 </div>
 </div>
 
@@ -140,25 +140,21 @@ window.openForm2 = function(){
   window.open(LINK2, '_blank');
 }
 
-// === VIDEO FIX ONLY - NO IFRAME BLOCK ===
+// === VIDEO FIX + AUTHOR DELETE FIX ===
 window.startGroupCall = async function(){
   if(!curGroup) return;
-  const room = "siel-trinity-" + curGroup.id.replace(/[^a-zA-Z0-9]/g,"").toLowerCase() + "-" + Date.now().toString().slice(-4);
-  const displayName = (currentUser||'guest').split('@')[0];
-  const url = `https://meet.ffmuc.net/${room}#userInfo.displayName="${encodeURIComponent(displayName)}"&config.prejoinConfig.enabled=false&config.lobby.enabled=false&config.requireDisplayName=false&config.startWithAudioMuted=false&config.startWithVideoMuted=false`;
+  let room = "siel-trinity-" + curGroup.id.replace(/[^a-zA-Z0-9]/g,"").toLowerCase();
+  let displayName = currentUser.split('@')[0];
+  let url = `https://meet.ffmuc.net/${room}#userInfo.displayName="${encodeURIComponent(displayName)}"&config.prejoinConfig.enabled=false&config.lobby.enabled=false`;
   currentCallUrl = url;
   document.getElementById('callGroupName').textContent = curGroup.name + " Call";
   document.getElementById('callLinkText').textContent = url;
   document.getElementById('callModal').classList.add('show');
-  window.open(url, '_blank'); // NEW TAB = FIXES WHITE SCREEN 🚫
+  window.open(url, '_blank');
   try{
     await updateDoc(doc(db,'groups',curGroup.id), {
-      callActive: true,
-      callRoom: room,
-      callUrl: url,
-      callStartedBy: displayName,
-      callStartedAt: serverTimestamp(),
-      msgs: arrayUnion({email:'system',name:'System',text:`📞 ${displayName} started LIVE video call — JOIN banner is active for everyone`,time:{seconds:Date.now()/1000}}),
+      callActive: true, callRoom: room, callUrl: url, callStartedBy: displayName, callStartedAt: serverTimestamp(),
+      msgs: arrayUnion({email:'system',name:'System',text:`📞 ${displayName} started LIVE call — tap JOIN banner above to join`,time:{seconds:Date.now()/1000}}),
       updatedAt: serverTimestamp()
     });
   }catch(e){ console.log(e); }
@@ -167,14 +163,14 @@ window.joinLiveCall = function(){
   let fresh = curGroup ? (groupsCache.find(x=>x.id===curGroup.id) || curGroup) : null;
   let url = currentCallUrl || fresh?.callUrl;
   if(!url && fresh){
-    const room = fresh.callRoom || ("siel-trinity-" + fresh.id.replace(/[^a-zA-Z0-9]/g,"").toLowerCase());
-    url = `https://meet.ffmuc.net/${room}#config.prejoinConfig.enabled=false&config.lobby.enabled=false`;
+    let room = fresh.callRoom || ("siel-trinity-" + fresh.id.replace(/[^a-zA-Z0-9]/g,"").toLowerCase());
+    url = `https://meet.ffmuc.net/${room}#config.prejoinConfig.enabled=false`;
   }
   if(url) window.open(url, '_blank');
 }
 window.copyCallLink = function(){
-  const txt = currentCallUrl || document.getElementById('callLinkText').textContent;
-  if(navigator.clipboard) navigator.clipboard.writeText(txt);
+  let txt = currentCallUrl || document.getElementById('callLinkText').textContent;
+  navigator.clipboard.writeText(txt);
   alert("Call link copied: " + txt);
 }
 window.endGroupCall = async function(){
@@ -190,7 +186,11 @@ document.getElementById('loginBtn').onclick = async ()=>{
   let e=document.getElementById('forceEmail').value.trim().toLowerCase();
   let err=document.getElementById('forceError');
   if(!e.includes('@')){ err.style.display='block'; err.textContent='Enter valid email'; return; }
-  currentUser=e; localStorage.setItem('sielEmail',e);
+  err.style.display='none';
+  localStorage.setItem('sielEmail',e);
+  currentUser=e;
+  document.getElementById('forceLogin').style.display='none';
+  document.getElementById('onlineStatus').textContent='● LIVE ONLINE';
   try{ await setDoc(doc(db,'trinity_users',e), { email:e, joinedAt: serverTimestamp() }, {merge:true}); }catch(ex){ console.log(ex); }
   checkLogin();
 };
@@ -199,6 +199,8 @@ document.getElementById('noteForm').addEventListener('change', function(){
   if(v==='form1'){ openForm1(); }
   if(v==='form2'){ openForm2(); }
 });
+
+// LONG VERSION - ONLY AUTHOR CAN DELETE POST
 function renderPosts(){
   let plist=document.getElementById('postsList'); let empty=document.getElementById('emptyFeed');
   if(postsCache.length===0){ plist.innerHTML=''; empty.style.display='block'; return; }
@@ -208,7 +210,7 @@ function renderPosts(){
     let isLiked = p.likedBy && p.likedBy.includes(currentUser); 
     let comments = p.comments||[]; 
     let id = p.id;
-    let isAuthor = p.email === currentUser;
+    let isAuthor = p.email && currentUser && p.email.toLowerCase() === currentUser.toLowerCase();
     let deleteBtn = isAuthor ? `<div class="action" data-del="${id}" style="margin-left:auto;color:#f15c6d">🗑 Delete</div>` : ``;
     return `<div class="post-card"><div style="display:flex;gap:12px"><div class="avatar">${name[0].toUpperCase()}</div><div style="flex:1;min-width:0"><div style="display:flex;justify-content:space-between"><div style="font-weight:700">@${name}</div><div style="font-size:11px;color:#555">${p.time? new Date(p.time.seconds? p.time.seconds*1000 : p.time).toLocaleString() : ''}</div></div>${p.body?`<div style="margin-top:6px;white-space:pre-wrap;word-break:break-word">${p.body}</div>`:''}${p.image?`<img src="${p.image}" style="width:100%;border-radius:12px;margin-top:10px;border:1px solid #222;display:block">`:''}<div class="post-actions"><div class="action ${isLiked?'liked':''}" data-like="${id}"><span>${isLiked?'❤️':'♡'}</span><span>${p.likes||0} Likes</span></div><div class="action" data-comment="${id}"><span>💬</span><span>${comments.length} Comments</span></div>${deleteBtn}</div></div></div></div>`;
   }).join('');
@@ -276,7 +278,7 @@ async function clearChat(gid){
 function renderNotes(){
   document.getElementById('notesList').innerHTML=notesCache.slice().reverse().map(n=>{
     let body = (n.body||'').replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" class="note-link">$1</a>');
-    let isAuthor = n.email === currentUser;
+    let isAuthor = n.email && currentUser && n.email.toLowerCase() === currentUser.toLowerCase();
     let delBtn = isAuthor ? `<button class="del-btn" data-del-note="${n.id}">🗑 Delete this note</button>` : `<div style="font-size:10px;color:#555;margin-top:6px">Only author can delete</div>`;
     return `<div style="padding:14px 16px;border-bottom:1px solid #222;display:flex;gap:12px"><div class="avatar" style="width:36px;height:36px;font-size:12px">${(n.form||'N')[0]}</div><div style="flex:1"><div style="font-weight:700">${n.form}</div><div style="margin-top:4px;white-space:pre-wrap;word-break:break-word">${body}</div>${n.image?`<img src="${n.image}" style="width:100%;border-radius:10px;margin-top:8px">`:''}<div>${delBtn}</div></div></div>`;
   }).join('')||'<div style="padding:40px;text-align:center;color:#555">No notes LIVE — Tap Form 1 or Form 2 above to open links</div>';
@@ -285,7 +287,7 @@ function renderNotes(){
 async function deleteNote(id){
   let n=notesCache.find(x=>x.id===id);
   if(!n) return;
-  if(n.email!==currentUser){ alert('Only the person who created this note can delete it'); return; }
+  if(n.email.toLowerCase()!==currentUser.toLowerCase()){ alert('Only the person who created this note can delete it'); return; }
   if(!confirm('Delete this note for everyone?')) return;
   await deleteDoc(doc(db,'notes',id));
 }
@@ -321,7 +323,15 @@ document.getElementById('publishBtn').onclick = async ()=>{
   document.getElementById('publishBtn').textContent='Post LIVE';
 };
 async function likePost(id){ if(!currentUser){ alert('Login first'); return; } let post = postsCache.find(p=>p.id===id); if(!post) return; let ref=doc(db,'posts',id); if(post.likedBy && post.likedBy.includes(currentUser)){ await updateDoc(ref, { likedBy: arrayRemove(currentUser), likes: increment(-1) }); }else{ await updateDoc(ref, { likedBy: arrayUnion(currentUser), likes: increment(1) }); } }
-async function deletePost(id){ let post = postsCache.find(p=>p.id===id); if(!post) return; if(post.email!==currentUser){ alert('Only author can delete — fixed!'); return; } if(confirm('Delete this LIVE post for all?')) await deleteDoc(doc(db,'posts',id)); }
+async function deletePost(id){
+  let post = postsCache.find(p=>p.id===id);
+  if(!post) return;
+  if(!post.email || post.email.toLowerCase() !== currentUser.toLowerCase()){
+    alert('Only the person who posted can delete this post');
+    return;
+  }
+  if(confirm('Delete your post for everyone?')) await deleteDoc(doc(db,'posts',id));
+}
 function openCommentModal(id){ let p=postsCache.find(x=>x.id===id); if(!p) return; curCommentPostId=id; let name=(p.email||'anon').split('@')[0]; document.getElementById('commentPostPreview').innerHTML=`<div style="display:flex;gap:8px"><div class="avatar" style="width:32px;height:32px;font-size:12px">${name[0].toUpperCase()}</div><div style="flex:1"><b>@${name}</b><div style="margin-top:4px;white-space:pre-wrap;font-size:14px">${p.body||''}</div>${p.image?`<img src="${p.image}" style="width:100%;border-radius:8px;margin-top:8px">`:''}</div></div>`; let comments=p.comments||[]; document.getElementById('commentsList').innerHTML = comments.length? comments.map(c=>`<div style="padding:8px;border-bottom:1px solid #222;display:flex;gap:8px"><div style="width:28px;height:28px;border-radius:50%;background:#2a3942;display:flex;align-items:center;justify-content:center;font-size:10px">${c.name[0].toUpperCase()}</div><div style="flex:1"><b style="font-size:13px">@${c.name}</b><div style="font-size:13px;margin-top:2px;white-space:pre-wrap">${c.text}</div></div></div>`).join('') : '<div style="padding:20px;text-align:center;color:#555">No comments yet - be first LIVE</div>'; document.getElementById('commentError').style.display='none'; document.getElementById('commentModal').classList.add('show'); }
 document.getElementById('submitCommentBtn').onclick = async ()=>{ let err=document.getElementById('commentError'); if(!curCommentPostId){ err.style.display='block'; err.textContent='Open a post first'; return; } if(!currentUser){ err.style.display='block'; err.textContent='Login first'; return; } let txt=document.getElementById('commentText').value.trim(); if(!txt){ err.style.display='block'; err.textContent='Write a comment'; return; } let ref=doc(db,'posts',curCommentPostId); let comment={ name:currentUser.split('@')[0], text:txt, email:currentUser, time:Date.now() }; await updateDoc(ref, { comments: arrayUnion(comment) }); document.getElementById('commentText').value=''; };
 document.getElementById('createGroupBtn').onclick = async ()=>{ if(!currentUser){ alert('Login first'); return; } let name=document.getElementById('newGroupName').value.trim(); if(!name){ alert('Enter name'); return; } await addDoc(collection(db,'groups'), { name, admin:currentUser, members:[currentUser], callActive:false, msgs:[{email:'system',name:'System',text:'Group created LIVE by '+currentUser.split('@')[0],time:{seconds:Date.now()/1000}}], updatedAt:serverTimestamp(), createdAt:serverTimestamp() }); document.getElementById('newGroupName').value=''; };
