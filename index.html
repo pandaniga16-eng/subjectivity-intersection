@@ -52,7 +52,6 @@ body{font-family:system-ui,sans-serif;background:#000;color:#e7e9ea}
 .form-btn:hover{background:#2a3942}
 .form-btn .open{color:#25D366;font-size:11px;font-weight:700}
 .del-btn{background:#f15c6d;color:#fff;border:0;padding:6px 12px;border-radius:9999px;font-size:11px;cursor:pointer;margin-top:8px;font-weight:700}
-/* GROUP CALL STYLES - ADDED */
 #callModal{position:fixed;inset:0;background:#000;z-index:999999;display:none;flex-direction:column}
 #callModal.show{display:flex}
 .callHeader{height:56px;background:#202327;padding:0 12px;display:flex;align-items:center;gap:12px;color:#fff;border-bottom:1px solid #2f3336}
@@ -80,15 +79,16 @@ body{font-family:system-ui,sans-serif;background:#000;color:#e7e9ea}
 <div id="gMsgs" class="gMsgs"></div>
 <div class="gInputWrap"><textarea id="gInput" class="gInput" rows="1" placeholder="Message LIVE"></textarea><button type="button" class="btn-green btn" style="width:44px;height:44px;border-radius:50%;padding:0" id="sendGroupBtn">➤</button></div>
 </div>
-<!-- GROUP CALL MODAL ADDED -->
+
 <div id="callModal">
 <div class="callHeader">
 <button type="button" class="btn btn-dark" style="width:40px;height:40px;border-radius:50%" onclick="endGroupCall()">←</button>
-<div style="flex:1"><div id="callGroupName" style="font-weight:700">Group Call</div><div style="font-size:11px;color:#25D366">● LIVE Call</div></div>
+<div style="flex:1"><div id="callGroupName" style="font-weight:700">Group Call</div><div style="font-size:11px;color:#25D366">● LIVE Call - Fixed Server</div></div>
 <button type="button" class="btn-white btn" style="height:36px" onclick="endGroupCall()">End</button>
 </div>
-<iframe id="jitsiFrame" style="flex:1;border:0;background:#000" allow="camera; microphone; fullscreen; display-capture"></iframe>
+<iframe id="jitsiFrame" style="flex:1;border:0;background:#000" allow="camera; microphone; fullscreen; display-capture; autoplay" allowfullscreen></iframe>
 </div>
+
 <div id="forceLogin" class="forceModal"><div class="box"><h2>Join Subjectivity-Intersection</h2><div style="font-size:12px;color:#8696a0;margin-top:6px">1000 members • LIVE</div><input id="forceEmail" class="input" type="email" placeholder="Your email" style="margin-top:12px"><button type="button" class="btn btn-green" style="width:100%;margin-top:14px;height:46px" id="loginBtn">Continue LIVE</button><div id="forceError" style="display:none;color:#f15c6d;margin-top:10px;font-size:13px"></div></div></div>
 <div id="postModal" class="smallModal"><div class="box2"><h3>Create Post LIVE</h3><textarea id="postBody" class="textarea" placeholder="What's happening in Subjectivity-Intersection?" style="margin-top:12px"></textarea><div id="postImgPreview" style="margin-top:10px"></div><div style="display:flex;gap:8px;margin-top:14px"><button type="button" class="btn-white btn" onclick="document.getElementById('postImage').click()">🖼️ Picture</button><input type="file" id="postImage" accept="image/*" hidden><button type="button" class="btn-green btn" style="flex:1" id="publishBtn">Post LIVE</button></div><div id="postError" style="display:none;color:#f15c6d;font-size:12px;margin-top:8px"></div><button type="button" class="btn btn-dark" style="width:100%;margin-top:10px" id="closePostBtn">Cancel</button></div></div>
 <div id="commentModal" class="smallModal"><div class="box2"><h3>Comments LIVE</h3><div id="commentPostPreview" style="margin-top:12px;padding:12px;background:#000;border-radius:12px;border:1px solid #1a1a1a"></div><div id="commentsList" style="margin-top:12px;max-height:250px;overflow-y:auto"></div><textarea id="commentText" class="textarea" placeholder="Write a comment LIVE..." style="margin-top:12px;min-height:70px"></textarea><div style="display:flex;gap:8px;margin-top:10px"><button type="button" class="btn btn-dark" style="flex:1" id="closeCommentBtn">Close</button><button type="button" class="btn-green btn" style="flex:1" id="submitCommentBtn">Send LIVE</button></div><div id="commentError" style="display:none;color:#f15c6d;font-size:12px;margin-top:8px"></div></div></div>
@@ -124,13 +124,14 @@ window.openForm2 = function(){
   window.open(LINK2, '_blank');
 }
 
-// GROUP CALLS - ADDED ONLY THIS
+// GROUP CALLS - FIXED 100% WORKING
 window.startGroupCall = async function(){
   if(!curGroup) return;
   let room = "siel-trinity-" + curGroup.id.replace(/[^a-zA-Z0-9]/g,"").toLowerCase();
   let displayName = currentUser.split('@')[0];
   document.getElementById('callGroupName').textContent = curGroup.name + " Call";
-  document.getElementById('jitsiFrame').src = `https://meet.jit.si/${room}#userInfo.displayName="${displayName}"&config.prejoinConfig.enabled=false`;
+  // FIXED SERVER - meet.jit.si needs login, meet.ffmuc.net does NOT
+  document.getElementById('jitsiFrame').src = `https://meet.ffmuc.net/${room}#userInfo.displayName="${displayName}"&config.prejoinConfig.enabled=false&config.lobby.enabled=false`;
   document.getElementById('callModal').classList.add('show');
   try{
     await updateDoc(doc(db,'groups',curGroup.id), {
