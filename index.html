@@ -20,7 +20,7 @@ body{font-family:system-ui,sans-serif;background:#080c14;color:#e7e9ea}
 .post-actions{display:flex;gap:24px;margin-top:12px;border-top:1px solid #0f172a;padding-top:10px}
 .action{cursor:pointer;display:flex;align-items:center;gap:6px;font-size:14px;color:#64748b}.action.liked{color:#f91880}
 .group-item{padding:14px 16px;border-bottom:1px solid #1e293b;display:flex;gap:12px;align-items:center;background:#0f172a;position:relative}
-.group-avatar{width:48px;height:48px;border-radius:12px;background:#2563eb;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;overflow:hidden}
+.group-avatar{width:48px;height:48px;border-radius:12px;background:#2563eb;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;overflow:hidden;cursor:pointer}
 .group-avatar img{width:100%;height:100%;object-fit:cover}
 .group-dots{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#64748b;font-size:20px}
 .group-menu{position:absolute;right:12px;top:56px;background:#0f172a;border:1px solid #1e293b;border-radius:12px;min-width:220px;z-index:100;padding:8px 0;display:none}
@@ -33,7 +33,7 @@ body{font-family:system-ui,sans-serif;background:#080c14;color:#e7e9ea}
 #groupModal.show{display:flex}
 .gHeader{height:64px;background:#0f172a;padding:0 12px;display:flex;align-items:center;gap:12px;border-bottom:1px solid #1e293b}
 .gMsgs{flex:1;overflow-y:auto;padding:16px 12px;display:flex;flex-direction:column;gap:10px;background:#020617}
-.bub{max-width:85%;padding:10px 14px;border-radius:18px;font-size:15px;word-break:break-word;position:relative}
+.bub{max-width:85%;padding:10px 14px;border-radius:18px;font-size:15px;word-break:break-word}
 .bub.me{align-self:flex-end;background:#2563eb;color:#fff;border-bottom-right-radius:4px;cursor:pointer}
 .bub.other{align-self:flex-start;background:#1e293b;color:#fff;border-bottom-left-radius:4px}
 .bub.system{align-self:center;background:#0f172a;border:1px dashed #334155;color:#94a3b8;font-size:12px;border-radius:12px;padding:6px 12px}
@@ -70,11 +70,16 @@ body{font-family:system-ui,sans-serif;background:#080c14;color:#e7e9ea}
 .form-card{padding:18px 12px;border-radius:16px;text-align:center;text-decoration:none;font-weight:800;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer}
 #callNotify{position:fixed;top:70px;left:50%;transform:translateX(-50%);max-width:600px;width:92%;background:#2563eb;color:#fff;padding:14px 16px;border-radius:16px;display:none;z-index:10000}
 #callNotify.show{display:flex;justify-content:space-between;align-items:center;gap:12px}
-#msgActionModal{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:100002;display:none;align-items:flex-end;justify-content:center;padding:0}
+#msgActionModal{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:100002;display:none;align-items:flex-end;justify-content:center}
 #msgActionModal.show{display:flex}
 .msgActions{background:#0f172a;width:100%;max-width:620px;border-radius:20px 20px 0 0;padding:12px 0 24px;border-top:1px solid #1e293b}
 .msgAct{padding:16px 20px;display:flex;gap:14px;align-items:center;font-size:15px;cursor:pointer}
-.msgAct:active{background:#1e293b}
+/* VIEW GROUP PHOTO MODAL - WHATSAPP STYLE */
+#viewPhotoModal{position:fixed;inset:0;background:#000;z-index:100003;display:none;flex-direction:column}
+#viewPhotoModal.show{display:flex}
+.viewPhotoHeader{height:64px;background:#0f172a;display:flex;align-items:center;gap:12px;padding:0 16px;color:#fff}
+.viewPhotoImg{flex:1;display:flex;align-items:center;justify-content:center;background:#000}
+.viewPhotoImg img{max-width:100%;max-height:80vh;object-fit:contain}
 </style>
 </head>
 <body>
@@ -97,10 +102,11 @@ body{font-family:system-ui,sans-serif;background:#080c14;color:#e7e9ea}
 </div>
 <div id="callNotify"><div><div style="font-weight:800;display:flex;align-items:center;gap:6px"><span class="live-dot"></span><span id="notifyTitle">Group call in progress</span></div><div id="notifySub" style="font-size:12px;opacity:0.9;margin-top:2px"></div></div><button class="btn-white btn" style="height:36px" onclick="joinFromNotify()">JOIN</button></div>
 <div id="overlay" class="overlay"></div>
+
 <div id="groupModal">
 <div class="gHeader">
 <button type="button" class="btn btn-dark" style="width:40px;height:40px;border-radius:50%" id="closeGroupBtn">←</button>
-<div class="group-avatar" id="gAvatar" onclick="if(isGroupAdmin(curGroup)) document.getElementById('gGroupImage').click()">◈</div>
+<div class="group-avatar" id="gAvatar" onclick="window.viewGroupPhoto()">◈</div>
 <input type="file" id="gGroupImage" accept="image/*" hidden>
 <div style="flex:1"><div id="gName" style="font-weight:700">Group</div><div id="gInfo" style="font-size:12px;color:#60a5fa"></div></div>
 <button type="button" class="btn-blue btn" style="height:36px" onclick="startGroupCall()">Call</button>
@@ -115,11 +121,23 @@ body{font-family:system-ui,sans-serif;background:#080c14;color:#e7e9ea}
 <button type="button" class="btn-blue btn" style="width:44px;height:44px;border-radius:50%;padding:0" id="sendGroupBtn">➤</button>
 </div>
 </div>
+
+<!-- WHATSAPP STYLE VIEW PHOTO -->
+<div id="viewPhotoModal">
+<div class="viewPhotoHeader">
+<button type="button" class="btn btn-dark" style="width:40px;height:40px;border-radius:50%" onclick="document.getElementById('viewPhotoModal').classList.remove('show')">←</button>
+<div style="flex:1"><div id="viewPhotoName" style="font-weight:700">Group photo</div><div style="font-size:12px;color:#94a3b8">Tap to change if admin</div></div>
+<button type="button" class="btn-blue btn" style="height:36px;display:none" id="changePhotoBtn" onclick="document.getElementById('gGroupImage').click()">Change</button>
+</div>
+<div class="viewPhotoImg"><img id="viewPhotoImg" src=""></div>
+</div>
+
 <div id="msgActionModal"><div class="msgActions"><div style="width:40px;height:4px;background:#334155;border-radius:9999px;margin:8px auto"></div><div class="msgAct" onclick="editCurrentMsg()">✏️ Edit message</div><div class="msgAct" onclick="deleteCurrentMsg()" style="color:#ef4444">🗑 Delete for everyone</div><div class="msgAct" onclick="closeMsgActions()">Cancel</div></div></div>
+
 <div id="callModal">
 <div class="callHeader">
 <button type="button" class="btn btn-dark" style="width:40px;height:40px;border-radius:50%" onclick="endGroupCall()">←</button>
-<div style="flex:1"><div id="callGroupName" style="font-weight:700">Group Call - Max 6</div><div id="callMembers" style="font-size:11px;color:#60a5fa">Connecting...</div></div>
+<div style="flex:1"><div id="callGroupName" style="font-weight:700">Group Call - Max 6</div><div id="callMembers" style="font-size:11px;color:#60a3b8">Connecting...</div></div>
 <button type="button" class="btn-white btn" style="height:36px" onclick="endGroupCall()">Leave</button>
 </div>
 <div id="limitBanner" class="limit-banner">⚠️ Max 6 people — room full</div>
@@ -130,9 +148,11 @@ body{font-family:system-ui,sans-serif;background:#080c14;color:#e7e9ea}
 <button type="button" class="ctrl end" onclick="endGroupCall()">📞</button>
 </div>
 </div>
+
 <div id="forceLogin" class="forceModal"><div class="box"><h2>◈ Join Trinity</h2><input id="forceEmail" class="input" type="email" placeholder="Your email" style="margin-top:12px"><button type="button" class="btn btn-blue" style="width:100%;margin-top:14px;height:46px" id="loginBtn">Continue</button><div id="forceError" style="display:none;color:#ef4444;margin-top:10px;font-size:13px"></div></div></div>
 <div id="postModal" class="smallModal"><div class="box2"><h3>Create Post</h3><textarea id="postBody" class="textarea" placeholder="What's happening?" style="margin-top:12px"></textarea><div id="postImgPreview" style="margin-top:10px"></div><div style="display:flex;gap:8px;margin-top:14px"><button type="button" class="btn-white btn" onclick="document.getElementById('postImage').click()">Photo</button><input type="file" id="postImage" accept="image/*" hidden><button type="button" class="btn-blue btn" style="flex:1" id="publishBtn">Post</button></div><button type="button" class="btn btn-dark" style="width:100%;margin-top:10px" id="closePostBtn">Cancel</button></div></div>
 <div id="commentModal" class="smallModal"><div class="box2"><h3>Comments</h3><div id="commentPostPreview" style="margin-top:12px;padding:12px;background:#000;border-radius:12px;border:1px solid #1e293b"></div><div id="commentsList" style="margin-top:12px;max-height:250px;overflow-y:auto"></div><textarea id="commentText" class="textarea" placeholder="Write a comment..." style="margin-top:12px;min-height:70px"></textarea><div style="display:flex;gap:8px;margin-top:10px"><button type="button" class="btn btn-dark" style="flex:1" id="closeCommentBtn">Close</button><button type="button" class="btn-blue btn" style="flex:1" id="submitCommentBtn">Send</button></div></div></div>
+
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, doc, updateDoc, arrayUnion, arrayRemove, increment, deleteDoc, serverTimestamp, setDoc, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
@@ -162,6 +182,20 @@ function formatTime(t){
   return `${h}:${m} ${ampm}`;
 }
 function ensureMember(group){ if(!group || !group.members || !group.members.includes(currentUser)){ alert("You must be a member of this group. Tap Join first."); return false; } return true; }
+window.viewGroupPhoto = function(photoUrl){
+  let g = curGroup ? (groupsCache.find(x=>x.id===curGroup.id) || curGroup) : null;
+  if(!g) return;
+  let url = photoUrl || g.groupPhoto;
+  document.getElementById('viewPhotoName').textContent = g.name;
+  if(url){
+    document.getElementById('viewPhotoImg').src = url;
+  } else {
+    document.getElementById('viewPhotoImg').src = '';
+    document.getElementById('viewPhotoImg').alt = 'No group photo';
+  }
+  document.getElementById('viewPhotoModal').classList.add('show');
+  document.getElementById('changePhotoBtn').style.display = isGroupAdmin(g) ? 'block' : 'none';
+}
 window.startGroupCall = async function(){
   if(!curGroup){ alert('Open a group'); return; }
   let fresh = groupsCache.find(x=>x.id===curGroup.id) || curGroup;
@@ -262,8 +296,8 @@ function compressImage(file, callback){
 document.getElementById('postImage').addEventListener('change',function(e){ let f=e.target.files[0]; if(!f) return; compressImage(f,function(compressed){ pendingPostImg=compressed; document.getElementById('postImgPreview').innerHTML='<img src="'+pendingPostImg+'" style="width:100%;border-radius:12px;max-height:600px;object-fit:contain;background:#000">'; }); });
 document.getElementById('gImage').addEventListener('change',function(e){ let f=e.target.files[0]; if(!f || !curGroup) return; compressImage(f, async function(compressed){ await updateDoc(doc(db,'groups',curGroup.id), { msgs: arrayUnion({id:'msg_'+Date.now()+'_'+Math.random().toString(36).slice(2), email:currentUser,name:currentUser.split('@')[0],text:'',image:compressed,time:{seconds:Date.now()/1000}}), members: arrayUnion(currentUser), updatedAt:serverTimestamp() }); }); e.target.value=''; });
 document.getElementById('gGroupImage').addEventListener('change',function(e){
-  let f=e.target.files[0]; if(!f || !curGroup) return; if(!isGroupAdmin(curGroup)){ alert('Only admin can update group photo'); return; }
-  compressImage(f, async function(compressed){ await updateDoc(doc(db,'groups',curGroup.id), { groupPhoto: compressed, msgs: arrayUnion({id:'photo_'+Date.now(), email:'system',name:'System',text:`🖼️ ${currentUser.split('@')[0]} updated group photo`,time:{seconds:Date.now()/1000}}), updatedAt:serverTimestamp() }); alert('Group photo updated!'); });
+  let f=e.target.files[0]; if(!f || !curGroup) return; if(!isGroupAdmin(curGroup)){ alert('Only admin can change photo'); return; }
+  compressImage(f, async function(compressed){ await updateDoc(doc(db,'groups',curGroup.id), { groupPhoto: compressed, msgs: arrayUnion({id:'photo_'+Date.now(), email:'system',name:'System',text:`🖼️ ${currentUser.split('@')[0]} updated group photo`,time:{seconds:Date.now()/1000}}), updatedAt:serverTimestamp() }); document.getElementById('viewPhotoModal').classList.remove('show'); alert('Group photo updated!'); });
   e.target.value='';
 });
 document.getElementById('fabBtn').onclick=()=>{ document.getElementById('postModal').classList.add('show'); }
@@ -279,12 +313,11 @@ function openGroup(id){ let g=groupsCache.find(x=>x.id===id); if(!g) return; cur
 document.getElementById('closeGroupBtn').onclick=()=>{ document.getElementById('groupModal').classList.remove('show'); curGroup=null; }
 document.getElementById('joinBtn').onclick= async ()=>{ if(!curGroup) return; if(!curGroup.members.includes(currentUser)){ await updateDoc(doc(db,'groups',curGroup.id), { members: arrayUnion(currentUser), msgs: arrayUnion({id:'join_'+Date.now(), email:'system',name:'System',text:`👋 ${currentUser.split('@')[0]} joined`,time:{seconds:Date.now()/1000}}), updatedAt:serverTimestamp() }); } document.getElementById('joinBtn').style.display='none'; };
 function checkLiveBanner(){ if(!curGroup) return; let fresh = groupsCache.find(x=>x.id===curGroup.id) || curGroup; let banner = document.getElementById('liveCallBanner'); if(fresh.callActive){ banner.style.display='flex'; document.getElementById('liveCallText').textContent = `LIVE by ${fresh.callStartedBy||'someone'}`; } else { banner.style.display='none'; } }
-
 window.openMsgActions = function(msgId, idx){
   let g = groupsCache.find(x=>x.id===curGroup.id) || curGroup;
   if(!g || !g.msgs) return;
   let m = g.msgs[idx];
-  if(!m){ return; }
+  if(!m) return;
   if(m.email!==currentUser){ alert('Only your own message can be edited/deleted'); return; }
   if(m.email==='system') return;
   selectedMsgId = msgId; selectedMsgIdx = idx;
@@ -309,13 +342,12 @@ window.deleteCurrentMsg = async function(){
   let fresh = groupsCache.find(x=>x.id===curGroup.id) || curGroup;
   let msg = fresh.msgs[selectedMsgIdx];
   if(!msg || msg.email!==currentUser) return;
-  if(!confirm('Delete this message for everyone?')) return;
+  if(!confirm('Delete for everyone?')) return;
   let updatedMsgs = fresh.msgs.filter((_,i)=> i!==selectedMsgIdx);
   updatedMsgs.push({id:'del_'+Date.now(), email:'system', name:'System', text:`🗑 ${currentUser.split('@')[0]} deleted a message`, time:{seconds:Date.now()/1000}});
   await updateDoc(doc(db,'groups',curGroup.id), {msgs: updatedMsgs, updatedAt:serverTimestamp()});
   closeMsgActions();
 }
-
 function renderGroupMsgs(){
   if(!curGroup) return; let fresh = groupsCache.find(x=>x.id===curGroup.id) || curGroup;
   document.getElementById('gMsgs').innerHTML=(fresh.msgs||[]).map((m,idx)=>{
@@ -350,15 +382,17 @@ function renderGroups(){
     let last=g.msgs && g.msgs[g.msgs.length-1]; let preview = last ? (last.image?'Photo' : last.text.slice(0,60)) : 'Tap to open';
     let isMember = g.members && g.members.includes(currentUser); let liveBadge = g.callActive ? `<div style="margin-top:6px;background:#2563eb;color:#fff;padding:4px 10px;border-radius:9999px;font-size:11px;font-weight:800;display:inline-flex;align-items:center;gap:4px"><span class="live-dot"></span>LIVE JOIN</div>` : '';
     let avatar = g.groupPhoto ? `<img src="${g.groupPhoto}">` : '◈';
-    return `<div class="group-item" data-open="${g.id}"><div class="group-avatar">${avatar}</div><div style="flex:1;min-width:0" data-open="${g.id}"><div style="font-weight:700">${g.name} ${g.callActive? '◈':''}</div><div style="font-size:11px;color:#60a5fa">Admin: ${(g.admin||'').split('@')[0]} ${isMember?'• Member':'• Max 6'}</div><div style="font-size:13px;color:#64748b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${preview}</div>${liveBadge}</div><div class="group-dots" data-dots="${g.id}">⋮</div><div class="group-menu" id="menu-${g.id}"><div class="menu-item" data-action="photo" data-gid="${g.id}">🖼️ ${g.admin===currentUser?'Update Group Photo':'View Photo'}</div><div class="menu-item" data-action="delete" data-gid="${g.id}">🗑 ${g.admin===currentUser?'Delete Group':'Exit Group'}</div></div></div>`;
+    return `<div class="group-item"><div class="group-avatar" onclick="event.stopPropagation(); curGroup=groupsCache.find(x=>x.id==='${g.id}'); window.viewGroupPhoto('${g.groupPhoto||''}')">${avatar}</div><div style="flex:1;min-width:0" data-open="${g.id}"><div style="font-weight:700">${g.name} ${g.callActive? '◈':''}</div><div style="font-size:11px;color:#60a5fa">Admin: ${(g.admin||'').split('@')[0]} ${isMember?'• Member':'• Max 6'}</div><div style="font-size:13px;color:#64748b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${preview}</div>${liveBadge}</div><div class="group-dots" data-dots="${g.id}">⋮</div><div class="group-menu" id="menu-${g.id}"><div class="menu-item" data-action="view" data-gid="${g.id}">👁 View group photo</div><div class="menu-item" data-action="photo" data-gid="${g.id}">🖼️ ${g.admin===currentUser?'Change photo':' '}</div><div class="menu-item" data-action="delete" data-gid="${g.id}">🗑 ${g.admin===currentUser?'Delete Group':'Exit Group'}</div></div></div>`;
   }).join('');
-  document.querySelectorAll('[data-open]').forEach(el=>{ el.onclick=(e)=>{ if(e.target.closest('.group-dots')) return; openGroup(el.getAttribute('data-open')); } });
+  document.querySelectorAll('[data-open]').forEach(el=>{ el.onclick=(e)=>{ if(e.target.closest('.group-dots') || e.target.closest('.group-avatar')) return; openGroup(el.getAttribute('data-open')); } });
   document.querySelectorAll('[data-dots]').forEach(el=>{ el.onclick=(e)=>{ e.stopPropagation(); let gid=el.getAttribute('data-dots'); document.querySelectorAll('.group-menu').forEach(m=>m.classList.remove('show')); document.getElementById('menu-'+gid).classList.add('show'); document.getElementById('overlay').classList.add('show'); } });
   document.querySelectorAll('.group-menu .menu-item').forEach(item=>{
     item.onclick=async(e)=>{
       e.stopPropagation(); let gid=item.getAttribute('data-gid'); let action=item.getAttribute('data-action'); document.getElementById('overlay').classList.remove('show'); document.querySelectorAll('.group-menu').forEach(m=>m.classList.remove('show'));
       let g=groupsCache.find(x=>x.id===gid);
-      if(action==='photo'){
+      if(action==='view'){
+        curGroup=g; window.viewGroupPhoto(g.groupPhoto);
+      } else if(action==='photo'){
         if(g.admin===currentUser){ curGroup=g; document.getElementById('gGroupImage').click(); }
       } else {
         if(g.admin===currentUser){ if(confirm('Delete group for all?')) await deleteDoc(doc(db,'groups',gid)); }
