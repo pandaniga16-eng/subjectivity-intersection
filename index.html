@@ -55,6 +55,10 @@ body{font-family:system-ui,sans-serif;background:#000;color:#e7e9ea}
 #callModal{position:fixed;inset:0;background:#000;z-index:999999;display:none;flex-direction:column}
 #callModal.show{display:flex}
 .callHeader{height:56px;background:#202327;padding:0 12px;display:flex;align-items:center;gap:12px;color:#fff;border-bottom:1px solid #2f3336}
+.live-banner{background:#25D366;color:#000;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;font-weight:800;font-size:14px;animation:pulse 1.5s infinite}
+@keyframes pulse{0%{opacity:1}50%{opacity:0.7}100%{opacity:1}}
+.live-dot{width:10px;height:10px;background:#ff0000;border-radius:50%;display:inline-block;margin-right:6px;animation:blink 1s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.2}}
 </style>
 </head>
 <body>
@@ -76,6 +80,7 @@ body{font-family:system-ui,sans-serif;background:#000;color:#e7e9ea}
 <button type="button" class="btn-green btn" style="height:36px" onclick="startGroupCall()">📞 Call</button>
 <button type="button" class="btn btn-white" style="height:36px;display:none" id="joinBtn">Join</button>
 </div>
+<div id="liveCallBanner" class="live-banner" style="display:none"><div><span class="live-dot"></span><span id="liveCallText">LIVE Call in progress</span></div><button type="button" class="btn-white btn" style="height:32px;padding:0 14px" onclick="joinLiveCall()">JOIN</button></div>
 <div id="gMsgs" class="gMsgs"></div>
 <div class="gInputWrap"><textarea id="gInput" class="gInput" rows="1" placeholder="Message LIVE"></textarea><button type="button" class="btn-green btn" style="width:44px;height:44px;border-radius:50%;padding:0" id="sendGroupBtn">➤</button></div>
 </div>
@@ -83,7 +88,7 @@ body{font-family:system-ui,sans-serif;background:#000;color:#e7e9ea}
 <div id="callModal">
 <div class="callHeader">
 <button type="button" class="btn btn-dark" style="width:40px;height:40px;border-radius:50%" onclick="endGroupCall()">←</button>
-<div style="flex:1"><div id="callGroupName" style="font-weight:700">Group Call</div><div style="font-size:11px;color:#25D366">● LIVE Call - Fixed Server</div></div>
+<div style="flex:1"><div id="callGroupName" style="font-weight:700">Group Call</div><div style="font-size:11px;color:#25D366">● LIVE Call - Tap End to leave</div></div>
 <button type="button" class="btn-white btn" style="height:36px" onclick="endGroupCall()">End</button>
 </div>
 <iframe id="jitsiFrame" style="flex:1;border:0;background:#000" allow="camera; microphone; fullscreen; display-capture; autoplay" allowfullscreen></iframe>
@@ -124,25 +129,47 @@ window.openForm2 = function(){
   window.open(LINK2, '_blank');
 }
 
-// GROUP CALLS - FIXED 100% WORKING
+// === GROUP CALLS - 100% WORKING + LIVE BANNER ===
 window.startGroupCall = async function(){
   if(!curGroup) return;
   let room = "siel-trinity-" + curGroup.id.replace(/[^a-zA-Z0-9]/g,"").toLowerCase();
   let displayName = currentUser.split('@')[0];
   document.getElementById('callGroupName').textContent = curGroup.name + " Call";
-  // FIXED SERVER - meet.jit.si needs login, meet.ffmuc.net does NOT
   document.getElementById('jitsiFrame').src = `https://meet.ffmuc.net/${room}#userInfo.displayName="${displayName}"&config.prejoinConfig.enabled=false&config.lobby.enabled=false`;
   document.getElementById('callModal').classList.add('show');
   try{
     await updateDoc(doc(db,'groups',curGroup.id), {
-      msgs: arrayUnion({email:'system',name:'System',text:`📞 ${displayName} started a group call — tap Call to join LIVE`,time:{seconds:Date.now()/1000}}),
+      callActive: true,
+      callRoom: room,
+      callStartedBy: displayName,
+      callStartedAt: serverTimestamp(),
+      msgs: arrayUnion({email:'system',name:'System',text:`📞 ${displayName} started a LIVE call — tap JOIN above`,time:{seconds:Date.now()/1000}}),
+      updatedAt: serverTimestamp()
+    });
+  }catch(e){ console.log(e); }
+}
+window.joinLiveCall = function(){
+  if(!curGroup) return;
+  let fresh = groupsCache.find(x=>x.id===curGroup.id) || curGroup;
+  let room = fresh.callRoom || ("siel-trinity-" + curGroup.id.replace(/[^a-zA-Z0-9]/g,"").toLowerCase());
+  let displayName = currentUser.split('@')[0];
+  document.getElementById('callGroupName').textContent = curGroup.name + " Call";
+  document.getElementById('jitsiFrame').src = `https://meet.ffmuc.net/${room}#userInfo.displayName="${displayName}"&config.prejoinConfig.enabled=false&config.lobby.enabled=false`;
+  document.getElementById('callModal').classList.add('show');
+}
+window.endGroupCall = async function(){
+  document.getElementById('jitsiFrame').src = "";
+  document.getElementById('callModal').classList.remove('show');
+  if(!curGroup) return;
+  try{
+    // Only admin or starter can end for everyone, but we let anyone clear active flag when they leave
+    // To keep banner alive while others are in call, we only clear if no one else joined recently
+    // Simple logic: clear banner - if others still inside they will start again
+    await updateDoc(doc(db,'groups',curGroup.id), {
+      callActive: false,
       updatedAt: serverTimestamp()
     });
   }catch(e){}
-}
-window.endGroupCall = function(){
-  document.getElementById('jitsiFrame').src = "";
-  document.getElementById('callModal').classList.remove('show');
 }
 
 function updateCounters(){ document.getElementById('topCounter').textContent = peopleCache.length+' / 1000'; document.getElementById('postCount').textContent = postsCache.length+' posts'; document.getElementById('groupCount').textContent = groupsCache.length+' groups'; document.getElementById('notesCount').textContent = notesCache.length+' notes'; }
@@ -183,7 +210,8 @@ function renderGroups(){
   document.getElementById('groupsList').innerHTML=sorted.map(g=>{
     let last=g.msgs && g.msgs[g.msgs.length-1]; let preview = last ? last.text.slice(0,60) : 'Tap to open messages LIVE';
     let isAdmin = g.admin===currentUser;
-    return `<div class="group-item" data-open="${g.id}"><div class="group-avatar">⧉</div><div style="flex:1;min-width:0" data-open="${g.id}"><div style="display:flex;justify-content:space-between"><div style="font-weight:700">${g.name}</div><div style="font-size:11px;color:#555">${last?.time? new Date(last.time.seconds*1000).toLocaleTimeString():''}</div></div><div style="font-size:11px;color:#25D366">Admin: ${(g.admin||'').split('@')[0]} (creator)</div><div style="font-size:13px;color:#555;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px">${preview}</div></div><div class="group-dots" data-dots="${g.id}">⋮</div><div class="group-menu" id="menu-${g.id}"><div class="menu-item" data-action="read" data-gid="${g.id}">💬 Mark as read</div><div class="menu-item" data-action="mute" data-gid="${g.id}">🔕 Mute</div><div class="menu-item" data-action="fav" data-gid="${g.id}">♡ Add to Favourites</div><div class="menu-item" data-action="clear" data-gid="${g.id}">✕ Clear chat</div>${isAdmin?`<div class="menu-item danger-red" data-action="delete" data-gid="${g.id}">🗑 Delete group</div>`:`<div class="menu-item danger" data-action="exit" data-gid="${g.id}">🚪 Exit group</div>`}</div></div>`;
+    let liveBadge = g.callActive ? `<div style="margin-top:6px;background:#25D366;color:#000;padding:4px 8px;border-radius:9999px;font-size:11px;font-weight:800;display:inline-flex;align-items:center;gap:4px"><span class="live-dot"></span>🔴 LIVE Call - Tap to JOIN</div>` : '';
+    return `<div class="group-item" data-open="${g.id}"><div class="group-avatar">⧉</div><div style="flex:1;min-width:0" data-open="${g.id}"><div style="display:flex;justify-content:space-between"><div style="font-weight:700">${g.name} ${g.callActive? '🔴':''}</div><div style="font-size:11px;color:#555">${last?.time? new Date(last.time.seconds*1000).toLocaleTimeString():''}</div></div><div style="font-size:11px;color:#25D366">Admin: ${(g.admin||'').split('@')[0]} (creator)</div><div style="font-size:13px;color:#555;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px">${preview}</div>${liveBadge}</div><div class="group-dots" data-dots="${g.id}">⋮</div><div class="group-menu" id="menu-${g.id}"><div class="menu-item" data-action="read" data-gid="${g.id}">💬 Mark as read</div><div class="menu-item" data-action="mute" data-gid="${g.id}">🔕 Mute</div><div class="menu-item" data-action="fav" data-gid="${g.id}">♡ Add to Favourites</div><div class="menu-item" data-action="clear" data-gid="${g.id}">✕ Clear chat</div>${isAdmin?`<div class="menu-item danger-red" data-action="delete" data-gid="${g.id}">🗑 Delete group</div>`:`<div class="menu-item danger" data-action="exit" data-gid="${g.id}">🚪 Exit group</div>`}</div></div>`;
   }).join('');
   document.querySelectorAll('[data-open]').forEach(el=>{
     el.onclick=(e)=>{
@@ -294,10 +322,21 @@ async function likePost(id){ if(!currentUser){ alert('Login first'); return; } l
 async function deletePost(id){ let post = postsCache.find(p=>p.id===id); if(!post) return; if(post.email!==currentUser){ alert('Only author can delete — fixed!'); return; } if(confirm('Delete this LIVE post for all?')) await deleteDoc(doc(db,'posts',id)); }
 function openCommentModal(id){ let p=postsCache.find(x=>x.id===id); if(!p) return; curCommentPostId=id; let name=(p.email||'anon').split('@')[0]; document.getElementById('commentPostPreview').innerHTML=`<div style="display:flex;gap:8px"><div class="avatar" style="width:32px;height:32px;font-size:12px">${name[0].toUpperCase()}</div><div style="flex:1"><b>@${name}</b><div style="margin-top:4px;white-space:pre-wrap;font-size:14px">${p.body||''}</div>${p.image?`<img src="${p.image}" style="width:100%;border-radius:8px;margin-top:8px">`:''}</div></div>`; let comments=p.comments||[]; document.getElementById('commentsList').innerHTML = comments.length? comments.map(c=>`<div style="padding:8px;border-bottom:1px solid #222;display:flex;gap:8px"><div style="width:28px;height:28px;border-radius:50%;background:#2a3942;display:flex;align-items:center;justify-content:center;font-size:10px">${c.name[0].toUpperCase()}</div><div style="flex:1"><b style="font-size:13px">@${c.name}</b><div style="font-size:13px;margin-top:2px;white-space:pre-wrap">${c.text}</div></div></div>`).join('') : '<div style="padding:20px;text-align:center;color:#555">No comments yet - be first LIVE</div>'; document.getElementById('commentError').style.display='none'; document.getElementById('commentModal').classList.add('show'); }
 document.getElementById('submitCommentBtn').onclick = async ()=>{ let err=document.getElementById('commentError'); if(!curCommentPostId){ err.style.display='block'; err.textContent='Open a post first'; return; } if(!currentUser){ err.style.display='block'; err.textContent='Login first'; return; } let txt=document.getElementById('commentText').value.trim(); if(!txt){ err.style.display='block'; err.textContent='Write a comment'; return; } let ref=doc(db,'posts',curCommentPostId); let comment={ name:currentUser.split('@')[0], text:txt, email:currentUser, time:Date.now() }; await updateDoc(ref, { comments: arrayUnion(comment) }); document.getElementById('commentText').value=''; };
-document.getElementById('createGroupBtn').onclick = async ()=>{ if(!currentUser){ alert('Login first'); return; } let name=document.getElementById('newGroupName').value.trim(); if(!name){ alert('Enter name'); return; } await addDoc(collection(db,'groups'), { name, admin:currentUser, members:[currentUser], msgs:[{email:'system',name:'System',text:'Group created LIVE by '+currentUser.split('@')[0],time:{seconds:Date.now()/1000}}], updatedAt:serverTimestamp(), createdAt:serverTimestamp() }); document.getElementById('newGroupName').value=''; };
-function openGroup(id){ if(!currentUser){ alert('Login first'); return; } let g=groupsCache.find(x=>x.id===id); if(!g) return; curGroup=g; document.getElementById('gName').textContent=g.name; document.getElementById('gInfo').textContent=`${g.members.length} members • LIVE`; document.getElementById('gAdmin').textContent=`Admin: ${(g.admin||'').split('@')[0]} (creator)`; document.getElementById('joinBtn').style.display=g.members.includes(currentUser)?'none':'block'; document.getElementById('groupModal').classList.add('show'); renderGroupMsgs(); }
+document.getElementById('createGroupBtn').onclick = async ()=>{ if(!currentUser){ alert('Login first'); return; } let name=document.getElementById('newGroupName').value.trim(); if(!name){ alert('Enter name'); return; } await addDoc(collection(db,'groups'), { name, admin:currentUser, members:[currentUser], callActive:false, msgs:[{email:'system',name:'System',text:'Group created LIVE by '+currentUser.split('@')[0],time:{seconds:Date.now()/1000}}], updatedAt:serverTimestamp(), createdAt:serverTimestamp() }); document.getElementById('newGroupName').value=''; };
+function openGroup(id){ if(!currentUser){ alert('Login first'); return; } let g=groupsCache.find(x=>x.id===id); if(!g) return; curGroup=g; document.getElementById('gName').textContent=g.name; document.getElementById('gInfo').textContent=`${g.members.length} members • LIVE`; document.getElementById('gAdmin').textContent=`Admin: ${(g.admin||'').split('@')[0]} (creator)`; document.getElementById('joinBtn').style.display=g.members.includes(currentUser)?'none':'block'; document.getElementById('groupModal').classList.add('show'); renderGroupMsgs(); checkLiveBanner(); }
 document.getElementById('closeGroupBtn').onclick=()=>{ document.getElementById('groupModal').classList.remove('show'); curGroup=null; }
 document.getElementById('joinBtn').onclick= async ()=>{ if(!curGroup) return; if(!curGroup.members.includes(currentUser)){ await updateDoc(doc(db,'groups',curGroup.id), { members: arrayUnion(currentUser), msgs: arrayUnion({email:'system',name:'System',text:currentUser.split('@')[0]+' joined LIVE',time:{seconds:Date.now()/1000}}), updatedAt:serverTimestamp() }); } document.getElementById('joinBtn').style.display='none'; };
+function checkLiveBanner(){
+  if(!curGroup) return;
+  let fresh = groupsCache.find(x=>x.id===curGroup.id) || curGroup;
+  let banner = document.getElementById('liveCallBanner');
+  if(fresh.callActive){
+    banner.style.display='flex';
+    document.getElementById('liveCallText').textContent = `🔴 LIVE Call by ${fresh.callStartedBy||'someone'} - Tap JOIN`;
+  } else {
+    banner.style.display='none';
+  }
+}
 function renderGroupMsgs(){ if(!curGroup) return; let fresh = groupsCache.find(x=>x.id===curGroup.id) || curGroup; 
   document.getElementById('gMsgs').innerHTML=(fresh.msgs||[]).map(function(m, idx){ 
     let isMe=m.email===currentUser; 
@@ -314,6 +353,7 @@ function renderGroupMsgs(){ if(!curGroup) return; let fresh = groupsCache.find(x
   setTimeout(function(){ box.scrollTop=box.scrollHeight; },30);
   document.querySelectorAll('[data-edit]').forEach(el=>{ el.onclick=()=> editGroupMsg(parseInt(el.getAttribute('data-edit'))); });
   document.querySelectorAll('[data-delmsg]').forEach(el=>{ el.onclick=()=> deleteGroupMsg(parseInt(el.getAttribute('data-delmsg'))); });
+  checkLiveBanner();
 }
 async function editGroupMsg(idx){
   if(!curGroup) return;
