@@ -22,7 +22,6 @@ body{font-family:system-ui,sans-serif;background:#000;color:#e7e9ea}
 .group-item{padding:14px 16px;border-bottom:1px solid #1f2428;display:flex;gap:12px;align-items:center;background:#000;position:relative}
 .group-avatar{width:48px;height:48px;border-radius:50%;background:#25D366;color:#000;display:flex;align-items:center;justify-content:center;font-weight:800;flex-shrink:0}
 .group-dots{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#8696a0;font-size:20px;flex-shrink:0}
-.group-dots:hover{background:#202327;color:#fff}
 .group-menu{position:absolute;right:12px;top:56px;background:#111b21;border:1px solid #2a3942;border-radius:12px;min-width:220px;z-index:100;padding:8px 0;display:none;box-shadow:0 8px 24px rgba(0,0,0,0.6)}
 .group-menu.show{display:block}
 .menu-item{padding:12px 16px;display:flex;gap:12px;align-items:center;font-size:14px;cursor:pointer;color:#e7e9ea}
@@ -49,8 +48,6 @@ body{font-family:system-ui,sans-serif;background:#000;color:#e7e9ea}
 .overlay{position:fixed;inset:0;z-index:99;display:none}.overlay.show{display:block}
 .note-link{color:#25D366;text-decoration:underline;word-break:break-all}
 .form-btn{padding:12px 14px;background:#202c33;border:1px solid #2a3942;border-radius:12px;margin-bottom:8px;cursor:pointer;display:flex;justify-content:space-between;align-items:center}
-.form-btn:hover{background:#2a3942}
-.form-btn .open{color:#25D366;font-size:11px;font-weight:700}
 .del-btn{background:#f15c6d;color:#fff;border:0;padding:6px 12px;border-radius:9999px;font-size:11px;cursor:pointer;margin-top:8px;font-weight:700}
 #callModal{position:fixed;inset:0;background:#111b21;z-index:999999;display:none;flex-direction:column;align-items:center;justify-content:center;padding:20px}
 #callModal.show{display:flex}
@@ -88,15 +85,15 @@ body{font-family:system-ui,sans-serif;background:#000;color:#e7e9ea}
 <div id="callModal">
 <div class="callHeader">
 <button type="button" class="btn btn-dark" style="width:40px;height:40px;border-radius:50%" onclick="endGroupCall()">←</button>
-<div style="flex:1"><div id="callGroupName" style="font-weight:700">Group Call</div><div style="font-size:11px;color:#25D366">● LIVE Call running in new tab - No block</div></div>
+<div style="flex:1"><div id="callGroupName" style="font-weight:700">Group Call</div><div style="font-size:11px;color:#25D366">● LIVE - tile view shows all participants</div></div>
 <button type="button" class="btn-white btn" style="height:36px" onclick="endGroupCall()">End</button>
 </div>
 <div style="text-align:center;max-width:400px;margin-top:80px">
 <div style="font-size:60px;margin-bottom:16px">📞</div>
 <h2 style="color:#fff">Call is LIVE</h2>
-<p style="color:#8696a0;margin-top:8px;font-size:14px">Call opened in new tab - that fixes the white screen with 🚫 you saw. Keep this open for LIVE banner.</p>
+<p style="color:#8696a0;margin-top:8px;font-size:14px">New tab opened with meet.jit.si — you will see ALL participants in tiles. Red button at bottom ends call. If you only see yourself, others haven't tapped JOIN yet.</p>
 <div style="background:#202c33;padding:16px;border-radius:12px;margin-top:20px;text-align:left">
-<div style="font-size:12px;color:#25D366;font-weight:700;margin-bottom:6px">CALL LINK:</div>
+<div style="font-size:12px;color:#25D366;font-weight:700;margin-bottom:6px">CALL LINK (same for everyone in group):</div>
 <div id="callLinkText" style="font-size:12px;word-break:break-all;color:#fff"></div>
 </div>
 <button type="button" class="btn-green btn" style="width:100%;margin-top:20px" onclick="joinLiveCall()">Re-open Call Tab</button>
@@ -140,12 +137,12 @@ window.openForm2 = function(){
   window.open(LINK2, '_blank');
 }
 
-// === VIDEO FIX + AUTHOR DELETE FIX ===
+// === FIXED VIDEO: meet.jit.si = tile view + easy hangup ===
 window.startGroupCall = async function(){
   if(!curGroup) return;
   let room = "siel-trinity-" + curGroup.id.replace(/[^a-zA-Z0-9]/g,"").toLowerCase();
   let displayName = currentUser.split('@')[0];
-  let url = `https://meet.ffmuc.net/${room}#userInfo.displayName="${encodeURIComponent(displayName)}"&config.prejoinConfig.enabled=false&config.lobby.enabled=false`;
+  let url = `https://meet.jit.si/${room}#userInfo.displayName="${encodeURIComponent(displayName)}"&config.prejoinConfig.enabled=false&config.lobby.enabled=false&config.startWithAudioMuted=false&config.startWithVideoMuted=false&config.requireDisplayName=false`;
   currentCallUrl = url;
   document.getElementById('callGroupName').textContent = curGroup.name + " Call";
   document.getElementById('callLinkText').textContent = url;
@@ -153,8 +150,12 @@ window.startGroupCall = async function(){
   window.open(url, '_blank');
   try{
     await updateDoc(doc(db,'groups',curGroup.id), {
-      callActive: true, callRoom: room, callUrl: url, callStartedBy: displayName, callStartedAt: serverTimestamp(),
-      msgs: arrayUnion({email:'system',name:'System',text:`📞 ${displayName} started LIVE call — tap JOIN banner above to join`,time:{seconds:Date.now()/1000}}),
+      callActive: true,
+      callRoom: room,
+      callUrl: url,
+      callStartedBy: displayName,
+      callStartedAt: serverTimestamp(),
+      msgs: arrayUnion({email:'system',name:'System',text:`📞 ${displayName} started LIVE video call — tap JOIN to see all participants`,time:{seconds:Date.now()/1000}}),
       updatedAt: serverTimestamp()
     });
   }catch(e){ console.log(e); }
@@ -164,7 +165,7 @@ window.joinLiveCall = function(){
   let url = currentCallUrl || fresh?.callUrl;
   if(!url && fresh){
     let room = fresh.callRoom || ("siel-trinity-" + fresh.id.replace(/[^a-zA-Z0-9]/g,"").toLowerCase());
-    url = `https://meet.ffmuc.net/${room}#config.prejoinConfig.enabled=false`;
+    url = `https://meet.jit.si/${room}#config.prejoinConfig.enabled=false`;
   }
   if(url) window.open(url, '_blank');
 }
@@ -177,6 +178,7 @@ window.endGroupCall = async function(){
   document.getElementById('callModal').classList.remove('show');
   if(!curGroup) return;
   try{ await updateDoc(doc(db,'groups',curGroup.id), { callActive: false, updatedAt: serverTimestamp() }); }catch(e){}
+  alert("Call ended. Also close the jitsi tab — red phone button at bottom center.");
 }
 
 function updateCounters(){ document.getElementById('topCounter').textContent = peopleCache.length+' / 1000'; document.getElementById('postCount').textContent = postsCache.length+' posts'; document.getElementById('groupCount').textContent = groupsCache.length+' groups'; document.getElementById('notesCount').textContent = notesCache.length+' notes'; }
@@ -191,6 +193,7 @@ document.getElementById('loginBtn').onclick = async ()=>{
   currentUser=e;
   document.getElementById('forceLogin').style.display='none';
   document.getElementById('onlineStatus').textContent='● LIVE ONLINE';
+  document.getElementById('onlineStatus').style.color='#25D366';
   try{ await setDoc(doc(db,'trinity_users',e), { email:e, joinedAt: serverTimestamp() }, {merge:true}); }catch(ex){ console.log(ex); }
   checkLogin();
 };
@@ -200,7 +203,7 @@ document.getElementById('noteForm').addEventListener('change', function(){
   if(v==='form2'){ openForm2(); }
 });
 
-// LONG VERSION - ONLY AUTHOR CAN DELETE POST
+// ONLY AUTHOR CAN DELETE POST
 function renderPosts(){
   let plist=document.getElementById('postsList'); let empty=document.getElementById('emptyFeed');
   if(postsCache.length===0){ plist.innerHTML=''; empty.style.display='block'; return; }
