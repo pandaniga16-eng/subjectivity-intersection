@@ -16,24 +16,27 @@ body{font-family:system-ui,sans-serif;background:#080c14;color:#e7e9ea}
 .btn{border:0;padding:0 22px;height:44px;border-radius:9999px;font-weight:700;cursor:pointer}
 .btn-blue{background:#2563eb;color:#fff}.btn-white{background:#fff;color:#000}.btn-dark{background:#1e293b;color:#fff}
 .post-card{padding:14px 16px;border-bottom:1px solid #1e293b;background:#080c14}
-.avatar{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,#2563eb,#06b6d4);display:flex;align-items:center;justify-content:center;font-weight:800;flex-shrink:0}
+.avatar{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,#2563eb,#06b6d4);display:flex;align-items:center;justify-content:center;font-weight:800;flex-shrink:0;overflow:hidden}
+.avatar img{width:100%;height:100%;object-fit:cover}
 .post-actions{display:flex;gap:24px;margin-top:12px;border-top:1px solid #0f172a;padding-top:10px}
 .action{cursor:pointer;display:flex;align-items:center;gap:6px;font-size:14px;color:#64748b;user-select:none}.action.liked{color:#f91880}
 .group-item{padding:14px 16px;border-bottom:1px solid #1e293b;display:flex;gap:12px;align-items:center;background:#0f172a;position:relative}
-.group-avatar{width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,#2563eb,#3b82f6);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;flex-shrink:0}
+.group-avatar{width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,#2563eb,#3b82f6);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;flex-shrink:0;overflow:hidden}
+.group-avatar img{width:100%;height:100%;object-fit:cover}
 .group-dots{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#64748b;font-size:20px;flex-shrink:0}
 .group-menu{position:absolute;right:12px;top:56px;background:#0f172a;border:1px solid #1e293b;border-radius:12px;min-width:220px;z-index:100;padding:8px 0;display:none}
 .group-menu.show{display:block}
 .menu-item{padding:12px 16px;display:flex;gap:12px;align-items:center;font-size:14px;cursor:pointer;color:#e7e9ea}
 .bottom{position:fixed;bottom:0;left:0;right:0;max-width:620px;margin:0 auto;background:#0f172a;border-top:1px solid #1e293b;display:flex;justify-content:space-around;align-items:center;height:64px;z-index:60}
 .b-item{flex:1;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:11px;color:#64748b;cursor:pointer}.b-item.active{color:#60a5fa}
-.fab{position:fixed;bottom:80px;right:16px;width:56px;height:56px;background:#2563eb;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:28px;color:#fff;cursor:pointer;z-index:55;box-shadow:0 4px 20px rgba(37,99,235,0.4)}
+.fab{position:fixed;bottom:80px;right:16px;width:56px;height:56px;background:#2563eb;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:28px;color:#fff;cursor:pointer;z-index:55}
 #groupModal{position:fixed;inset:0;background:#080c14;z-index:99999;display:none;flex-direction:column}
 #groupModal.show{display:flex}
 .gHeader{height:64px;background:#0f172a;padding:0 12px;display:flex;align-items:center;gap:12px;border-bottom:1px solid #1e293b}
 .gMsgs{flex:1;overflow-y:auto;padding:16px 12px;display:flex;flex-direction:column;gap:10px;background:#020617}
 .bub{max-width:85%;padding:10px 14px;border-radius:18px;font-size:15px;word-break:break-word}
 .bub.me{align-self:flex-end;background:#2563eb;color:#fff;border-bottom-right-radius:4px}.bub.other{align-self:flex-start;background:#1e293b;color:#fff;border-bottom-left-radius:4px}
+.bub.system{align-self:center;background:#0f172a;border:1px dashed #334155;color:#94a3b8;font-size:12px;border-radius:12px;padding:6px 12px}
 .gInputWrap{padding:10px 12px;background:#0f172a;display:flex;gap:8px;align-items:center;border-top:1px solid #1e293b}
 .gInput{flex:1;background:#1e293b;border:0;border-radius:24px;padding:12px 16px;color:#fff;font-size:15px;outline:none;resize:none;min-height:44px}
 .gMediaBtn{width:40px;height:40px;border-radius:50%;border:0;background:#1e293b;color:#60a5fa;display:flex;align-items:center;justify-content:center;font-size:18px;cursor:pointer;flex-shrink:0}
@@ -63,8 +66,11 @@ body{font-family:system-ui,sans-serif;background:#080c14;color:#e7e9ea}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
 .limit-banner{background:#fbbf24;color:#000;padding:8px 12px;text-align:center;font-weight:700;font-size:12px;display:none}
 .limit-banner.show{display:block}
-.group-media{width:100%;border-radius:12px;margin-top:8px;max-height:none;object-fit:contain;background:#000}
+.group-media{width:100%;border-radius:12px;margin-top:8px;object-fit:contain;background:#000}
 .form-card{padding:18px 12px;border-radius:16px;text-align:center;text-decoration:none;font-weight:800;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer}
+#callNotify{position:fixed;top:70px;left:50%;transform:translateX(-50%);max-width:600px;width:92%;background:#2563eb;color:#fff;padding:14px 16px;border-radius:16px;display:none;z-index:10000;box-shadow:0 8px 30px rgba(37,99,235,0.5);animation:slideDown 0.3s}
+#callNotify.show{display:flex;justify-content:space-between;align-items:center;gap:12px}
+@keyframes slideDown{from{transform:translate(-50%,-20px);opacity:0}to{transform:translate(-50%,0);opacity:1}}
 </style>
 </head>
 <body>
@@ -76,16 +82,8 @@ body{font-family:system-ui,sans-serif;background:#080c14;color:#e7e9ea}
 <div id="view-notes" style="display:none">
 <div class="header"><div style="font-weight:800">Notes</div><div style="font-size:12px" id="notesCount">0 notes</div></div>
 <div style="padding:16px;display:grid;grid-template-columns:1fr 1fr;gap:12px;border-bottom:1px solid #1e293b;background:#080c14">
-<a href="https://622622.substack.com/p/does-the-world-begin-with-subjectivity" target="_blank" class="form-card" style="background:#2563eb;color:#fff;">
-<span style="font-size:26px">📄</span>
-<span>Form 1</span>
-<span style="font-size:11px;opacity:0.9;font-weight:400;text-align:center">Does the world begin with subjectivity</span>
-</a>
-<a href="https://x.gd/hAQQ1" target="_blank" class="form-card" style="background:#0f172a;border:1px solid #2563eb;color:#60a5fa;">
-<span style="font-size:26px">🔗</span>
-<span>Form 2</span>
-<span style="font-size:11px;opacity:0.9;font-weight:400">Open Second Form</span>
-</a>
+<a href="https://622622.substack.com/p/does-the-world-begin-with-subjectivity" target="_blank" class="form-card" style="background:#2563eb;color:#fff;"><span style="font-size:26px">📄</span><span>Form 1</span><span style="font-size:11px;opacity:0.9">Does world begin with subjectivity</span></a>
+<a href="https://x.gd/hAQQ1" target="_blank" class="form-card" style="background:#0f172a;border:1px solid #2563eb;color:#60a5fa;"><span style="font-size:26px">🔗</span><span>Form 2</span><span style="font-size:11px">Open Second Form</span></a>
 </div>
 <div style="padding:16px;border-bottom:1px solid #1e293b;background:#080c14"><textarea id="noteText" class="input" placeholder="Write personal note..." style="border-radius:12px;min-height:80px"></textarea><button type="button" class="btn-blue btn" style="width:100%;margin-top:10px;height:44px" id="saveNoteBtn">Save Personal Note</button></div>
 <div id="notesList"></div><div style="height:100px"></div>
@@ -93,11 +91,15 @@ body{font-family:system-ui,sans-serif;background:#080c14;color:#e7e9ea}
 <div class="fab" id="fabBtn">+</div>
 <div class="bottom"><div class="b-item active" id="b-feed" onclick="switchTab('feed')"><span>⌂</span><span>For you</span></div><div class="b-item" id="b-comm" onclick="switchTab('comm')"><span>⧉</span><span>Groups</span></div><div class="b-item" id="b-notes" onclick="switchTab('notes')"><span>📝</span><span>Notes</span></div></div>
 </div>
+
+<div id="callNotify"><div><div style="font-weight:800;display:flex;align-items:center;gap:6px"><span class="live-dot"></span><span id="notifyTitle">Group call in progress</span></div><div id="notifySub" style="font-size:12px;opacity:0.9;margin-top:2px"></div></div><button class="btn-white btn" style="height:36px" onclick="joinFromNotify()">JOIN</button></div>
+
 <div id="overlay" class="overlay"></div>
 <div id="groupModal">
 <div class="gHeader">
 <button type="button" class="btn btn-dark" style="width:40px;height:40px;border-radius:50%" id="closeGroupBtn">←</button>
-<div class="group-avatar">◈</div>
+<div class="group-avatar" id="gAvatar" onclick="if(isGroupAdmin(curGroup)) document.getElementById('gGroupImage').click()"></div>
+<input type="file" id="gGroupImage" accept="image/*" hidden>
 <div style="flex:1"><div id="gName" style="font-weight:700">Group</div><div id="gInfo" style="font-size:12px;color:#60a5fa"></div></div>
 <button type="button" class="btn-blue btn" style="height:36px" onclick="startGroupCall()">◈ Call</button>
 <button type="button" class="btn btn-white" style="height:36px;display:none" id="joinBtn">Join</button>
@@ -111,6 +113,7 @@ body{font-family:system-ui,sans-serif;background:#080c14;color:#e7e9ea}
 <button type="button" class="btn-blue btn" style="width:44px;height:44px;border-radius:50%;padding:0" id="sendGroupBtn">➤</button>
 </div>
 </div>
+
 <div id="callModal">
 <div class="callHeader">
 <button type="button" class="btn btn-dark" style="width:40px;height:40px;border-radius:50%" onclick="endGroupCall()">←</button>
@@ -125,9 +128,11 @@ body{font-family:system-ui,sans-serif;background:#080c14;color:#e7e9ea}
 <button type="button" class="ctrl end" onclick="endGroupCall()">📞</button>
 </div>
 </div>
+
 <div id="forceLogin" class="forceModal"><div class="box"><h2>◈ Join Trinity</h2><input id="forceEmail" class="input" type="email" placeholder="Your email" style="margin-top:12px"><button type="button" class="btn btn-blue" style="width:100%;margin-top:14px;height:46px" id="loginBtn">Continue</button><div id="forceError" style="display:none;color:#ef4444;margin-top:10px;font-size:13px"></div></div></div>
 <div id="postModal" class="smallModal"><div class="box2"><h3>Create Post</h3><textarea id="postBody" class="textarea" placeholder="What's happening?" style="margin-top:12px"></textarea><div id="postImgPreview" style="margin-top:10px"></div><div style="display:flex;gap:8px;margin-top:14px"><button type="button" class="btn-white btn" onclick="document.getElementById('postImage').click()">🖼️ HD Photo</button><input type="file" id="postImage" accept="image/*" hidden><button type="button" class="btn-blue btn" style="flex:1" id="publishBtn">Post</button></div><button type="button" class="btn btn-dark" style="width:100%;margin-top:10px" id="closePostBtn">Cancel</button></div></div>
 <div id="commentModal" class="smallModal"><div class="box2"><h3>Comments</h3><div id="commentPostPreview" style="margin-top:12px;padding:12px;background:#000;border-radius:12px;border:1px solid #1e293b"></div><div id="commentsList" style="margin-top:12px;max-height:250px;overflow-y:auto"></div><textarea id="commentText" class="textarea" placeholder="Write a comment..." style="margin-top:12px;min-height:70px"></textarea><div style="display:flex;gap:8px;margin-top:10px"><button type="button" class="btn btn-dark" style="flex:1" id="closeCommentBtn">Close</button><button type="button" class="btn-blue btn" style="flex:1" id="submitCommentBtn">Send</button></div></div></div>
+
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, doc, updateDoc, arrayUnion, arrayRemove, increment, deleteDoc, serverTimestamp, setDoc, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
@@ -144,8 +149,17 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 let currentUser = localStorage.getItem('sielEmail')||'';
 let peopleCache=[]; let postsCache=[]; let groupsCache=[]; let notesCache=[]; let curGroup=null, pendingPostImg=null, curCommentPostId=null;
-let localStream=null, peers={}, isMuted=false, isCamOff=false, callUnsubs=[], joinedCallId=null;
+let localStream=null, peers={}, isMuted=false, isCamOff=false, callUnsubs=[], joinedCallId=null, notifyGroupId=null;
 const MAX_PEOPLE = 6;
+function isGroupAdmin(g){ return g && g.admin===currentUser; }
+function formatWhatsAppTime(t){
+  if(!t) return '';
+  let d = t.seconds ? new Date(t.seconds*1000) : new Date(t);
+  if(isNaN(d)) return '';
+  let h = d.getHours(); let m = d.getMinutes().toString().padStart(2,'0');
+  let ampm = h>=12 ? 'PM' : 'AM'; h = h%12 || 12;
+  return `${h}:${m} ${ampm}`;
+}
 function ensureMember(group){ if(!group || !group.members || !group.members.includes(currentUser)){ alert("You must be a member of this group. Tap Join first."); return false; } return true; }
 window.startGroupCall = async function(){
   if(!curGroup){ alert('Open a group'); return; }
@@ -157,7 +171,7 @@ window.startGroupCall = async function(){
   document.getElementById('callModal').classList.add('show');
   document.getElementById('limitBanner').classList.remove('show');
   await startLocalVideo();
-  try{ await updateDoc(doc(db,'groups',curGroup.id), { callActive:true, callStartedBy:currentUser.split('@')[0], callStartedAt:serverTimestamp(), updatedAt:serverTimestamp() }); await setDoc(doc(db,'videoCalls',curGroup.id), { groupId:curGroup.id, active:true, startedBy:currentUser, startedAt:serverTimestamp() }, {merge:true}); }catch(e){ console.log(e); }
+  try{ await updateDoc(doc(db,'groups',curGroup.id), { callActive:true, callStartedBy:currentUser.split('@')[0], callStartedAt:serverTimestamp(), msgs: arrayUnion({email:'system',name:'System',text:`📞 ${currentUser.split('@')[0]} started a group call`,time:{seconds:Date.now()/1000}}), updatedAt:serverTimestamp() }); await setDoc(doc(db,'videoCalls',curGroup.id), { groupId:curGroup.id, active:true, startedBy:currentUser, startedAt:serverTimestamp() }, {merge:true}); }catch(e){ console.log(e); }
   joinCallFirestore();
 }
 window.joinLiveCall = async function(){
@@ -171,6 +185,11 @@ window.joinLiveCall = async function(){
   document.getElementById('limitBanner').classList.remove('show');
   await startLocalVideo();
   joinCallFirestore();
+}
+window.joinFromNotify = function(){
+  if(!notifyGroupId) return;
+  let g = groupsCache.find(x=>x.id===notifyGroupId);
+  if(g){ document.getElementById('callNotify').classList.remove('show'); openGroup(g.id); setTimeout(()=>joinLiveCall(),400); }
 }
 async function startLocalVideo(){
   try{ if(localStream) return; localStream = await navigator.mediaDevices.getUserMedia({video:{width:640,height:480}, audio:true}); addVideoBox('me', currentUser.split('@')[0]+' (You)', localStream, true); }catch(e){ alert('Allow camera/mic: '+e.message); }
@@ -216,7 +235,7 @@ window.toggleMute = function(){ if(!localStream) return; isMuted=!isMuted; local
 window.toggleCam = function(){ if(!localStream) return; isCamOff=!isCamOff; localStream.getVideoTracks().forEach(t=>t.enabled=!isCamOff); let b=document.getElementById('camBtn'); b.textContent=isCamOff?'🚫':'📷'; b.classList.toggle('off',isCamOff); }
 window.endGroupCall = async function(){
   callUnsubs.forEach(u=>{ try{u()}catch{} }); callUnsubs=[]; joinedCallId=null; Object.keys(peers).forEach(closePeer); peers={}; if(localStream){ localStream.getTracks().forEach(t=>t.stop()); localStream=null; } document.getElementById('videosGrid').innerHTML=''; document.getElementById('callModal').classList.remove('show'); document.getElementById('limitBanner').classList.remove('show'); if(!curGroup) return;
-  try{ await deleteDoc(doc(db,'videoCalls',curGroup.id,'participants',currentUser)); let q1 = query(collection(db,'videoCalls',curGroup.id,'offers'), where('from','==',currentUser)); let snap1 = await getDocs(q1); snap1.forEach(d=>deleteDoc(d.ref)); let q2 = query(collection(db,'videoCalls',curGroup.id,'answers'), where('from','==',currentUser)); let snap2 = await getDocs(q2); snap2.forEach(d=>deleteDoc(d.ref)); let q3 = query(collection(db,'videoCalls',curGroup.id,'candidates'), where('from','==',currentUser)); let snap3 = await getDocs(q3); snap3.forEach(d=>deleteDoc(d.ref)); let partSnap = await getDocs(collection(db,'videoCalls',curGroup.id,'participants')); if(partSnap.empty){ await updateDoc(doc(db,'groups',curGroup.id), {callActive:false, updatedAt:serverTimestamp()}); await setDoc(doc(db,'videoCalls',curGroup.id), {active:false}, {merge:true}); } }catch(e){ console.log(e); }
+  try{ await deleteDoc(doc(db,'videoCalls',curGroup.id,'participants',currentUser)); let q1 = query(collection(db,'videoCalls',curGroup.id,'offers'), where('from','==',currentUser)); let snap1 = await getDocs(q1); snap1.forEach(d=>deleteDoc(d.ref)); let q2 = query(collection(db,'videoCalls',curGroup.id,'answers'), where('from','==',currentUser)); let snap2 = await getDocs(q2); snap2.forEach(d=>deleteDoc(d.ref)); let q3 = query(collection(db,'videoCalls',curGroup.id,'candidates'), where('from','==',currentUser)); let snap3 = await getDocs(q3); snap3.forEach(d=>deleteDoc(d.ref)); let partSnap = await getDocs(collection(db,'videoCalls',curGroup.id,'participants')); if(partSnap.empty){ await updateDoc(doc(db,'groups',curGroup.id), {callActive:false, msgs: arrayUnion({email:'system',name:'System',text:`📞 Call ended`,time:{seconds:Date.now()/1000}}), updatedAt:serverTimestamp()}); await setDoc(doc(db,'videoCalls',curGroup.id), {active:false}, {merge:true}); } }catch(e){ console.log(e); }
 }
 function updateCounters(){ document.getElementById('topCounter').textContent = peopleCache.length+' / 1000'; document.getElementById('postCount').textContent = postsCache.length+' posts'; document.getElementById('groupCount').textContent = groupsCache.length+' groups'; document.getElementById('notesCount').textContent = notesCache.length+' notes'; }
 function checkLogin(){ document.getElementById('forceLogin').style.display = currentUser ? 'none' : 'flex'; updateCounters(); }
@@ -236,37 +255,15 @@ window.switchTab = function(name){
   if(name==='notes'){ document.getElementById('tab-notes').classList.add('active'); document.getElementById('b-notes').classList.add('active'); document.getElementById('view-notes').style.display='block'; }
 }
 function compressImage(file, callback){
-  if(file.size <= 1500 * 1024){
-    let r=new FileReader();
-    r.onload=e=>callback(e.target.result);
-    r.readAsDataURL(file);
-    return;
-  }
-  let reader=new FileReader(); 
-  reader.onload=function(e){ 
-    let img=new Image(); 
-    img.onload=function(){ 
-      let canvas=document.createElement('canvas'); 
-      let maxW=2560;
-      let scale=Math.min(1, maxW/img.width); 
-      canvas.width=img.width*scale; 
-      canvas.height=img.height*scale; 
-      let ctx=canvas.getContext('2d'); 
-      ctx.drawImage(img,0,0,canvas.width,canvas.height); 
-      let compressed=canvas.toDataURL('image/jpeg',0.95);
-      callback(compressed); 
-    }; 
-    img.src=e.target.result; 
-  }; 
-  reader.readAsDataURL(file);
+  if(file.size <= 1500 * 1024){ let r=new FileReader(); r.onload=e=>callback(e.target.result); r.readAsDataURL(file); return; }
+  let reader=new FileReader(); reader.onload=function(e){ let img=new Image(); img.onload=function(){ let canvas=document.createElement('canvas'); let maxW=2560; let scale=Math.min(1, maxW/img.width); canvas.width=img.width*scale; canvas.height=img.height*scale; let ctx=canvas.getContext('2d'); ctx.drawImage(img,0,0,canvas.width,canvas.height); let compressed=canvas.toDataURL('image/jpeg',0.95); callback(compressed); }; img.src=e.target.result; }; reader.readAsDataURL(file);
 }
 document.getElementById('postImage').addEventListener('change',function(e){ let f=e.target.files[0]; if(!f) return; compressImage(f,function(compressed){ pendingPostImg=compressed; document.getElementById('postImgPreview').innerHTML='<img src="'+pendingPostImg+'" style="width:100%;border-radius:12px;max-height:600px;object-fit:contain;background:#000">'; }); });
-document.getElementById('gImage').addEventListener('change',function(e){ 
-  let f=e.target.files[0]; if(!f || !curGroup) return; 
-  compressImage(f, async function(compressed){ 
-    await updateDoc(doc(db,'groups',curGroup.id), { msgs: arrayUnion({email:currentUser,name:currentUser.split('@')[0],text:'',image:compressed,time:{seconds:Date.now()/1000}}), members: arrayUnion(currentUser), updatedAt:serverTimestamp() }); 
-  }); 
-  e.target.value=''; 
+document.getElementById('gImage').addEventListener('change',function(e){ let f=e.target.files[0]; if(!f || !curGroup) return; compressImage(f, async function(compressed){ await updateDoc(doc(db,'groups',curGroup.id), { msgs: arrayUnion({email:currentUser,name:currentUser.split('@')[0],text:'',image:compressed,time:{seconds:Date.now()/1000}}), members: arrayUnion(currentUser), updatedAt:serverTimestamp() }); }); e.target.value=''; });
+document.getElementById('gGroupImage').addEventListener('change',function(e){
+  let f=e.target.files[0]; if(!f || !curGroup) return; if(!isGroupAdmin(curGroup)){ alert('Only admin can update group photo'); return; }
+  compressImage(f, async function(compressed){ await updateDoc(doc(db,'groups',curGroup.id), { groupPhoto: compressed, msgs: arrayUnion({email:'system',name:'System',text:`🖼️ ${currentUser.split('@')[0]} updated group photo`,time:{seconds:Date.now()/1000}}), updatedAt:serverTimestamp() }); alert('Group photo updated!'); });
+  e.target.value='';
 });
 document.getElementById('fabBtn').onclick=()=>{ document.getElementById('postModal').classList.add('show'); }
 document.getElementById('closePostBtn').onclick=()=>{ document.getElementById('postModal').classList.remove('show'); }
@@ -274,21 +271,30 @@ document.getElementById('closeCommentBtn').onclick=()=>{ document.getElementById
 document.getElementById('publishBtn').onclick = async ()=>{ let bodyEl=document.getElementById('postBody'); let body=bodyEl.value.trim(); if(!currentUser){ alert('Login first'); return; } if(!body && !pendingPostImg){ alert('Write something'); return; } try{ await addDoc(collection(db,'posts'), { body, image:pendingPostImg||null, email:currentUser, time:serverTimestamp(), likes:0, likedBy:[], comments:[] }); bodyEl.value=''; pendingPostImg=null; document.getElementById('postImgPreview').innerHTML=''; document.getElementById('postImage').value=''; document.getElementById('postModal').classList.remove('show'); }catch(e){ alert(e.message); } };
 async function likePost(id){ let post = postsCache.find(p=>p.id===id); if(!post) return; let ref=doc(db,'posts',id); if(post.likedBy && post.likedBy.includes(currentUser)){ await updateDoc(ref, { likedBy: arrayRemove(currentUser), likes: increment(-1) }); }else{ await updateDoc(ref, { likedBy: arrayUnion(currentUser), likes: increment(1) }); } }
 async function deletePost(id){ let post = postsCache.find(p=>p.id===id); if(!post) return; if(post.email.toLowerCase()!==currentUser.toLowerCase()){ alert('Only author'); return; } if(confirm('Delete?')) await deleteDoc(doc(db,'posts',id)); }
-function openCommentModal(id){ let p=postsCache.find(x=>x.id===id); if(!p) return; curCommentPostId=id; let name=(p.email||'anon').split('@')[0]; document.getElementById('commentPostPreview').innerHTML=`<div style="display:flex;gap:8px"><div class="avatar" style="width:32px;height:32px;font-size:12px">${name[0].toUpperCase()}</div><div style="flex:1"><b>@${name}</b><div style="margin-top:4px">${p.body||''}</div></div></div>`; let comments=p.comments||[]; document.getElementById('commentsList').innerHTML = comments.length? comments.map(c=>`<div style="padding:8px;border-bottom:1px solid #222"><b>@${c.name}</b> ${c.text}</div>`).join('') : '<div style="padding:20px;text-align:center;color:#555">No comments</div>'; document.getElementById('commentModal').classList.add('show'); }
+function openCommentModal(id){ let p=postsCache.find(x=>x.id===id); if(!p) return; curCommentPostId=id; let name=(p.email||'anon').split('@')[0]; document.getElementById('commentPostPreview').innerHTML=`<div style="display:flex;gap:8px"><div class="avatar" style="width:32px;height:32px;font-size:12px">${name[0].toUpperCase()}</div><div style="flex:1"><b>@${name}</b><div style="margin-top:4px">${p.body||''}</div></div></div>`; let comments=p.comments||[]; document.getElementById('commentsList').innerHTML = comments.length? comments.map(c=>`<div style="padding:8px;border-bottom:1px solid #222"><b>@${c.name}</b> ${c.text} <span style="font-size:10px;color:#94a3b8">${formatWhatsAppTime({seconds:c.time/1000})}</span></div>`).join('') : '<div style="padding:20px;text-align:center;color:#555">No comments</div>'; document.getElementById('commentModal').classList.add('show'); }
 document.getElementById('submitCommentBtn').onclick = async ()=>{ let txt=document.getElementById('commentText').value.trim(); if(!txt) return; let ref=doc(db,'posts',curCommentPostId); let comment={ name:currentUser.split('@')[0], text:txt, email:currentUser, time:Date.now() }; await updateDoc(ref, { comments: arrayUnion(comment) }); document.getElementById('commentText').value=''; };
-document.getElementById('createGroupBtn').onclick = async ()=>{ let name=document.getElementById('newGroupName').value.trim(); if(!name){ alert('Enter name'); return; } await addDoc(collection(db,'groups'), { name, admin:currentUser, members:[currentUser], callActive:false, msgs:[{email:'system',name:'System',text:'Group '+name+' created by '+currentUser.split('@')[0],time:{seconds:Date.now()/1000}}], updatedAt:serverTimestamp(), createdAt:serverTimestamp() }); document.getElementById('newGroupName').value=''; };
-function openGroup(id){ let g=groupsCache.find(x=>x.id===id); if(!g) return; curGroup=g; document.getElementById('gName').textContent=g.name; document.getElementById('gInfo').textContent=`${g.members.length} members • Max 6 in call`; document.getElementById('joinBtn').style.display=g.members.includes(currentUser)?'none':'block'; document.getElementById('groupModal').classList.add('show'); renderGroupMsgs(); checkLiveBanner(); }
+document.getElementById('createGroupBtn').onclick = async ()=>{ let name=document.getElementById('newGroupName').value.trim(); if(!name){ alert('Enter name'); return; } await addDoc(collection(db,'groups'), { name, admin:currentUser, members:[currentUser], callActive:false, groupPhoto:null, msgs:[{email:'system',name:'System',text:'Group '+name+' created by '+currentUser.split('@')[0],time:{seconds:Date.now()/1000}}], updatedAt:serverTimestamp(), createdAt:serverTimestamp() }); document.getElementById('newGroupName').value=''; };
+function openGroup(id){ let g=groupsCache.find(x=>x.id===id); if(!g) return; curGroup=g; document.getElementById('gName').textContent=g.name; document.getElementById('gInfo').textContent=`${g.members.length} members • Max 6 in call`; document.getElementById('joinBtn').style.display=g.members.includes(currentUser)?'none':'block'; let av=document.getElementById('gAvatar'); if(g.groupPhoto){ av.innerHTML=`<img src="${g.groupPhoto}">`; } else { av.innerHTML='◈'; } document.getElementById('groupModal').classList.add('show'); renderGroupMsgs(); checkLiveBanner(); }
 document.getElementById('closeGroupBtn').onclick=()=>{ document.getElementById('groupModal').classList.remove('show'); curGroup=null; }
-document.getElementById('joinBtn').onclick= async ()=>{ if(!curGroup) return; if(!curGroup.members.includes(currentUser)){ await updateDoc(doc(db,'groups',curGroup.id), { members: arrayUnion(currentUser), msgs: arrayUnion({email:'system',name:'System',text:currentUser.split('@')[0]+' joined',time:{seconds:Date.now()/1000}}), updatedAt:serverTimestamp() }); } document.getElementById('joinBtn').style.display='none'; };
+document.getElementById('joinBtn').onclick= async ()=>{ if(!curGroup) return; if(!curGroup.members.includes(currentUser)){ await updateDoc(doc(db,'groups',curGroup.id), { members: arrayUnion(currentUser), msgs: arrayUnion({email:'system',name:'System',text:`👋 ${currentUser.split('@')[0]} joined`,time:{seconds:Date.now()/1000}}), updatedAt:serverTimestamp() }); } document.getElementById('joinBtn').style.display='none'; };
 function checkLiveBanner(){ if(!curGroup) return; let fresh = groupsCache.find(x=>x.id===curGroup.id) || curGroup; let banner = document.getElementById('liveCallBanner'); if(fresh.callActive){ banner.style.display='flex'; document.getElementById('liveCallText').textContent = `◈ LIVE by ${fresh.callStartedBy||'someone'}`; } else { banner.style.display='none'; } }
-function renderGroupMsgs(){ if(!curGroup) return; let fresh = groupsCache.find(x=>x.id===curGroup.id) || curGroup; document.getElementById('gMsgs').innerHTML=(fresh.msgs||[]).map(m=>{ let img = m.image ? `<img src="${m.image}" class="group-media" loading="lazy">` : ''; return `<div class="bub ${m.email===currentUser?'me':'other'}"><div style="font-weight:700;font-size:12px">${m.name||m.email?.split('@')[0]}</div><div>${m.text||''}</div>${img}</div>`; }).join(''); let box=document.getElementById('gMsgs'); setTimeout(()=>box.scrollTop=box.scrollHeight,30); checkLiveBanner(); }
+function renderGroupMsgs(){
+  if(!curGroup) return; let fresh = groupsCache.find(x=>x.id===curGroup.id) || curGroup;
+  document.getElementById('gMsgs').innerHTML=(fresh.msgs||[]).map(m=>{
+    if(m.email==='system'){ return `<div class="bub system">${m.text} <span style="font-size:10px">${formatWhatsAppTime(m.time)}</span></div>`; }
+    let img = m.image ? `<img src="${m.image}" class="group-media" loading="lazy">` : '';
+    let time = formatWhatsAppTime(m.time);
+    return `<div class="bub ${m.email===currentUser?'me':'other'}"><div style="font-weight:700;font-size:12px">${m.name||m.email?.split('@')[0]}</div><div>${m.text||''}</div>${img}<div style="font-size:10px;color:${m.email===currentUser?'#e0e7ff':'#94a3b8'};margin-top:6px;text-align:right">${time} ${m.email===currentUser?'✓✓':''}</div></div>`;
+  }).join('');
+  let box=document.getElementById('gMsgs'); setTimeout(()=>box.scrollTop=box.scrollHeight,30); checkLiveBanner();
+}
 document.getElementById('sendGroupBtn').onclick= async ()=>{ if(!curGroup) return; let txt=document.getElementById('gInput').value.trim(); if(!txt) return; await updateDoc(doc(db,'groups',curGroup.id), { msgs: arrayUnion({email:currentUser,name:currentUser.split('@')[0],text:txt,time:{seconds:Date.now()/1000}}), members: arrayUnion(currentUser), updatedAt:serverTimestamp() }); document.getElementById('gInput').value=''; };
 function renderPosts(){
   let plist=document.getElementById('postsList');
   if(postsCache.length===0){ plist.innerHTML='<div style="padding:60px;text-align:center;color:#555">No posts</div>'; return; }
   plist.innerHTML=postsCache.map(p=>{
     let name=(p.email||'anon').split('@')[0]; let isLiked = p.likedBy && p.likedBy.includes(currentUser); let id = p.id; let isAuthor = p.email && currentUser && p.email.toLowerCase() === currentUser.toLowerCase(); let deleteBtn = isAuthor ? `<div class="action" data-del="${id}" style="margin-left:auto;color:#f15c6d">🗑 Delete</div>` : ``;
-    return `<div class="post-card"><div style="display:flex;gap:12px"><div class="avatar">${name[0].toUpperCase()}</div><div style="flex:1;min-width:0"><div style="display:flex;justify-content:space-between"><div style="font-weight:700">@${name}</div><div style="font-size:11px;color:#555">${p.time? new Date(p.time.seconds? p.time.seconds*1000 : p.time).toLocaleString() : ''}</div></div>${p.body?`<div style="margin-top:6px;white-space:pre-wrap;word-break:break-word">${p.body}</div>`:''}${p.image?`<img src="${p.image}" style="width:100%;border-radius:12px;margin-top:10px;max-height:800px;object-fit:contain;background:#000">`:''}<div class="post-actions"><div class="action ${isLiked?'liked':''}" data-like="${id}"><span>${isLiked?'❤️':'♡'}</span><span>${p.likes||0}</span></div><div class="action" data-comment="${id}"><span>💬</span><span>${p.comments?.length||0}</span></div>${deleteBtn}</div></div></div></div>`;
+    return `<div class="post-card"><div style="display:flex;gap:12px"><div class="avatar">${name[0].toUpperCase()}</div><div style="flex:1;min-width:0"><div style="display:flex;justify-content:space-between"><div style="font-weight:700">@${name}</div><div style="font-size:11px;color:#94a3b8">${formatWhatsAppTime(p.time)}</div></div>${p.body?`<div style="margin-top:6px;white-space:pre-wrap;word-break:break-word">${p.body}</div>`:''}${p.image?`<img src="${p.image}" style="width:100%;border-radius:12px;margin-top:10px;max-height:800px;object-fit:contain;background:#000">`:''}<div class="post-actions"><div class="action ${isLiked?'liked':''}" data-like="${id}"><span>${isLiked?'❤️':'♡'}</span><span>${p.likes||0}</span></div><div class="action" data-comment="${id}"><span>💬</span><span>${p.comments?.length||0}</span></div>${deleteBtn}</div></div></div></div>`;
   }).join('');
   plist.querySelectorAll('[data-like]').forEach(el=> el.onclick=()=> likePost(el.getAttribute('data-like')));
   plist.querySelectorAll('[data-comment]').forEach(el=> el.onclick=()=> openCommentModal(el.getAttribute('data-comment')));
@@ -299,14 +305,45 @@ function renderGroups(){
   document.getElementById('groupsList').innerHTML=sorted.map(g=>{
     let last=g.msgs && g.msgs[g.msgs.length-1]; let preview = last ? (last.image?'🖼️ HD Photo' : last.text.slice(0,60)) : 'Tap to open';
     let isMember = g.members && g.members.includes(currentUser); let liveBadge = g.callActive ? `<div style="margin-top:6px;background:#2563eb;color:#fff;padding:4px 10px;border-radius:9999px;font-size:11px;font-weight:800;display:inline-flex;align-items:center;gap:4px"><span class="live-dot"></span>◈ LIVE JOIN</div>` : '';
-    return `<div class="group-item" data-open="${g.id}"><div class="group-avatar">◈</div><div style="flex:1;min-width:0" data-open="${g.id}"><div style="font-weight:700">${g.name} ${g.callActive? '◈':''}</div><div style="font-size:11px;color:#60a5fa">Admin: ${(g.admin||'').split('@')[0]} ${isMember?'• Member':'• Max 6'}</div><div style="font-size:13px;color:#64748b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${preview}</div>${liveBadge}</div><div class="group-dots" data-dots="${g.id}">⋮</div><div class="group-menu" id="menu-${g.id}"><div class="menu-item" data-action="delete" data-gid="${g.id}">🗑 Delete/Exit</div></div></div>`;
+    let avatar = g.groupPhoto ? `<img src="${g.groupPhoto}">` : '◈';
+    return `<div class="group-item" data-open="${g.id}"><div class="group-avatar">${avatar}</div><div style="flex:1;min-width:0" data-open="${g.id}"><div style="font-weight:700">${g.name} ${g.callActive? '◈':''}</div><div style="font-size:11px;color:#60a5fa">Admin: ${(g.admin||'').split('@')[0]} ${isMember?'• Member':'• Max 6'}</div><div style="font-size:13px;color:#64748b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${preview}</div>${liveBadge}</div><div class="group-dots" data-dots="${g.id}">⋮</div><div class="group-menu" id="menu-${g.id}"><div class="menu-item" data-action="photo" data-gid="${g.id}">🖼️ ${g.admin===currentUser?'Update Group Photo':'View Photo'}</div><div class="menu-item" data-action="delete" data-gid="${g.id}">🗑 ${g.admin===currentUser?'Delete Group':'Exit Group'}</div></div></div>`;
   }).join('');
   document.querySelectorAll('[data-open]').forEach(el=>{ el.onclick=(e)=>{ if(e.target.closest('.group-dots')) return; openGroup(el.getAttribute('data-open')); } });
   document.querySelectorAll('[data-dots]').forEach(el=>{ el.onclick=(e)=>{ e.stopPropagation(); let gid=el.getAttribute('data-dots'); document.querySelectorAll('.group-menu').forEach(m=>m.classList.remove('show')); document.getElementById('menu-'+gid).classList.add('show'); document.getElementById('overlay').classList.add('show'); } });
-  document.querySelectorAll('.group-menu .menu-item').forEach(item=>{ item.onclick=async(e)=>{ e.stopPropagation(); let gid=item.getAttribute('data-gid'); document.getElementById('overlay').classList.remove('show'); document.querySelectorAll('.group-menu').forEach(m=>m.classList.remove('show')); let g=groupsCache.find(x=>x.id===gid); if(g.admin===currentUser){ if(confirm('Delete group?')) await deleteDoc(doc(db,'groups',gid)); } else { await updateDoc(doc(db,'groups',gid),{members:arrayRemove(currentUser)}); } } });
+  document.querySelectorAll('.group-menu .menu-item').forEach(item=>{
+    item.onclick=async(e)=>{
+      e.stopPropagation(); let gid=item.getAttribute('data-gid'); let action=item.getAttribute('data-action'); document.getElementById('overlay').classList.remove('show'); document.querySelectorAll('.group-menu').forEach(m=>m.classList.remove('show'));
+      let g=groupsCache.find(x=>x.id===gid);
+      if(action==='photo'){
+        if(g.admin===currentUser){ curGroup=g; document.getElementById('gGroupImage').click(); }
+        else if(g.groupPhoto){ alert('Group photo'); }
+      } else {
+        if(g.admin===currentUser){ if(confirm('Delete group for all? Messages will remain in archive but group removed')) await deleteDoc(doc(db,'groups',gid)); }
+        else {
+          if(confirm('Exit group? Your exit message will stay in group')){
+            await updateDoc(doc(db,'groups',gid),{msgs: arrayUnion({email:'system',name:'System',text:`👋 ${currentUser.split('@')[0]} left`,time:{seconds:Date.now()/1000}}), members:arrayRemove(currentUser), updatedAt:serverTimestamp()});
+          }
+        }
+      }
+    }
+  });
+  // NOTIFICATION FOR CALLS
+  let activeCalls = groupsCache.filter(g=>g.callActive);
+  if(activeCalls.length>0){
+    let g = activeCalls[0];
+    if(g.members.includes(currentUser) && joinedCallId!==g.id){
+      notifyGroupId = g.id;
+      document.getElementById('notifyTitle').textContent = `📞 Group call in progress`;
+      document.getElementById('notifySub').textContent = `${g.name} • by ${g.callStartedBy||'someone'} • Tap JOIN`;
+      document.getElementById('callNotify').classList.add('show');
+      if(navigator.vibrate) navigator.vibrate([200,100,200]);
+    }
+  } else {
+    document.getElementById('callNotify').classList.remove('show');
+  }
 }
 document.getElementById('overlay').onclick=()=>{ document.getElementById('overlay').classList.remove('show'); document.querySelectorAll('.group-menu').forEach(m=>m.classList.remove('show')); };
-function renderNotes(){ document.getElementById('notesList').innerHTML=notesCache.slice().reverse().map(n=>`<div style="padding:14px 16px;border-bottom:1px solid #1e293b"><div style="font-weight:700">${n.form}</div><div style="margin-top:4px;white-space:pre-wrap">${n.body}</div></div>`).join('')||'<div style="padding:40px;text-align:center;color:#555">No personal notes yet</div>'; }
+function renderNotes(){ document.getElementById('notesList').innerHTML=notesCache.slice().reverse().map(n=>`<div style="padding:14px 16px;border-bottom:1px solid #1e293b"><div style="font-weight:700">${n.form}</div><div style="margin-top:4px;white-space:pre-wrap">${n.body}</div><div style="font-size:10px;color:#64748b;margin-top:6px">${formatWhatsAppTime(n.time)}</div></div>`).join('')||'<div style="padding:40px;text-align:center;color:#555">No personal notes yet</div>'; }
 document.getElementById('saveNoteBtn').onclick= async ()=>{ let text=document.getElementById('noteText').value.trim(); if(!text){ alert('Write note'); return; } await addDoc(collection(db,'notes'), {form:'Personal', body:text, email:currentUser, time:serverTimestamp()}); document.getElementById('noteText').value=''; };
 onSnapshot(query(collection(db,'posts'), orderBy('time','desc')), (snap)=>{ postsCache = snap.docs.map(d=> ({id:d.id, ...d.data()})); document.getElementById('onlineStatus').textContent='● LIVE CHART'; updateCounters(); renderPosts(); });
 onSnapshot(collection(db,'trinity_users'), (snap)=>{ peopleCache = snap.docs.map(d=> d.data()); updateCounters(); });
