@@ -20,7 +20,8 @@ body{font-family:system-ui,sans-serif;background:#080c14;color:#e7e9ea}
 .post-actions{display:flex;gap:24px;margin-top:12px;border-top:1px solid #0f172a;padding-top:10px}
 .action{cursor:pointer;display:flex;align-items:center;gap:6px;font-size:14px;color:#64748b}.action.liked{color:#f91880}
 .group-item{padding:14px 16px;border-bottom:1px solid #1e293b;display:flex;gap:12px;align-items:center;background:#0f172a;position:relative}
-.group-avatar{width:48px;height:48px;border-radius:12px;background:#2563eb;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;overflow:hidden;cursor:pointer}
+.group-avatar{width:48px;height:48px;border-radius:12px;background:#2563eb;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;overflow:hidden;cursor:pointer;border:2px solid transparent}
+.group-avatar:active{border-color:#60a5fa}
 .group-avatar img{width:100%;height:100%;object-fit:cover}
 .group-dots{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#64748b;font-size:20px}
 .group-menu{position:absolute;right:12px;top:56px;background:#0f172a;border:1px solid #1e293b;border-radius:12px;min-width:220px;z-index:100;padding:8px 0;display:none}
@@ -74,12 +75,11 @@ body{font-family:system-ui,sans-serif;background:#080c14;color:#e7e9ea}
 #msgActionModal.show{display:flex}
 .msgActions{background:#0f172a;width:100%;max-width:620px;border-radius:20px 20px 0 0;padding:12px 0 24px;border-top:1px solid #1e293b}
 .msgAct{padding:16px 20px;display:flex;gap:14px;align-items:center;font-size:15px;cursor:pointer}
-/* VIEW GROUP PHOTO MODAL - WHATSAPP STYLE */
 #viewPhotoModal{position:fixed;inset:0;background:#000;z-index:100003;display:none;flex-direction:column}
 #viewPhotoModal.show{display:flex}
-.viewPhotoHeader{height:64px;background:#0f172a;display:flex;align-items:center;gap:12px;padding:0 16px;color:#fff}
-.viewPhotoImg{flex:1;display:flex;align-items:center;justify-content:center;background:#000}
-.viewPhotoImg img{max-width:100%;max-height:80vh;object-fit:contain}
+.viewPhotoHeader{height:64px;background:rgba(15,23,42,0.9);display:flex;align-items:center;gap:12px;padding:0 16px;color:#fff;position:absolute;top:0;left:0;right:0;z-index:2}
+.viewPhotoImg{flex:1;display:flex;align-items:center;justify-content:center;background:#000;padding-top:64px}
+.viewPhotoImg img{max-width:100%;max-height:90vh;object-fit:contain}
 </style>
 </head>
 <body>
@@ -122,14 +122,13 @@ body{font-family:system-ui,sans-serif;background:#080c14;color:#e7e9ea}
 </div>
 </div>
 
-<!-- WHATSAPP STYLE VIEW PHOTO -->
 <div id="viewPhotoModal">
 <div class="viewPhotoHeader">
 <button type="button" class="btn btn-dark" style="width:40px;height:40px;border-radius:50%" onclick="document.getElementById('viewPhotoModal').classList.remove('show')">←</button>
-<div style="flex:1"><div id="viewPhotoName" style="font-weight:700">Group photo</div><div style="font-size:12px;color:#94a3b8">Tap to change if admin</div></div>
+<div style="flex:1"><div id="viewPhotoName" style="font-weight:700">Group photo</div><div id="viewPhotoSub" style="font-size:12px;color:#94a3b8"></div></div>
 <button type="button" class="btn-blue btn" style="height:36px;display:none" id="changePhotoBtn" onclick="document.getElementById('gGroupImage').click()">Change</button>
 </div>
-<div class="viewPhotoImg"><img id="viewPhotoImg" src=""></div>
+<div class="viewPhotoImg"><img id="viewPhotoImg" src="" onclick="document.getElementById('viewPhotoModal').classList.remove('show')"></div>
 </div>
 
 <div id="msgActionModal"><div class="msgActions"><div style="width:40px;height:4px;background:#334155;border-radius:9999px;margin:8px auto"></div><div class="msgAct" onclick="editCurrentMsg()">✏️ Edit message</div><div class="msgAct" onclick="deleteCurrentMsg()" style="color:#ef4444">🗑 Delete for everyone</div><div class="msgAct" onclick="closeMsgActions()">Cancel</div></div></div>
@@ -182,20 +181,36 @@ function formatTime(t){
   return `${h}:${m} ${ampm}`;
 }
 function ensureMember(group){ if(!group || !group.members || !group.members.includes(currentUser)){ alert("You must be a member of this group. Tap Join first."); return false; } return true; }
-window.viewGroupPhoto = function(photoUrl){
+
+window.viewGroupPhoto = function(){
   let g = curGroup ? (groupsCache.find(x=>x.id===curGroup.id) || curGroup) : null;
-  if(!g) return;
-  let url = photoUrl || g.groupPhoto;
+  if(!g){ alert('Open a group first'); return; }
   document.getElementById('viewPhotoName').textContent = g.name;
-  if(url){
-    document.getElementById('viewPhotoImg').src = url;
+  document.getElementById('viewPhotoSub').textContent = g.members.length + ' members • Admin: ' + (g.admin||'').split('@')[0];
+  if(g.groupPhoto){
+    document.getElementById('viewPhotoImg').src = g.groupPhoto;
   } else {
     document.getElementById('viewPhotoImg').src = '';
-    document.getElementById('viewPhotoImg').alt = 'No group photo';
+    document.getElementById('viewPhotoImg').alt = '◈ No photo yet';
   }
   document.getElementById('viewPhotoModal').classList.add('show');
   document.getElementById('changePhotoBtn').style.display = isGroupAdmin(g) ? 'block' : 'none';
 }
+window.viewGroupPhotoById = function(gid){
+  let g = groupsCache.find(x=>x.id===gid);
+  if(!g) return;
+  curGroup = g;
+  document.getElementById('viewPhotoName').textContent = g.name;
+  document.getElementById('viewPhotoSub').textContent = g.members.length + ' members • Admin: ' + (g.admin||'').split('@')[0];
+  if(g.groupPhoto){
+    document.getElementById('viewPhotoImg').src = g.groupPhoto;
+  } else {
+    document.getElementById('viewPhotoImg').src = '';
+  }
+  document.getElementById('viewPhotoModal').classList.add('show');
+  document.getElementById('changePhotoBtn').style.display = isGroupAdmin(g) ? 'block' : 'none';
+}
+
 window.startGroupCall = async function(){
   if(!curGroup){ alert('Open a group'); return; }
   let fresh = groupsCache.find(x=>x.id===curGroup.id) || curGroup;
@@ -382,7 +397,7 @@ function renderGroups(){
     let last=g.msgs && g.msgs[g.msgs.length-1]; let preview = last ? (last.image?'Photo' : last.text.slice(0,60)) : 'Tap to open';
     let isMember = g.members && g.members.includes(currentUser); let liveBadge = g.callActive ? `<div style="margin-top:6px;background:#2563eb;color:#fff;padding:4px 10px;border-radius:9999px;font-size:11px;font-weight:800;display:inline-flex;align-items:center;gap:4px"><span class="live-dot"></span>LIVE JOIN</div>` : '';
     let avatar = g.groupPhoto ? `<img src="${g.groupPhoto}">` : '◈';
-    return `<div class="group-item"><div class="group-avatar" onclick="event.stopPropagation(); curGroup=groupsCache.find(x=>x.id==='${g.id}'); window.viewGroupPhoto('${g.groupPhoto||''}')">${avatar}</div><div style="flex:1;min-width:0" data-open="${g.id}"><div style="font-weight:700">${g.name} ${g.callActive? '◈':''}</div><div style="font-size:11px;color:#60a5fa">Admin: ${(g.admin||'').split('@')[0]} ${isMember?'• Member':'• Max 6'}</div><div style="font-size:13px;color:#64748b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${preview}</div>${liveBadge}</div><div class="group-dots" data-dots="${g.id}">⋮</div><div class="group-menu" id="menu-${g.id}"><div class="menu-item" data-action="view" data-gid="${g.id}">👁 View group photo</div><div class="menu-item" data-action="photo" data-gid="${g.id}">🖼️ ${g.admin===currentUser?'Change photo':' '}</div><div class="menu-item" data-action="delete" data-gid="${g.id}">🗑 ${g.admin===currentUser?'Delete Group':'Exit Group'}</div></div></div>`;
+    return `<div class="group-item"><div class="group-avatar" onclick="event.stopPropagation(); window.viewGroupPhotoById('${g.id}')">${avatar}</div><div style="flex:1;min-width:0" data-open="${g.id}"><div style="font-weight:700">${g.name} ${g.callActive? '◈':''}</div><div style="font-size:11px;color:#60a5fa">Admin: ${(g.admin||'').split('@')[0]} ${isMember?'• Member':'• Max 6'}</div><div style="font-size:13px;color:#64748b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${preview}</div>${liveBadge}</div><div class="group-dots" data-dots="${g.id}">⋮</div><div class="group-menu" id="menu-${g.id}"><div class="menu-item" data-action="view" data-gid="${g.id}">👁 View group photo</div><div class="menu-item" data-action="photo" data-gid="${g.id}">🖼️ ${g.admin===currentUser?'Change photo':' '}</div><div class="menu-item" data-action="delete" data-gid="${g.id}">🗑 ${g.admin===currentUser?'Delete Group':'Exit Group'}</div></div></div>`;
   }).join('');
   document.querySelectorAll('[data-open]').forEach(el=>{ el.onclick=(e)=>{ if(e.target.closest('.group-dots') || e.target.closest('.group-avatar')) return; openGroup(el.getAttribute('data-open')); } });
   document.querySelectorAll('[data-dots]').forEach(el=>{ el.onclick=(e)=>{ e.stopPropagation(); let gid=el.getAttribute('data-dots'); document.querySelectorAll('.group-menu').forEach(m=>m.classList.remove('show')); document.getElementById('menu-'+gid).classList.add('show'); document.getElementById('overlay').classList.add('show'); } });
@@ -391,7 +406,7 @@ function renderGroups(){
       e.stopPropagation(); let gid=item.getAttribute('data-gid'); let action=item.getAttribute('data-action'); document.getElementById('overlay').classList.remove('show'); document.querySelectorAll('.group-menu').forEach(m=>m.classList.remove('show'));
       let g=groupsCache.find(x=>x.id===gid);
       if(action==='view'){
-        curGroup=g; window.viewGroupPhoto(g.groupPhoto);
+        window.viewGroupPhotoById(gid);
       } else if(action==='photo'){
         if(g.admin===currentUser){ curGroup=g; document.getElementById('gGroupImage').click(); }
       } else {
