@@ -44,16 +44,16 @@ body{font-family:system-ui,sans-serif;background:#000;color:#e7e9ea}
 .appHeader{padding:10px 16px;border-bottom:1px solid #2f3336;display:flex;gap:8px;align-items:center;font-size:14px;background:#000}
 .counter{background:#25D366;color:#000;padding:3px 10px;border-radius:9999px;font-weight:800;font-size:12px}
 .overlay{position:fixed;inset:0;z-index:99;display:none}.overlay.show{display:block}
-.del-btn{background:#f15c6d;color:#fff;border:0;padding:6px 12px;border-radius:9999px;font-size:11px;cursor:pointer;margin-top:8px;font-weight:700}
 #callModal{position:fixed;inset:0;background:#111b21;z-index:999999;display:none;flex-direction:column}
 #callModal.show{display:flex}
 .callHeader{height:56px;background:#202327;padding:0 12px;display:flex;align-items:center;gap:12px;color:#fff;border-bottom:1px solid #2f3336}
-.videosGrid{flex:1;display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:4px;background:#000;overflow-y:auto;align-content:start}
-.videoBox{position:relative;background:#1a1a1a;border-radius:12px;overflow:hidden;aspect-ratio:3/4;min-height:200px;display:flex;align-items:center;justify-content:center}
+.videosGrid{flex:1;display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:8px;background:#0b141a;overflow-y:auto;align-content:start}
+.videoBox{position:relative;background:#1a1a1a;border-radius:14px;overflow:hidden;aspect-ratio:4/3;min-height:110px;max-height:145px;display:flex;align-items:center;justify-content:center;border:1px solid #2a3942}
 .videoBox video{width:100%;height:100%;object-fit:cover;background:#000}
-.videoLabel{position:absolute;bottom:6px;left:6px;background:rgba(0,0,0,0.8);padding:3px 8px;border-radius:9999px;font-size:11px;color:#fff}
+.videoLabel{position:absolute;bottom:6px;left:6px;background:rgba(0,0,0,0.8);padding:3px 8px;border-radius:9999px;font-size:10px;color:#fff}
 .videoBox.me{border:2px solid #25D366}
-.callControls{height:90px;background:#202327;display:flex;align-items:center;justify-content:center;gap:18px;padding:0 20px;border-top:1px solid #2f3336}
+.videoBox:first-child{grid-column:span 2;max-height:190px;min-height:160px}
+.callControls{height:80px;background:#202327;display:flex;align-items:center;justify-content:center;gap:18px;padding:0 20px;border-top:1px solid #2f3336}
 .ctrl{width:56px;height:56px;border-radius:50%;border:0;display:flex;align-items:center;justify-content:center;font-size:22px;cursor:pointer}
 .ctrl.mute{background:#2a3942;color:#fff}.ctrl.mute.off{background:#f15c6d}
 .ctrl.cam{background:#2a3942;color:#fff}.ctrl.cam.off{background:#f15c6d}
@@ -118,13 +118,7 @@ const db = getFirestore(app);
 let currentUser = localStorage.getItem('sielEmail')||'';
 let peopleCache=[]; let postsCache=[]; let groupsCache=[]; let notesCache=[]; let curGroup=null, pendingPostImg=null, curCommentPostId=null;
 let localStream=null, peers={}, isMuted=false, isCamOff=false, callUnsubs=[], joinedCallId=null;
-function ensureMember(group){
-  if(!group || !group.members || !group.members.includes(currentUser)){
-    alert("You must be a member of this group. Tap Join first.");
-    return false;
-  }
-  return true;
-}
+function ensureMember(group){ if(!group || !group.members || !group.members.includes(currentUser)){ alert("You must be a member of this group. Tap Join first."); return false; } return true; }
 window.startGroupCall = async function(){
   if(!curGroup){ alert('Open a group'); return; }
   let fresh = groupsCache.find(x=>x.id===curGroup.id) || curGroup;
@@ -187,50 +181,32 @@ async function joinCallFirestore(){
       if(pid===currentUser) return;
       if(change.type==='added'){
         addVideoBox(pid, p.name + ' (Connecting...)', null, false);
-        if(currentUser < pid){
-          setTimeout(()=>createPeerOffer(pid), 800);
-        }
+        if(currentUser < pid){ setTimeout(()=>createPeerOffer(pid), 800); }
       }
-      if(change.type==='removed'){
-        closePeer(pid);
-        removeVideoBox(pid);
-      }
+      if(change.type==='removed'){ closePeer(pid); removeVideoBox(pid); }
     });
     snap.docs.forEach(d=>{
       let p=d.data(); let pid=p.email;
       if(pid===currentUser) return;
       if(!document.getElementById('box-'+pid)){
         addVideoBox(pid, p.name + ' (Connecting...)', null, false);
-        if(currentUser < pid){
-          setTimeout(()=>createPeerOffer(pid), 1000);
-        }
+        if(currentUser < pid){ setTimeout(()=>createPeerOffer(pid), 1000); }
       }
     });
   });
   callUnsubs.push(unsubP);
   let unsubOffers = onSnapshot(query(collection(db,'videoCalls',callId,'offers'), where('to','==',currentUser)), async (snap)=>{
-    for(let d of snap.docs){
-      let data=d.data();
-      await handleOffer(data);
-      try{ await deleteDoc(doc(db,'videoCalls',callId,'offers',d.id)); }catch{}
-    }
+    for(let d of snap.docs){ let data=d.data(); await handleOffer(data); try{ await deleteDoc(doc(db,'videoCalls',callId,'offers',d.id)); }catch{} }
   });
   callUnsubs.push(unsubOffers);
   let unsubAnswers = onSnapshot(query(collection(db,'videoCalls',callId,'answers'), where('to','==',currentUser)), async (snap)=>{
-    for(let d of snap.docs){
-      let data=d.data();
-      await handleAnswer(data);
-      try{ await deleteDoc(doc(db,'videoCalls',callId,'answers',d.id)); }catch{}
-    }
+    for(let d of snap.docs){ let data=d.data(); await handleAnswer(data); try{ await deleteDoc(doc(db,'videoCalls',callId,'answers',d.id)); }catch{} }
   });
   callUnsubs.push(unsubAnswers);
   let unsubCandidates = onSnapshot(query(collection(db,'videoCalls',callId,'candidates'), where('to','==',currentUser)), async (snap)=>{
     for(let d of snap.docs){
-      let data=d.data();
-      let pc=peers[data.from];
-      if(pc && data.candidate){
-        try{ await pc.addIceCandidate(new RTCIceCandidate(data.candidate)); }catch(e){ console.log('ICE err',e); }
-      }
+      let data=d.data(); let pc=peers[data.from];
+      if(pc && data.candidate){ try{ await pc.addIceCandidate(new RTCIceCandidate(data.candidate)); }catch(e){} }
       try{ await deleteDoc(doc(db,'videoCalls',callId,'candidates',d.id)); }catch{}
     }
   });
@@ -255,17 +231,9 @@ async function createPeerOffer(targetEmail){
   let pc=new RTCPeerConnection(getPeerConfig());
   peers[targetEmail]=pc;
   localStream.getTracks().forEach(t=>pc.addTrack(t, localStream));
-  pc.ontrack=(e)=>{
-    let stream=e.streams[0];
-    addVideoBox(targetEmail, targetEmail.split('@')[0], stream, false);
-  };
+  pc.ontrack=(e)=>{ addVideoBox(targetEmail, targetEmail.split('@')[0], e.streams[0], false); };
   pc.onicecandidate=async (e)=>{ if(e.candidate){ try{ await addDoc(collection(db,'videoCalls',curGroup.id,'candidates'), {from:currentUser, to:targetEmail, candidate:e.candidate.toJSON()}); }catch{} } };
-  pc.onconnectionstatechange=()=>{
-    console.log('PC state',targetEmail, pc.connectionState);
-    if(pc.connectionState==='failed' || pc.connectionState==='disconnected'){
-      try{ pc.restartIce(); }catch{}
-    }
-  };
+  pc.onconnectionstatechange=()=>{ if(pc.connectionState==='failed' || pc.connectionState==='disconnected'){ try{ pc.restartIce(); }catch{} } };
   let offer=await pc.createOffer({offerToReceiveAudio:true, offerToReceiveVideo:true});
   await pc.setLocalDescription(offer);
   await addDoc(collection(db,'videoCalls',curGroup.id,'offers'), {from:currentUser, to:targetEmail, type:'offer', sdp:offer.sdp, createdAt:Date.now()});
@@ -278,26 +246,16 @@ async function handleOffer(data){
   let pc=new RTCPeerConnection(getPeerConfig());
   peers[from]=pc;
   localStream.getTracks().forEach(t=>pc.addTrack(t, localStream));
-  pc.ontrack=(e)=>{
-    let stream=e.streams[0];
-    addVideoBox(from, from.split('@')[0], stream, false);
-  };
+  pc.ontrack=(e)=>{ addVideoBox(from, from.split('@')[0], e.streams[0], false); };
   pc.onicecandidate=async (e)=>{ if(e.candidate){ try{ await addDoc(collection(db,'videoCalls',curGroup.id,'candidates'), {from:currentUser, to:from, candidate:e.candidate.toJSON()}); }catch{} } };
-  pc.onconnectionstatechange=()=>{
-    if(pc.connectionState==='failed'){ try{ pc.restartIce(); }catch{} }
-  };
   await pc.setRemoteDescription({type:'offer', sdp:data.sdp});
   let answer=await pc.createAnswer();
   await pc.setLocalDescription(answer);
   await addDoc(collection(db,'videoCalls',curGroup.id,'answers'), {from:currentUser, to:from, type:'answer', sdp:answer.sdp, createdAt:Date.now()});
 }
 async function handleAnswer(data){
-  let from=data.from;
-  let pc=peers[from];
-  if(!pc) return;
-  try{
-    if(pc.signalingState!=='stable'){ await pc.setRemoteDescription({type:'answer', sdp:data.sdp}); }
-  }catch(e){ console.log('answer err',e); }
+  let from=data.from; let pc=peers[from]; if(!pc) return;
+  try{ if(pc.signalingState!=='stable'){ await pc.setRemoteDescription({type:'answer', sdp:data.sdp}); } }catch(e){}
 }
 function closePeer(email){ if(peers[email]){ try{ peers[email].close(); }catch{} delete peers[email]; } }
 window.toggleMute = function(){ if(!localStream) return; isMuted=!isMuted; localStream.getAudioTracks().forEach(t=>t.enabled=!isMuted); let b=document.getElementById('muteBtn'); b.textContent=isMuted?'🔇':'🎤'; b.classList.toggle('off',isMuted); }
@@ -332,11 +290,10 @@ document.getElementById('loginBtn').onclick = async ()=>{
   let err=document.getElementById('forceError');
   if(!e.includes('@')){ err.style.display='block'; err.textContent='Enter valid email'; return; }
   err.style.display='none';
-  localStorage.setItem('sielEmail',e);
-  currentUser=e;
+  localStorage.setItem('sielEmail',e); currentUser=e;
   document.getElementById('forceLogin').style.display='none';
   document.getElementById('onlineStatus').textContent='● LIVE ONLINE';
-  try{ await setDoc(doc(db,'trinity_users',e), { email:e, joinedAt: serverTimestamp() }, {merge:true}); }catch(ex){ console.log(ex); }
+  try{ await setDoc(doc(db,'trinity_users',e), { email:e, joinedAt: serverTimestamp() }, {merge:true}); }catch(ex){}
   checkLogin();
 };
 window.switchTab = function(name){
