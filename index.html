@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Subjectivity-Intersection — LIVE</title>
+<title>Subjectivity-Intersection — 6 LIVE</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:system-ui,sans-serif;background:#000;color:#e7e9ea}
@@ -60,14 +60,16 @@ body{font-family:system-ui,sans-serif;background:#000;color:#e7e9ea}
 .ctrl.end{background:#ff3b30;color:#fff;width:64px}
 .live-banner{background:#25D366;color:#000;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;font-weight:800;font-size:14px}
 .live-dot{width:10px;height:10px;background:#ff0000;border-radius:50%;display:inline-block;margin-right:6px}
+.limit-banner{background:#ffcc00;color:#000;padding:8px 12px;text-align:center;font-weight:700;font-size:12px;display:none}
+.limit-banner.show{display:block}
 </style>
 </head>
 <body>
 <div class="app">
 <div class="top"><div class="tabs"><div class="tab active" id="tab-feed" onclick="switchTab('feed')">For you</div><div class="tab" id="tab-comm" onclick="switchTab('comm')">Communities</div><div class="tab" id="tab-notes" onclick="switchTab('notes')">Simple Notes</div></div></div>
-<div class="appHeader"><span>🟣 SIEL Trinity</span><span id="topCounter">0 / 1000</span><span class="counter">LIVE</span><span id="onlineStatus" style="margin-left:8px;font-size:11px;color:#25D366">● Connecting...</span></div>
+<div class="appHeader"><span>🟣 SIEL Trinity 6</span><span id="topCounter">0 / 1000</span><span class="counter">LIVE 6</span><span id="onlineStatus" style="margin-left:8px;font-size:11px;color:#25D366">● Connecting...</span></div>
 <div id="view-feed"><div class="header"><div style="font-weight:800">For you</div><div style="font-size:12px" id="postCount">0 posts</div></div><div id="postsList"></div><div style="height:100px"></div></div>
-<div id="view-comm" style="display:none"><div class="header"><div style="font-weight:800">Communities</div><div style="font-size:12px" id="groupCount">0 groups</div></div><div style="padding:12px 16px;display:flex;gap:10px;border-bottom:1px solid #2f3336"><input id="newGroupName" class="input" placeholder="Create community" style="flex:1"><button type="button" class="btn-white btn" id="createGroupBtn">Create</button></div><div id="groupsList"></div><div style="height:100px"></div></div>
+<div id="view-comm" style="display:none"><div class="header"><div style="font-weight:800">Communities — Max 6 in call</div><div style="font-size:12px" id="groupCount">0 groups</div></div><div style="padding:12px 16px;display:flex;gap:10px;border-bottom:1px solid #2f3336"><input id="newGroupName" class="input" placeholder="Create community" style="flex:1"><button type="button" class="btn-white btn" id="createGroupBtn">Create</button></div><div id="groupsList"></div><div style="height:100px"></div></div>
 <div id="view-notes" style="display:none"><div class="header"><div style="font-weight:800">Simple Notes</div><div style="font-size:12px" id="notesCount">0 notes</div></div><div style="padding:16px;border-bottom:1px solid #2f3336;background:#000"><textarea id="noteText" class="input" placeholder="Write note..." style="border-radius:12px;min-height:80px"></textarea><button type="button" class="btn-white btn" style="width:100%;margin-top:10px;height:44px" id="saveNoteBtn">Save</button></div><div id="notesList"></div><div style="height:100px"></div></div>
 <div class="fab" id="fabBtn">+</div>
 <div class="bottom"><div class="b-item active" id="b-feed" onclick="switchTab('feed')"><span>⌂</span><span>For you</span></div><div class="b-item" id="b-comm" onclick="switchTab('comm')"><span>⧉</span><span>Communities</span></div><div class="b-item" id="b-notes" onclick="switchTab('notes')"><span>📝</span><span>Notes</span></div></div>
@@ -78,19 +80,21 @@ body{font-family:system-ui,sans-serif;background:#000;color:#e7e9ea}
 <button type="button" class="btn btn-dark" style="width:40px;height:40px;border-radius:50%" id="closeGroupBtn">←</button>
 <div class="group-avatar">⧉</div>
 <div style="flex:1"><div id="gName" style="font-weight:700">Group</div><div id="gInfo" style="font-size:12px;color:#8696a0"></div></div>
-<button type="button" class="btn-green btn" style="height:36px" onclick="startGroupCall()">📞 Call</button>
+<button type="button" class="btn-green btn" style="height:36px" onclick="startGroupCall()">📞 Call 6</button>
 <button type="button" class="btn btn-white" style="height:36px;display:none" id="joinBtn">Join</button>
 </div>
 <div id="liveCallBanner" class="live-banner" style="display:none"><div><span class="live-dot"></span><span id="liveCallText">LIVE Call</span></div><button type="button" class="btn-white btn" style="height:32px;padding:0 14px" onclick="joinLiveCall()">JOIN</button></div>
 <div id="gMsgs" class="gMsgs"></div>
 <div class="gInputWrap"><textarea id="gInput" class="gInput" rows="1" placeholder="Message"></textarea><button type="button" class="btn-green btn" style="width:44px;height:44px;border-radius:50%;padding:0" id="sendGroupBtn">➤</button></div>
 </div>
+
 <div id="callModal">
 <div class="callHeader">
 <button type="button" class="btn btn-dark" style="width:40px;height:40px;border-radius:50%" onclick="endGroupCall()">←</button>
-<div style="flex:1"><div id="callGroupName" style="font-weight:700">Group Call</div><div id="callMembers" style="font-size:11px;color:#25D366">Connecting...</div></div>
-<button type="button" class="btn-white btn" style="height:36px" onclick="endGroupCall()">End</button>
+<div style="flex:1"><div id="callGroupName" style="font-weight:700">Group Call - Max 6</div><div id="callMembers" style="font-size:11px;color:#25D366">Connecting...</div></div>
+<button type="button" class="btn-white btn" style="height:36px" onclick="endGroupCall()">Leave</button>
 </div>
+<div id="limitBanner" class="limit-banner">⚠️ Max 6 people reached — try later</div>
 <div id="videosGrid" class="videosGrid"></div>
 <div class="callControls">
 <button type="button" class="ctrl mute" id="muteBtn" onclick="toggleMute()">🎤</button>
@@ -98,9 +102,11 @@ body{font-family:system-ui,sans-serif;background:#000;color:#e7e9ea}
 <button type="button" class="ctrl end" onclick="endGroupCall()">📞</button>
 </div>
 </div>
-<div id="forceLogin" class="forceModal"><div class="box"><h2>Join SIEL Trinity</h2><input id="forceEmail" class="input" type="email" placeholder="Your email" style="margin-top:12px"><button type="button" class="btn btn-green" style="width:100%;margin-top:14px;height:46px" id="loginBtn">Continue</button><div id="forceError" style="display:none;color:#f15c6d;margin-top:10px;font-size:13px"></div></div></div>
+
+<div id="forceLogin" class="forceModal"><div class="box"><h2>Join SIEL Trinity 6</h2><input id="forceEmail" class="input" type="email" placeholder="Your email" style="margin-top:12px"><button type="button" class="btn btn-green" style="width:100%;margin-top:14px;height:46px" id="loginBtn">Continue</button><div id="forceError" style="display:none;color:#f15c6d;margin-top:10px;font-size:13px"></div></div></div>
 <div id="postModal" class="smallModal"><div class="box2"><h3>Create Post</h3><textarea id="postBody" class="textarea" placeholder="What's happening?" style="margin-top:12px"></textarea><div id="postImgPreview" style="margin-top:10px"></div><div style="display:flex;gap:8px;margin-top:14px"><button type="button" class="btn-white btn" onclick="document.getElementById('postImage').click()">🖼️ Picture</button><input type="file" id="postImage" accept="image/*" hidden><button type="button" class="btn-green btn" style="flex:1" id="publishBtn">Post</button></div><button type="button" class="btn btn-dark" style="width:100%;margin-top:10px" id="closePostBtn">Cancel</button></div></div>
 <div id="commentModal" class="smallModal"><div class="box2"><h3>Comments</h3><div id="commentPostPreview" style="margin-top:12px;padding:12px;background:#000;border-radius:12px;border:1px solid #1a1a1a"></div><div id="commentsList" style="margin-top:12px;max-height:250px;overflow-y:auto"></div><textarea id="commentText" class="textarea" placeholder="Write a comment..." style="margin-top:12px;min-height:70px"></textarea><div style="display:flex;gap:8px;margin-top:10px"><button type="button" class="btn btn-dark" style="flex:1" id="closeCommentBtn">Close</button><button type="button" class="btn-green btn" style="flex:1" id="submitCommentBtn">Send</button></div></div></div>
+
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, doc, updateDoc, arrayUnion, arrayRemove, increment, deleteDoc, serverTimestamp, setDoc, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
@@ -118,14 +124,33 @@ const db = getFirestore(app);
 let currentUser = localStorage.getItem('sielEmail')||'';
 let peopleCache=[]; let postsCache=[]; let groupsCache=[]; let notesCache=[]; let curGroup=null, pendingPostImg=null, curCommentPostId=null;
 let localStream=null, peers={}, isMuted=false, isCamOff=false, callUnsubs=[], joinedCallId=null;
-function ensureMember(group){ if(!group || !group.members || !group.members.includes(currentUser)){ alert("You must be a member of this group. Tap Join first."); return false; } return true; }
+const MAX_PEOPLE = 6;
+
+function ensureMember(group){
+  if(!group || !group.members || !group.members.includes(currentUser)){
+    alert("You must be a member of this group. Tap Join first.");
+    return false;
+  }
+  return true;
+}
+
 window.startGroupCall = async function(){
   if(!curGroup){ alert('Open a group'); return; }
   let fresh = groupsCache.find(x=>x.id===curGroup.id) || curGroup;
   if(!ensureMember(fresh)) return;
+  // Check 6 limit before starting
+  try{
+    let partSnap = await getDocs(collection(db,'videoCalls',fresh.id,'participants'));
+    if(partSnap.size >= MAX_PEOPLE){
+      document.getElementById('limitBanner').classList.add('show');
+      alert("Max "+MAX_PEOPLE+" people in call — try later");
+      return;
+    }
+  }catch{}
   curGroup = fresh;
-  document.getElementById('callGroupName').textContent = fresh.name + " Call";
+  document.getElementById('callGroupName').textContent = fresh.name + " Call (max 6)";
   document.getElementById('callModal').classList.add('show');
+  document.getElementById('limitBanner').classList.remove('show');
   await startLocalVideo();
   try{
     await updateDoc(doc(db,'groups',curGroup.id), { callActive:true, callStartedBy:currentUser.split('@')[0], callStartedAt:serverTimestamp(), updatedAt:serverTimestamp() });
@@ -137,9 +162,19 @@ window.joinLiveCall = async function(){
   if(!curGroup){ let g = groupsCache.find(x=>x.callActive); if(g) curGroup=g; else return; }
   let fresh = groupsCache.find(x=>x.id===curGroup.id) || curGroup;
   if(!ensureMember(fresh)) return;
+  try{
+    let partSnap = await getDocs(collection(db,'videoCalls',fresh.id,'participants'));
+    if(partSnap.size >= MAX_PEOPLE && !partSnap.docs.find(d=>d.id===currentUser)){
+      document.getElementById('callModal').classList.add('show');
+      document.getElementById('limitBanner').classList.add('show');
+      alert("Max "+MAX_PEOPLE+" people — room full");
+      return;
+    }
+  }catch{}
   curGroup = fresh;
-  document.getElementById('callGroupName').textContent = fresh.name + " Call";
+  document.getElementById('callGroupName').textContent = fresh.name + " Call (max 6)";
   document.getElementById('callModal').classList.add('show');
+  document.getElementById('limitBanner').classList.remove('show');
   await startLocalVideo();
   joinCallFirestore();
 }
@@ -168,7 +203,15 @@ function addVideoBox(id, label, stream, isMe){
   updateMemberCount();
 }
 function removeVideoBox(id){ let el=document.getElementById('box-'+id); if(el) el.remove(); updateMemberCount(); }
-function updateMemberCount(){ let c=document.getElementById('videosGrid').children.length; document.getElementById('callMembers').textContent = c + ' in call • Encrypted'; }
+function updateMemberCount(){
+  let c=document.getElementById('videosGrid').children.length;
+  document.getElementById('callMembers').textContent = c + ' / '+MAX_PEOPLE+' in call • Encrypted';
+  if(c >= MAX_PEOPLE){
+    document.getElementById('limitBanner').classList.add('show');
+  } else {
+    document.getElementById('limitBanner').classList.remove('show');
+  }
+}
 async function joinCallFirestore(){
   if(!curGroup) return;
   let callId=curGroup.id;
@@ -176,6 +219,12 @@ async function joinCallFirestore(){
   joinedCallId=callId;
   try{ await setDoc(doc(db,'videoCalls',callId,'participants',currentUser), {email:currentUser, name:currentUser.split('@')[0], joinedAt:serverTimestamp()}, {merge:true}); }catch(e){ console.log(e); }
   let unsubP = onSnapshot(collection(db,'videoCalls',callId,'participants'), (snap)=>{
+    if(snap.size > MAX_PEOPLE && !snap.docs.find(d=>d.data().email===currentUser)){
+      // over limit — kick self
+      alert("Room full — max "+MAX_PEOPLE);
+      endGroupCall();
+      return;
+    }
     snap.docChanges().forEach(async change=>{
       let p=change.doc.data(); let pid=p.email;
       if(pid===currentUser) return;
@@ -193,6 +242,7 @@ async function joinCallFirestore(){
         if(currentUser < pid){ setTimeout(()=>createPeerOffer(pid), 1000); }
       }
     });
+    updateMemberCount();
   });
   callUnsubs.push(unsubP);
   let unsubOffers = onSnapshot(query(collection(db,'videoCalls',callId,'offers'), where('to','==',currentUser)), async (snap)=>{
@@ -266,6 +316,7 @@ window.endGroupCall = async function(){
   if(localStream){ localStream.getTracks().forEach(t=>t.stop()); localStream=null; }
   document.getElementById('videosGrid').innerHTML='';
   document.getElementById('callModal').classList.remove('show');
+  document.getElementById('limitBanner').classList.remove('show');
   if(!curGroup) return;
   try{
     await deleteDoc(doc(db,'videoCalls',curGroup.id,'participants',currentUser));
@@ -328,7 +379,7 @@ async function deletePost(id){ let post = postsCache.find(p=>p.id===id); if(!pos
 function openCommentModal(id){ let p=postsCache.find(x=>x.id===id); if(!p) return; curCommentPostId=id; let name=(p.email||'anon').split('@')[0]; document.getElementById('commentPostPreview').innerHTML=`<div style="display:flex;gap:8px"><div class="avatar" style="width:32px;height:32px;font-size:12px">${name[0].toUpperCase()}</div><div style="flex:1"><b>@${name}</b><div style="margin-top:4px">${p.body||''}</div></div></div>`; let comments=p.comments||[]; document.getElementById('commentsList').innerHTML = comments.length? comments.map(c=>`<div style="padding:8px;border-bottom:1px solid #222"><b>@${c.name}</b> ${c.text}</div>`).join('') : '<div style="padding:20px;text-align:center;color:#555">No comments</div>'; document.getElementById('commentModal').classList.add('show'); }
 document.getElementById('submitCommentBtn').onclick = async ()=>{ let txt=document.getElementById('commentText').value.trim(); if(!txt) return; let ref=doc(db,'posts',curCommentPostId); let comment={ name:currentUser.split('@')[0], text:txt, email:currentUser, time:Date.now() }; await updateDoc(ref, { comments: arrayUnion(comment) }); document.getElementById('commentText').value=''; };
 document.getElementById('createGroupBtn').onclick = async ()=>{ let name=document.getElementById('newGroupName').value.trim(); if(!name){ alert('Enter name'); return; } await addDoc(collection(db,'groups'), { name, admin:currentUser, members:[currentUser], callActive:false, msgs:[{email:'system',name:'System',text:'Group created by '+currentUser.split('@')[0],time:{seconds:Date.now()/1000}}], updatedAt:serverTimestamp(), createdAt:serverTimestamp() }); document.getElementById('newGroupName').value=''; };
-function openGroup(id){ let g=groupsCache.find(x=>x.id===id); if(!g) return; curGroup=g; document.getElementById('gName').textContent=g.name; document.getElementById('gInfo').textContent=`${g.members.length} members`; document.getElementById('joinBtn').style.display=g.members.includes(currentUser)?'none':'block'; document.getElementById('groupModal').classList.add('show'); renderGroupMsgs(); checkLiveBanner(); }
+function openGroup(id){ let g=groupsCache.find(x=>x.id===id); if(!g) return; curGroup=g; document.getElementById('gName').textContent=g.name; document.getElementById('gInfo').textContent=`${g.members.length} members • Max 6 in call`; document.getElementById('joinBtn').style.display=g.members.includes(currentUser)?'none':'block'; document.getElementById('groupModal').classList.add('show'); renderGroupMsgs(); checkLiveBanner(); }
 document.getElementById('closeGroupBtn').onclick=()=>{ document.getElementById('groupModal').classList.remove('show'); curGroup=null; }
 document.getElementById('joinBtn').onclick= async ()=>{ if(!curGroup) return; if(!curGroup.members.includes(currentUser)){ await updateDoc(doc(db,'groups',curGroup.id), { members: arrayUnion(currentUser), msgs: arrayUnion({email:'system',name:'System',text:currentUser.split('@')[0]+' joined',time:{seconds:Date.now()/1000}}), updatedAt:serverTimestamp() }); } document.getElementById('joinBtn').style.display='none'; };
 function checkLiveBanner(){ if(!curGroup) return; let fresh = groupsCache.find(x=>x.id===curGroup.id) || curGroup; let banner = document.getElementById('liveCallBanner'); if(fresh.callActive){ banner.style.display='flex'; document.getElementById('liveCallText').textContent = `🔴 LIVE by ${fresh.callStartedBy||'someone'}`; } else { banner.style.display='none'; } }
@@ -354,8 +405,8 @@ function renderGroups(){
   document.getElementById('groupsList').innerHTML=sorted.map(g=>{
     let last=g.msgs && g.msgs[g.msgs.length-1]; let preview = last ? last.text.slice(0,60) : 'Tap to open';
     let isMember = g.members && g.members.includes(currentUser);
-    let liveBadge = g.callActive ? `<div style="margin-top:6px;background:#25D366;color:#000;padding:4px 8px;border-radius:9999px;font-size:11px;font-weight:800;display:inline-flex;align-items:center;gap:4px"><span class="live-dot"></span>🔴 LIVE ${isMember?'JOIN':''}</div>` : '';
-    return `<div class="group-item" data-open="${g.id}"><div class="group-avatar">⧉</div><div style="flex:1;min-width:0" data-open="${g.id}"><div style="font-weight:700">${g.name} ${g.callActive? '🔴':''}</div><div style="font-size:11px;color:#25D366">Admin: ${(g.admin||'').split('@')[0]} ${isMember?'• Member':'• Not member'}</div><div style="font-size:13px;color:#555;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${preview}</div>${liveBadge}</div><div class="group-dots" data-dots="${g.id}">⋮</div><div class="group-menu" id="menu-${g.id}"><div class="menu-item" data-action="delete" data-gid="${g.id}">🗑 Delete/Exit</div></div></div>`;
+    let liveBadge = g.callActive ? `<div style="margin-top:6px;background:#25D366;color:#000;padding:4px 8px;border-radius:9999px;font-size:11px;font-weight:800;display:inline-flex;align-items:center;gap:4px"><span class="live-dot"></span>🔴 LIVE JOIN</div>` : '';
+    return `<div class="group-item" data-open="${g.id}"><div class="group-avatar">⧉</div><div style="flex:1;min-width:0" data-open="${g.id}"><div style="font-weight:700">${g.name} ${g.callActive? '🔴':''}</div><div style="font-size:11px;color:#25D366">Admin: ${(g.admin||'').split('@')[0]} ${isMember?'• Member':'• Max 6'}</div><div style="font-size:13px;color:#555;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${preview}</div>${liveBadge}</div><div class="group-dots" data-dots="${g.id}">⋮</div><div class="group-menu" id="menu-${g.id}"><div class="menu-item" data-action="delete" data-gid="${g.id}">🗑 Delete/Exit</div></div></div>`;
   }).join('');
   document.querySelectorAll('[data-open]').forEach(el=>{ el.onclick=(e)=>{ if(e.target.closest('.group-dots')) return; openGroup(el.getAttribute('data-open')); } });
   document.querySelectorAll('[data-dots]').forEach(el=>{ el.onclick=(e)=>{ e.stopPropagation(); let gid=el.getAttribute('data-dots'); document.querySelectorAll('.group-menu').forEach(m=>m.classList.remove('show')); document.getElementById('menu-'+gid).classList.add('show'); document.getElementById('overlay').classList.add('show'); } });
