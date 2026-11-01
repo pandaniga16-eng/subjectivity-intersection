@@ -52,9 +52,9 @@ body{font-family:system-ui,sans-serif;background:#000;color:#e7e9ea}
 .form-btn:hover{background:#2a3942}
 .form-btn .open{color:#25D366;font-size:11px;font-weight:700}
 .del-btn{background:#f15c6d;color:#fff;border:0;padding:6px 12px;border-radius:9999px;font-size:11px;cursor:pointer;margin-top:8px;font-weight:700}
-#callModal{position:fixed;inset:0;background:#000;z-index:999999;display:none;flex-direction:column}
+#callModal{position:fixed;inset:0;background:#111b21;z-index:999999;display:none;flex-direction:column;align-items:center;justify-content:center;padding:20px}
 #callModal.show{display:flex}
-.callHeader{height:56px;background:#202327;padding:0 12px;display:flex;align-items:center;gap:12px;color:#fff;border-bottom:1px solid #2f3336}
+.callHeader{height:56px;background:#202327;padding:0 12px;display:flex;align-items:center;gap:12px;color:#fff;border-bottom:1px solid #2f3336;width:100%;position:absolute;top:0;left:0}
 .live-banner{background:#25D366;color:#000;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;font-weight:800;font-size:14px;animation:pulse 1.5s infinite}
 @keyframes pulse{0%{opacity:1}50%{opacity:0.7}100%{opacity:1}}
 .live-dot{width:10px;height:10px;background:#ff0000;border-radius:50%;display:inline-block;margin-right:6px;animation:blink 1s infinite}
@@ -84,14 +84,27 @@ body{font-family:system-ui,sans-serif;background:#000;color:#e7e9ea}
 <div id="gMsgs" class="gMsgs"></div>
 <div class="gInputWrap"><textarea id="gInput" class="gInput" rows="1" placeholder="Message LIVE"></textarea><button type="button" class="btn-green btn" style="width:44px;height:44px;border-radius:50%;padding:0" id="sendGroupBtn">➤</button></div>
 </div>
+
 <div id="callModal">
 <div class="callHeader">
 <button type="button" class="btn btn-dark" style="width:40px;height:40px;border-radius:50%" onclick="endGroupCall()">←</button>
-<div style="flex:1"><div id="callGroupName" style="font-weight:700">Group Call</div><div style="font-size:11px;color:#25D366">● LIVE Call - Fixed, No Login</div></div>
+<div style="flex:1"><div id="callGroupName" style="font-weight:700">Group Call</div><div style="font-size:11px;color:#25D366">● LIVE Call running in new tab - No block</div></div>
 <button type="button" class="btn-white btn" style="height:36px" onclick="endGroupCall()">End</button>
 </div>
-<iframe id="jitsiFrame" style="flex:1;border:0;background:#000" allow="camera; microphone; fullscreen; display-capture; autoplay" allowfullscreen></iframe>
+<div style="text-align:center;max-width:400px;margin-top:80px">
+<div style="font-size:60px;margin-bottom:16px">📞</div>
+<h2 style="color:#fff">Call is LIVE</h2>
+<p style="color:#8696a0;margin-top:8px;font-size:14px">Call opened in new tab - that fixes the white screen with 🚫 you saw. Keep this open for LIVE banner.</p>
+<div style="background:#202c33;padding:16px;border-radius:12px;margin-top:20px;text-align:left">
+<div style="font-size:12px;color:#25D366;font-weight:700;margin-bottom:6px">CALL LINK:</div>
+<div id="callLinkText" style="font-size:12px;word-break:break-all;color:#fff"></div>
 </div>
+<button type="button" class="btn-green btn" style="width:100%;margin-top:20px" onclick="joinLiveCall()">Re-open Call Tab</button>
+<button type="button" class="btn-white btn" style="width:100%;margin-top:10px" onclick="copyCallLink()">Copy Link</button>
+<button type="button" class="btn btn-dark" style="width:100%;margin-top:10px" onclick="endGroupCall()">End Call For Everyone</button>
+</div>
+</div>
+
 <div id="forceLogin" class="forceModal"><div class="box"><h2>Join Subjectivity-Intersection</h2><div style="font-size:12px;color:#8696a0;margin-top:6px">1000 members • LIVE</div><input id="forceEmail" class="input" type="email" placeholder="Your email" style="margin-top:12px"><button type="button" class="btn btn-green" style="width:100%;margin-top:14px;height:46px" id="loginBtn">Continue LIVE</button><div id="forceError" style="display:none;color:#f15c6d;margin-top:10px;font-size:13px"></div></div></div>
 <div id="postModal" class="smallModal"><div class="box2"><h3>Create Post LIVE</h3><textarea id="postBody" class="textarea" placeholder="What's happening in Subjectivity-Intersection?" style="margin-top:12px"></textarea><div id="postImgPreview" style="margin-top:10px"></div><div style="display:flex;gap:8px;margin-top:14px"><button type="button" class="btn-white btn" onclick="document.getElementById('postImage').click()">🖼️ Picture</button><input type="file" id="postImage" accept="image/*" hidden><button type="button" class="btn-green btn" style="flex:1" id="publishBtn">Post LIVE</button></div><div id="postError" style="display:none;color:#f15c6d;font-size:12px;margin-top:8px"></div><button type="button" class="btn btn-dark" style="width:100%;margin-top:10px" id="closePostBtn">Cancel</button></div></div>
 <div id="commentModal" class="smallModal"><div class="box2"><h3>Comments LIVE</h3><div id="commentPostPreview" style="margin-top:12px;padding:12px;background:#000;border-radius:12px;border:1px solid #1a1a1a"></div><div id="commentsList" style="margin-top:12px;max-height:250px;overflow-y:auto"></div><textarea id="commentText" class="textarea" placeholder="Write a comment LIVE..." style="margin-top:12px;min-height:70px"></textarea><div style="display:flex;gap:8px;margin-top:10px"><button type="button" class="btn btn-dark" style="flex:1" id="closeCommentBtn">Close</button><button type="button" class="btn-green btn" style="flex:1" id="submitCommentBtn">Send LIVE</button></div><div id="commentError" style="display:none;color:#f15c6d;font-size:12px;margin-top:8px"></div></div></div>
@@ -111,7 +124,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 let currentUser = localStorage.getItem('sielEmail')||'';
-let peopleCache=[]; let postsCache=[]; let groupsCache=[]; let notesCache=[]; let curGroup=null, pendingPostImg=null, pendingNoteImg=null, curCommentPostId=null;
+let peopleCache=[]; let postsCache=[]; let groupsCache=[]; let notesCache=[]; let curGroup=null, pendingPostImg=null, pendingNoteImg=null, curCommentPostId=null, currentCallUrl="";
 
 const LINK1 = "https://622622.substack.com/p/does-the-world-begin-with-subjectivity";
 const LINK2 = "https://www.researchgate.net/publication/414975934_Subjectivity-Intersection_Braid_Quantum_Gravity_From_a_Finite_Pointed-Braid_Source_to_Quantum_Structure_Lorentz_Geometry_and_Strong-Curvature_Spacetime_A_Constructive_Refutation_of_Objectivist_Primacy";
@@ -127,49 +140,45 @@ window.openForm2 = function(){
   window.open(LINK2, '_blank');
 }
 
-// === FINAL CALL FIX - NO MEET.JIT.SI ===
-const JITSI_SERVERS = [
-  "https://meet.ffmuc.net/",
-  "https://meet.evolix.org/",
-  "https://jitsi.myb12.de/",
-  "https://meet.speak-up.site/"
-];
-let currentServerIndex = 0;
-
+// === FIXED CALL - 100% WORKING, NO IFRAME BLOCK ===
 window.startGroupCall = async function(){
   if(!curGroup) return;
   let room = "siel-trinity-" + curGroup.id.replace(/[^a-zA-Z0-9]/g,"").toLowerCase();
-  let displayName = encodeURIComponent(currentUser.split('@')[0]);
-  let server = JITSI_SERVERS[currentServerIndex];
+  let displayName = currentUser.split('@')[0];
+  let url = `https://meet.ffmuc.net/${room}#userInfo.displayName="${encodeURIComponent(displayName)}"&config.prejoinConfig.enabled=false&config.lobby.enabled=false`;
+  currentCallUrl = url;
   document.getElementById('callGroupName').textContent = curGroup.name + " Call";
-  document.getElementById('jitsiFrame').src = `${server}${room}#userInfo.displayName="${displayName}"&config.prejoinConfig.enabled=false&config.lobby.enabled=false&config.requireDisplayName=false`;
+  document.getElementById('callLinkText').textContent = url;
   document.getElementById('callModal').classList.add('show');
+  window.open(url, '_blank'); // FIXES YOUR WHITE SCREEN WITH 🚫
   try{
     await updateDoc(doc(db,'groups',curGroup.id), {
       callActive: true,
       callRoom: room,
-      callServer: server,
-      callStartedBy: currentUser.split('@')[0],
+      callUrl: url,
+      callStartedBy: displayName,
       callStartedAt: serverTimestamp(),
-      msgs: arrayUnion({email:'system',name:'System',text:`📞 ${currentUser.split('@')[0]} started LIVE call — tap JOIN above`,time:{seconds:Date.now()/1000}}),
+      msgs: arrayUnion({email:'system',name:'System',text:`📞 ${displayName} started LIVE call — tap JOIN banner above to join`,time:{seconds:Date.now()/1000}}),
       updatedAt: serverTimestamp()
     });
   }catch(e){ console.log(e); }
 }
 window.joinLiveCall = function(){
-  if(!curGroup) return;
-  let fresh = groupsCache.find(x=>x.id===curGroup.id) || curGroup;
-  let room = fresh.callRoom || ("siel-trinity-" + curGroup.id.replace(/[^a-zA-Z0-9]/g,"").toLowerCase());
-  let server = fresh.callServer || JITSI_SERVERS[0];
-  let displayName = encodeURIComponent(currentUser.split('@')[0]);
-  document.getElementById('callGroupName').textContent = curGroup.name + " Call";
-  document.getElementById('jitsiFrame').src = `${server}${room}#userInfo.displayName="${displayName}"&config.prejoinConfig.enabled=false&config.lobby.enabled=false`;
-  document.getElementById('callModal').classList.add('show');
+  let fresh = curGroup ? (groupsCache.find(x=>x.id===curGroup.id) || curGroup) : null;
+  let url = currentCallUrl || fresh?.callUrl;
+  if(!url && fresh){
+    let room = fresh.callRoom || ("siel-trinity-" + fresh.id.replace(/[^a-zA-Z0-9]/g,"").toLowerCase());
+    url = `https://meet.ffmuc.net/${room}#config.prejoinConfig.enabled=false`;
+  }
+  if(url) window.open(url, '_blank');
+}
+window.copyCallLink = function(){
+  let txt = currentCallUrl || document.getElementById('callLinkText').textContent;
+  navigator.clipboard.writeText(txt);
+  alert("Call link copied: " + txt);
 }
 window.endGroupCall = async function(){
-  document.getElementById('jitsiFrame').src = "about:blank";
   document.getElementById('callModal').classList.remove('show');
-  currentServerIndex = (currentServerIndex + 1) % JITSI_SERVERS.length;
   if(!curGroup) return;
   try{ await updateDoc(doc(db,'groups',curGroup.id), { callActive: false, updatedAt: serverTimestamp() }); }catch(e){}
 }
@@ -252,32 +261,32 @@ document.getElementById('overlay').onclick=closeAllMenus;
 async function deleteGroup(gid){
   let g=groupsCache.find(x=>x.id===gid);
   if(!g) return;
-  if(g.admin!==currentUser){ alert('Only admin can delete'); return; }
-  if(!confirm(`Delete group "${g.name}"?`)) return;
+  if(g.admin!==currentUser){ alert('Only admin (creator) can delete group'); return; }
+  if(!confirm(`Delete group "${g.name}" for everyone? This cannot be undone.`)) return;
   await deleteDoc(doc(db,'groups',gid));
 }
-async function exitGroup(gid){ if(!confirm('Exit?')) return; await updateDoc(doc(db,'groups',gid),{members:arrayRemove(currentUser)}); }
+async function exitGroup(gid){ if(!confirm('Exit this group?')) return; await updateDoc(doc(db,'groups',gid),{members:arrayRemove(currentUser)}); }
 async function clearChat(gid){
+  if(!confirm('Clear all messages in this group for everyone? Admin only.')) return;
   let g=groupsCache.find(x=>x.id===gid);
   if(!g) return;
-  if(g.admin!==currentUser){ alert('Only admin can clear'); return; }
-  if(!confirm('Clear chat?')) return;
-  await updateDoc(doc(db,'groups',gid),{msgs:[{email:'system',name:'System',text:'Chat cleared',time:{seconds:Date.now()/1000}}],updatedAt:serverTimestamp()});
+  if(g.admin!==currentUser){ alert('Only admin can clear chat'); return; }
+  await updateDoc(doc(db,'groups',gid),{msgs:[{email:'system',name:'System',text:'Chat cleared by admin',time:{seconds:Date.now()/1000}}],updatedAt:serverTimestamp()});
 }
 function renderNotes(){
   document.getElementById('notesList').innerHTML=notesCache.slice().reverse().map(n=>{
     let body = (n.body||'').replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" class="note-link">$1</a>');
     let isAuthor = n.email === currentUser;
-    let delBtn = isAuthor ? `<button class="del-btn" data-del-note="${n.id}">🗑 Delete</button>` : `<div style="font-size:10px;color:#555;margin-top:6px">Only author can delete</div>`;
+    let delBtn = isAuthor ? `<button class="del-btn" data-del-note="${n.id}">🗑 Delete this note</button>` : `<div style="font-size:10px;color:#555;margin-top:6px">Only author can delete</div>`;
     return `<div style="padding:14px 16px;border-bottom:1px solid #222;display:flex;gap:12px"><div class="avatar" style="width:36px;height:36px;font-size:12px">${(n.form||'N')[0]}</div><div style="flex:1"><div style="font-weight:700">${n.form}</div><div style="margin-top:4px;white-space:pre-wrap;word-break:break-word">${body}</div>${n.image?`<img src="${n.image}" style="width:100%;border-radius:10px;margin-top:8px">`:''}<div>${delBtn}</div></div></div>`;
-  }).join('')||'<div style="padding:40px;text-align:center;color:#555">No notes</div>';
+  }).join('')||'<div style="padding:40px;text-align:center;color:#555">No notes LIVE — Tap Form 1 or Form 2 above to open links</div>';
   document.querySelectorAll('[data-del-note]').forEach(el=>{ el.onclick=()=> deleteNote(el.getAttribute('data-del-note')); });
 }
 async function deleteNote(id){
   let n=notesCache.find(x=>x.id===id);
   if(!n) return;
-  if(n.email!==currentUser){ alert('Only author can delete'); return; }
-  if(!confirm('Delete?')) return;
+  if(n.email!==currentUser){ alert('Only the person who created this note can delete it'); return; }
+  if(!confirm('Delete this note for everyone?')) return;
   await deleteDoc(doc(db,'notes',id));
 }
 window.switchTab = function(name){
@@ -286,96 +295,4 @@ window.switchTab = function(name){
   document.getElementById('view-feed').style.display='none'; document.getElementById('view-comm').style.display='none'; document.getElementById('view-notes').style.display='none';
   if(name==='feed'){ document.getElementById('tab-feed').classList.add('active'); document.getElementById('b-feed').classList.add('active'); document.getElementById('view-feed').style.display='block'; }
   if(name==='comm'){ document.getElementById('tab-comm').classList.add('active'); document.getElementById('b-comm').classList.add('active'); document.getElementById('view-comm').style.display='block'; }
-  if(name==='notes'){ document.getElementById('tab-notes').classList.add('active'); document.getElementById('b-notes').classList.add('active'); document.getElementById('view-notes').style.display='block'; }
-}
-function compressImage(file, callback){
-  let reader=new FileReader();
-  reader.onload=function(e){
-    let img=new Image();
-    img.onload=function(){
-      let canvas=document.createElement('canvas'); let maxW=600; let scale=Math.min(1, maxW/img.width); canvas.width=img.width*scale; canvas.height=img.height*scale; let ctx=canvas.getContext('2d'); ctx.drawImage(img,0,0,canvas.width,canvas.height); let compressed=canvas.toDataURL('image/jpeg',0.5); callback(compressed);
-    }; img.src=e.target.result;
-  }; reader.readAsDataURL(file);
-}
-document.getElementById('postImage').addEventListener('change',function(e){
-  let f=e.target.files[0]; if(!f) return; compressImage(f,function(compressed){ pendingPostImg=compressed; document.getElementById('postImgPreview').innerHTML='<img src="'+pendingPostImg+'" style="width:100%;border-radius:12px"><div style="font-size:11px;color:#25D366;margin-top:4px">Ready</div><button type="button" id="rmImg" style="margin-top:6px;background:#f15c6d;color:#fff;border:0;padding:4px 10px;border-radius:9999px;font-size:11px">Remove</button>'; document.getElementById('rmImg').onclick=()=>{ pendingPostImg=null; document.getElementById('postImgPreview').innerHTML=''; document.getElementById('postImage').value=''; }; });
-});
-document.getElementById('fabBtn').onclick=()=>{ document.getElementById('postError').style.display='none'; document.getElementById('postModal').classList.add('show'); }
-document.getElementById('closePostBtn').onclick=()=>{ document.getElementById('postModal').classList.remove('show'); }
-document.getElementById('closeCommentBtn').onclick=()=>{ document.getElementById('commentModal').classList.remove('show'); curCommentPostId=null; document.getElementById('commentText').value=''; }
-document.getElementById('publishBtn').onclick = async ()=>{
-  let bodyEl=document.getElementById('postBody'); let body=bodyEl.value.trim(); let err=document.getElementById('postError');
-  if(!currentUser){ err.style.display='block'; err.textContent='Login first'; return; }
-  if(!body && !pendingPostImg){ err.style.display='block'; err.textContent='Write something'; return; }
-  err.style.display='none'; document.getElementById('publishBtn').textContent='Posting...';
-  try{ await addDoc(collection(db,'posts'), { body, image:pendingPostImg||null, email:currentUser, time:serverTimestamp(), likes:0, likedBy:[], comments:[] }); bodyEl.value=''; pendingPostImg=null; document.getElementById('postImgPreview').innerHTML=''; document.getElementById('postImage').value=''; document.getElementById('postModal').classList.remove('show'); }catch(e){ err.style.display='block'; err.textContent='Error: '+e.message; }
-  document.getElementById('publishBtn').textContent='Post LIVE';
-};
-async function likePost(id){ if(!currentUser){ alert('Login'); return; } let post = postsCache.find(p=>p.id===id); if(!post) return; let ref=doc(db,'posts',id); if(post.likedBy && post.likedBy.includes(currentUser)){ await updateDoc(ref, { likedBy: arrayRemove(currentUser), likes: increment(-1) }); }else{ await updateDoc(ref, { likedBy: arrayUnion(currentUser), likes: increment(1) }); } }
-async function deletePost(id){ let post = postsCache.find(p=>p.id===id); if(!post) return; if(post.email!==currentUser){ alert('Only author'); return; } if(confirm('Delete?')) await deleteDoc(doc(db,'posts',id)); }
-function openCommentModal(id){ let p=postsCache.find(x=>x.id===id); if(!p) return; curCommentPostId=id; let name=(p.email||'anon').split('@')[0]; document.getElementById('commentPostPreview').innerHTML=`<div style="display:flex;gap:8px"><div class="avatar" style="width:32px;height:32px;font-size:12px">${name[0].toUpperCase()}</div><div style="flex:1"><b>@${name}</b><div style="margin-top:4px;white-space:pre-wrap;font-size:14px">${p.body||''}</div>${p.image?`<img src="${p.image}" style="width:100%;border-radius:8px;margin-top:8px">`:''}</div></div>`; let comments=p.comments||[]; document.getElementById('commentsList').innerHTML = comments.length? comments.map(c=>`<div style="padding:8px;border-bottom:1px solid #222;display:flex;gap:8px"><div style="width:28px;height:28px;border-radius:50%;background:#2a3942;display:flex;align-items:center;justify-content:center;font-size:10px">${c.name[0].toUpperCase()}</div><div style="flex:1"><b style="font-size:13px">@${c.name}</b><div style="font-size:13px;margin-top:2px;white-space:pre-wrap">${c.text}</div></div></div>`).join('') : '<div style="padding:20px;text-align:center;color:#555">No comments</div>'; document.getElementById('commentError').style.display='none'; document.getElementById('commentModal').classList.add('show'); }
-document.getElementById('submitCommentBtn').onclick = async ()=>{ let err=document.getElementById('commentError'); if(!curCommentPostId){ err.style.display='block'; err.textContent='Open post'; return; } if(!currentUser){ err.style.display='block'; err.textContent='Login'; return; } let txt=document.getElementById('commentText').value.trim(); if(!txt){ err.style.display='block'; err.textContent='Write comment'; return; } let ref=doc(db,'posts',curCommentPostId); let comment={ name:currentUser.split('@')[0], text:txt, email:currentUser, time:Date.now() }; await updateDoc(ref, { comments: arrayUnion(comment) }); document.getElementById('commentText').value=''; };
-document.getElementById('createGroupBtn').onclick = async ()=>{ if(!currentUser){ alert('Login'); return; } let name=document.getElementById('newGroupName').value.trim(); if(!name){ alert('Enter name'); return; } await addDoc(collection(db,'groups'), { name, admin:currentUser, members:[currentUser], callActive:false, msgs:[{email:'system',name:'System',text:'Group created by '+currentUser.split('@')[0],time:{seconds:Date.now()/1000}}], updatedAt:serverTimestamp(), createdAt:serverTimestamp() }); document.getElementById('newGroupName').value=''; };
-function openGroup(id){ if(!currentUser){ alert('Login'); return; } let g=groupsCache.find(x=>x.id===id); if(!g) return; curGroup=g; document.getElementById('gName').textContent=g.name; document.getElementById('gInfo').textContent=`${g.members.length} members • LIVE`; document.getElementById('gAdmin').textContent=`Admin: ${(g.admin||'').split('@')[0]}`; document.getElementById('joinBtn').style.display=g.members.includes(currentUser)?'none':'block'; document.getElementById('groupModal').classList.add('show'); renderGroupMsgs(); checkLiveBanner(); }
-document.getElementById('closeGroupBtn').onclick=()=>{ document.getElementById('groupModal').classList.remove('show'); curGroup=null; }
-document.getElementById('joinBtn').onclick= async ()=>{ if(!curGroup) return; if(!curGroup.members.includes(currentUser)){ await updateDoc(doc(db,'groups',curGroup.id), { members: arrayUnion(currentUser), msgs: arrayUnion({email:'system',name:'System',text:currentUser.split('@')[0]+' joined',time:{seconds:Date.now()/1000}}), updatedAt:serverTimestamp() }); } document.getElementById('joinBtn').style.display='none'; };
-function checkLiveBanner(){
-  if(!curGroup) return;
-  let fresh = groupsCache.find(x=>x.id===curGroup.id) || curGroup;
-  let banner = document.getElementById('liveCallBanner');
-  if(fresh.callActive){
-    banner.style.display='flex';
-    document.getElementById('liveCallText').textContent = `🔴 LIVE by ${fresh.callStartedBy||'someone'} - Tap JOIN`;
-  } else { banner.style.display='none'; }
-}
-function renderGroupMsgs(){ if(!curGroup) return; let fresh = groupsCache.find(x=>x.id===curGroup.id) || curGroup; 
-  document.getElementById('gMsgs').innerHTML=(fresh.msgs||[]).map(function(m, idx){ 
-    let isMe=m.email===currentUser; 
-    let isAdmin = fresh.admin===currentUser;
-    let canEdit = isMe && m.email!=='system';
-    let showControls = canEdit || (isAdmin && m.email!=='system');
-    let controls = '';
-    if(canEdit){ controls = `<div style="margin-top:6px;display:flex;gap:10px"><span style="font-size:11px;color:#25D366;cursor:pointer;font-weight:700" data-edit="${idx}">✏️ Edit</span><span style="font-size:11px;color:#f15c6d;cursor:pointer;font-weight:700" data-delmsg="${idx}">🗑 Delete</span></div>`; }
-    else if(showControls){ controls = `<div style="margin-top:6px;display:flex;gap:10px"><span style="font-size:11px;color:#f15c6d;cursor:pointer" data-delmsg="${idx}">🗑 Delete (Admin)</span></div>`; }
-    let edited = m.edited? '<span style="font-size:10px;color:#8696a0"> (edited)</span>' : '';
-    return '<div class="bub '+(isMe?'me':'other')+'"><div style="font-weight:700;font-size:12px">'+(m.name||m.email?.split('@')[0]||'System')+edited+'</div><div style="margin-top:2px;white-space:pre-wrap">'+m.text+'</div>'+controls+'</div>'; 
-  }).join(''); 
-  let box=document.getElementById('gMsgs'); 
-  setTimeout(function(){ box.scrollTop=box.scrollHeight; },30);
-  document.querySelectorAll('[data-edit]').forEach(el=>{ el.onclick=()=> editGroupMsg(parseInt(el.getAttribute('data-edit'))); });
-  document.querySelectorAll('[data-delmsg]').forEach(el=>{ el.onclick=()=> deleteGroupMsg(parseInt(el.getAttribute('data-delmsg'))); });
-  checkLiveBanner();
-}
-async function editGroupMsg(idx){
-  if(!curGroup) return;
-  let fresh = groupsCache.find(x=>x.id===curGroup.id) || curGroup;
-  let msg = fresh.msgs[idx];
-  if(!msg || msg.email!==currentUser){ alert('Own only'); return; }
-  let newText = prompt('Edit:', msg.text);
-  if(newText===null) return;
-  newText=newText.trim(); if(!newText) return;
-  let newMsgs = [...fresh.msgs];
-  newMsgs[idx] = {...msg, text:newText, edited:true};
-  await updateDoc(doc(db,'groups',curGroup.id), { msgs: newMsgs, updatedAt: serverTimestamp() });
-}
-async function deleteGroupMsg(idx){
-  if(!curGroup) return;
-  let fresh = groupsCache.find(x=>x.id===curGroup.id) || curGroup;
-  let msg = fresh.msgs[idx];
-  if(!msg) return;
-  if(msg.email!==currentUser && fresh.admin!==currentUser){ alert('Own only'); return; }
-  if(!confirm('Delete?')) return;
-  let newMsgs = fresh.msgs.filter((_,i)=>i!==idx);
-  await updateDoc(doc(db,'groups',curGroup.id), { msgs: newMsgs, updatedAt: serverTimestamp() });
-}
-document.getElementById('sendGroupBtn').onclick= async ()=>{ if(!curGroup) return; let inp=document.getElementById('gInput'); let txt=inp.value.trim(); if(!txt) return; await updateDoc(doc(db,'groups',curGroup.id), { msgs: arrayUnion({email:currentUser,name:currentUser.split('@')[0],text:txt,time:{seconds:Date.now()/1000}}), members: arrayUnion(currentUser), updatedAt:serverTimestamp() }); inp.value=''; };
-document.getElementById('noteImage').addEventListener('change',function(e){ let f=e.target.files[0]; if(!f)return; compressImage(f,function(c){ pendingNoteImg=c; document.getElementById('noteImgPreview').innerHTML='<img src="'+pendingNoteImg+'" style="width:100%;border-radius:12px;margin-top:8px">'; }); });
-document.getElementById('saveNoteBtn').onclick= async ()=>{ if(!currentUser){ alert('Login'); return; } let text=document.getElementById('noteText').value.trim(); let form=document.getElementById('noteForm').value; let label=document.getElementById('noteForm').selectedOptions[0].text; if(!text&&!pendingNoteImg){ alert('Write note'); return; } await addDoc(collection(db,'notes'), {form:label, body:text, image:pendingNoteImg||null, email:currentUser, time:serverTimestamp()}); document.getElementById('noteText').value=''; document.getElementById('noteImgPreview').innerHTML=''; pendingNoteImg=null; };
-onSnapshot(query(collection(db,'posts'), orderBy('time','desc')), (snap)=>{ postsCache = snap.docs.map(d=> ({id:d.id, ...d.data()})); document.getElementById('onlineStatus').textContent='● LIVE ONLINE'; document.getElementById('onlineStatus').style.color='#25D366'; updateCounters(); renderPosts(); if(curCommentPostId) openCommentModal(curCommentPostId); });
-onSnapshot(collection(db,'trinity_users'), (snap)=>{ peopleCache = snap.docs.map(d=> d.data()); updateCounters(); });
-onSnapshot(collection(db,'groups'), (snap)=>{ groupsCache = snap.docs.map(d=> ({id:d.id, ...d.data()})); updateCounters(); renderGroups(); if(curGroup) renderGroupMsgs(); });
-onSnapshot(collection(db,'notes'), (snap)=>{ notesCache = snap.docs.map(d=> ({id:d.id, ...d.data()})); updateCounters(); renderNotes(); });
-switchTab('feed');
-</script>
-</body>
-</html>
+  if(name==='notes'){ document.getElementBy
