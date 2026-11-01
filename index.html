@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>SIEL Trinity — Live Chart HD</title>
+<title>SIEL Trinity — LIVE CHART HD</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:system-ui,sans-serif;background:#080c14;color:#e7e9ea}
@@ -32,7 +32,7 @@ body{font-family:system-ui,sans-serif;background:#080c14;color:#e7e9ea}
 #groupModal.show{display:flex}
 .gHeader{height:64px;background:#0f172a;padding:0 12px;display:flex;align-items:center;gap:12px;border-bottom:1px solid #1e293b}
 .gMsgs{flex:1;overflow-y:auto;padding:16px 12px;display:flex;flex-direction:column;gap:10px;background:#020617}
-.bub{max-width:78%;padding:10px 14px;border-radius:18px;font-size:15px;word-break:break-word}
+.bub{max-width:85%;padding:10px 14px;border-radius:18px;font-size:15px;word-break:break-word}
 .bub.me{align-self:flex-end;background:#2563eb;color:#fff;border-bottom-right-radius:4px}.bub.other{align-self:flex-start;background:#1e293b;color:#fff;border-bottom-left-radius:4px}
 .gInputWrap{padding:10px 12px;background:#0f172a;display:flex;gap:8px;align-items:center;border-top:1px solid #1e293b}
 .gInput{flex:1;background:#1e293b;border:0;border-radius:24px;padding:12px 16px;color:#fff;font-size:15px;outline:none;resize:none;min-height:44px}
@@ -63,7 +63,7 @@ body{font-family:system-ui,sans-serif;background:#080c14;color:#e7e9ea}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
 .limit-banner{background:#fbbf24;color:#000;padding:8px 12px;text-align:center;font-weight:700;font-size:12px;display:none}
 .limit-banner.show{display:block}
-.group-media{width:100%;border-radius:12px;margin-top:8px;max-height:500px;object-fit:contain;background:#000}
+.group-media{width:100%;border-radius:12px;margin-top:8px;max-height:none;object-fit:contain;background:#000}
 .form-card{padding:18px 12px;border-radius:16px;text-align:center;text-decoration:none;font-weight:800;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer}
 </style>
 </head>
@@ -71,11 +71,8 @@ body{font-family:system-ui,sans-serif;background:#080c14;color:#e7e9ea}
 <div class="app">
 <div class="top"><div class="tabs"><div class="tab active" id="tab-feed" onclick="switchTab('feed')">For you</div><div class="tab" id="tab-comm" onclick="switchTab('comm')">Groups</div><div class="tab" id="tab-notes" onclick="switchTab('notes')">Notes</div></div></div>
 <div class="appHeader"><span>◈ SIEL Trinity</span><span id="topCounter">0 / 1000</span><span id="onlineStatus" style="margin-left:8px;font-size:11px;color:#60a5fa">● LIVE CHART</span></div>
-
 <div id="view-feed"><div class="header"><div style="font-weight:800">For you</div><div style="font-size:12px" id="postCount">0 posts</div></div><div id="postsList"></div><div style="height:100px"></div></div>
-
 <div id="view-comm" style="display:none"><div class="header"><div style="font-weight:800">Groups — Max 6 in call</div><div style="font-size:12px" id="groupCount">0 groups</div></div><div style="padding:12px 16px;display:flex;gap:10px;border-bottom:1px solid #1e293b"><input id="newGroupName" class="input" placeholder="Create new group" style="flex:1"><button type="button" class="btn-white btn" id="createGroupBtn">Create</button></div><div id="groupsList"></div><div style="height:100px"></div></div>
-
 <div id="view-notes" style="display:none">
 <div class="header"><div style="font-weight:800">Notes</div><div style="font-size:12px" id="notesCount">0 notes</div></div>
 <div style="padding:16px;display:grid;grid-template-columns:1fr 1fr;gap:12px;border-bottom:1px solid #1e293b;background:#080c14">
@@ -93,11 +90,9 @@ body{font-family:system-ui,sans-serif;background:#080c14;color:#e7e9ea}
 <div style="padding:16px;border-bottom:1px solid #1e293b;background:#080c14"><textarea id="noteText" class="input" placeholder="Write personal note..." style="border-radius:12px;min-height:80px"></textarea><button type="button" class="btn-blue btn" style="width:100%;margin-top:10px;height:44px" id="saveNoteBtn">Save Personal Note</button></div>
 <div id="notesList"></div><div style="height:100px"></div>
 </div>
-
 <div class="fab" id="fabBtn">+</div>
 <div class="bottom"><div class="b-item active" id="b-feed" onclick="switchTab('feed')"><span>⌂</span><span>For you</span></div><div class="b-item" id="b-comm" onclick="switchTab('comm')"><span>⧉</span><span>Groups</span></div><div class="b-item" id="b-notes" onclick="switchTab('notes')"><span>📝</span><span>Notes</span></div></div>
 </div>
-
 <div id="overlay" class="overlay"></div>
 <div id="groupModal">
 <div class="gHeader">
@@ -110,13 +105,12 @@ body{font-family:system-ui,sans-serif;background:#080c14;color:#e7e9ea}
 <div id="liveCallBanner" class="live-banner" style="display:none"><div><span class="live-dot"></span><span id="liveCallText">LIVE Call</span></div><button type="button" class="btn-white btn" style="height:32px;padding:0 14px" onclick="joinLiveCall()">JOIN</button></div>
 <div id="gMsgs" class="gMsgs"></div>
 <div class="gInputWrap">
-<button type="button" class="gMediaBtn" onclick="document.getElementById('gImage').click()">🖼️</button>
+<button type="button" class="gMediaBtn" onclick="document.getElementById('gImage').click()">🖼️ HD</button>
 <input type="file" id="gImage" accept="image/*" hidden>
 <textarea id="gInput" class="gInput" rows="1" placeholder="Message in group"></textarea>
 <button type="button" class="btn-blue btn" style="width:44px;height:44px;border-radius:50%;padding:0" id="sendGroupBtn">➤</button>
 </div>
 </div>
-
 <div id="callModal">
 <div class="callHeader">
 <button type="button" class="btn btn-dark" style="width:40px;height:40px;border-radius:50%" onclick="endGroupCall()">←</button>
@@ -131,11 +125,9 @@ body{font-family:system-ui,sans-serif;background:#080c14;color:#e7e9ea}
 <button type="button" class="ctrl end" onclick="endGroupCall()">📞</button>
 </div>
 </div>
-
 <div id="forceLogin" class="forceModal"><div class="box"><h2>◈ Join Trinity</h2><input id="forceEmail" class="input" type="email" placeholder="Your email" style="margin-top:12px"><button type="button" class="btn btn-blue" style="width:100%;margin-top:14px;height:46px" id="loginBtn">Continue</button><div id="forceError" style="display:none;color:#ef4444;margin-top:10px;font-size:13px"></div></div></div>
-<div id="postModal" class="smallModal"><div class="box2"><h3>Create Post</h3><textarea id="postBody" class="textarea" placeholder="What's happening?" style="margin-top:12px"></textarea><div id="postImgPreview" style="margin-top:10px"></div><div style="display:flex;gap:8px;margin-top:14px"><button type="button" class="btn-white btn" onclick="document.getElementById('postImage').click()">🖼️ Picture HD</button><input type="file" id="postImage" accept="image/*" hidden><button type="button" class="btn-blue btn" style="flex:1" id="publishBtn">Post</button></div><button type="button" class="btn btn-dark" style="width:100%;margin-top:10px" id="closePostBtn">Cancel</button></div></div>
+<div id="postModal" class="smallModal"><div class="box2"><h3>Create Post</h3><textarea id="postBody" class="textarea" placeholder="What's happening?" style="margin-top:12px"></textarea><div id="postImgPreview" style="margin-top:10px"></div><div style="display:flex;gap:8px;margin-top:14px"><button type="button" class="btn-white btn" onclick="document.getElementById('postImage').click()">🖼️ HD Photo</button><input type="file" id="postImage" accept="image/*" hidden><button type="button" class="btn-blue btn" style="flex:1" id="publishBtn">Post</button></div><button type="button" class="btn btn-dark" style="width:100%;margin-top:10px" id="closePostBtn">Cancel</button></div></div>
 <div id="commentModal" class="smallModal"><div class="box2"><h3>Comments</h3><div id="commentPostPreview" style="margin-top:12px;padding:12px;background:#000;border-radius:12px;border:1px solid #1e293b"></div><div id="commentsList" style="margin-top:12px;max-height:250px;overflow-y:auto"></div><textarea id="commentText" class="textarea" placeholder="Write a comment..." style="margin-top:12px;min-height:70px"></textarea><div style="display:flex;gap:8px;margin-top:10px"><button type="button" class="btn btn-dark" style="flex:1" id="closeCommentBtn">Close</button><button type="button" class="btn-blue btn" style="flex:1" id="submitCommentBtn">Send</button></div></div></div>
-
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, doc, updateDoc, arrayUnion, arrayRemove, increment, deleteDoc, serverTimestamp, setDoc, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
@@ -244,25 +236,31 @@ window.switchTab = function(name){
   if(name==='notes'){ document.getElementById('tab-notes').classList.add('active'); document.getElementById('b-notes').classList.add('active'); document.getElementById('view-notes').style.display='block'; }
 }
 function compressImage(file, callback){
+  if(file.size <= 1500 * 1024){
+    let r=new FileReader();
+    r.onload=e=>callback(e.target.result);
+    r.readAsDataURL(file);
+    return;
+  }
   let reader=new FileReader(); 
   reader.onload=function(e){ 
     let img=new Image(); 
     img.onload=function(){ 
       let canvas=document.createElement('canvas'); 
-      let maxW=1920;
+      let maxW=2560;
       let scale=Math.min(1, maxW/img.width); 
       canvas.width=img.width*scale; 
       canvas.height=img.height*scale; 
       let ctx=canvas.getContext('2d'); 
       ctx.drawImage(img,0,0,canvas.width,canvas.height); 
-      let compressed=canvas.toDataURL('image/jpeg',0.92);
+      let compressed=canvas.toDataURL('image/jpeg',0.95);
       callback(compressed); 
     }; 
     img.src=e.target.result; 
   }; 
   reader.readAsDataURL(file);
 }
-document.getElementById('postImage').addEventListener('change',function(e){ let f=e.target.files[0]; if(!f) return; compressImage(f,function(compressed){ pendingPostImg=compressed; document.getElementById('postImgPreview').innerHTML='<img src="'+pendingPostImg+'" style="width:100%;border-radius:12px;max-height:500px;object-fit:contain;background:#000">'; }); });
+document.getElementById('postImage').addEventListener('change',function(e){ let f=e.target.files[0]; if(!f) return; compressImage(f,function(compressed){ pendingPostImg=compressed; document.getElementById('postImgPreview').innerHTML='<img src="'+pendingPostImg+'" style="width:100%;border-radius:12px;max-height:600px;object-fit:contain;background:#000">'; }); });
 document.getElementById('gImage').addEventListener('change',function(e){ 
   let f=e.target.files[0]; if(!f || !curGroup) return; 
   compressImage(f, async function(compressed){ 
@@ -283,14 +281,14 @@ function openGroup(id){ let g=groupsCache.find(x=>x.id===id); if(!g) return; cur
 document.getElementById('closeGroupBtn').onclick=()=>{ document.getElementById('groupModal').classList.remove('show'); curGroup=null; }
 document.getElementById('joinBtn').onclick= async ()=>{ if(!curGroup) return; if(!curGroup.members.includes(currentUser)){ await updateDoc(doc(db,'groups',curGroup.id), { members: arrayUnion(currentUser), msgs: arrayUnion({email:'system',name:'System',text:currentUser.split('@')[0]+' joined',time:{seconds:Date.now()/1000}}), updatedAt:serverTimestamp() }); } document.getElementById('joinBtn').style.display='none'; };
 function checkLiveBanner(){ if(!curGroup) return; let fresh = groupsCache.find(x=>x.id===curGroup.id) || curGroup; let banner = document.getElementById('liveCallBanner'); if(fresh.callActive){ banner.style.display='flex'; document.getElementById('liveCallText').textContent = `◈ LIVE by ${fresh.callStartedBy||'someone'}`; } else { banner.style.display='none'; } }
-function renderGroupMsgs(){ if(!curGroup) return; let fresh = groupsCache.find(x=>x.id===curGroup.id) || curGroup; document.getElementById('gMsgs').innerHTML=(fresh.msgs||[]).map(m=>{ let img = m.image ? `<img src="${m.image}" class="group-media" loading="lazy">` : ''; let vid = m.video ? `<video src="${m.video}" class="group-media" controls></video>` : ''; return `<div class="bub ${m.email===currentUser?'me':'other'}"><div style="font-weight:700;font-size:12px">${m.name||m.email?.split('@')[0]}</div><div>${m.text||''}</div>${img}${vid}</div>`; }).join(''); let box=document.getElementById('gMsgs'); setTimeout(()=>box.scrollTop=box.scrollHeight,30); checkLiveBanner(); }
+function renderGroupMsgs(){ if(!curGroup) return; let fresh = groupsCache.find(x=>x.id===curGroup.id) || curGroup; document.getElementById('gMsgs').innerHTML=(fresh.msgs||[]).map(m=>{ let img = m.image ? `<img src="${m.image}" class="group-media" loading="lazy">` : ''; return `<div class="bub ${m.email===currentUser?'me':'other'}"><div style="font-weight:700;font-size:12px">${m.name||m.email?.split('@')[0]}</div><div>${m.text||''}</div>${img}</div>`; }).join(''); let box=document.getElementById('gMsgs'); setTimeout(()=>box.scrollTop=box.scrollHeight,30); checkLiveBanner(); }
 document.getElementById('sendGroupBtn').onclick= async ()=>{ if(!curGroup) return; let txt=document.getElementById('gInput').value.trim(); if(!txt) return; await updateDoc(doc(db,'groups',curGroup.id), { msgs: arrayUnion({email:currentUser,name:currentUser.split('@')[0],text:txt,time:{seconds:Date.now()/1000}}), members: arrayUnion(currentUser), updatedAt:serverTimestamp() }); document.getElementById('gInput').value=''; };
 function renderPosts(){
   let plist=document.getElementById('postsList');
   if(postsCache.length===0){ plist.innerHTML='<div style="padding:60px;text-align:center;color:#555">No posts</div>'; return; }
   plist.innerHTML=postsCache.map(p=>{
     let name=(p.email||'anon').split('@')[0]; let isLiked = p.likedBy && p.likedBy.includes(currentUser); let id = p.id; let isAuthor = p.email && currentUser && p.email.toLowerCase() === currentUser.toLowerCase(); let deleteBtn = isAuthor ? `<div class="action" data-del="${id}" style="margin-left:auto;color:#f15c6d">🗑 Delete</div>` : ``;
-    return `<div class="post-card"><div style="display:flex;gap:12px"><div class="avatar">${name[0].toUpperCase()}</div><div style="flex:1;min-width:0"><div style="display:flex;justify-content:space-between"><div style="font-weight:700">@${name}</div><div style="font-size:11px;color:#555">${p.time? new Date(p.time.seconds? p.time.seconds*1000 : p.time).toLocaleString() : ''}</div></div>${p.body?`<div style="margin-top:6px;white-space:pre-wrap;word-break:break-word">${p.body}</div>`:''}${p.image?`<img src="${p.image}" style="width:100%;border-radius:12px;margin-top:10px;max-height:600px;object-fit:contain;background:#000">`:''}<div class="post-actions"><div class="action ${isLiked?'liked':''}" data-like="${id}"><span>${isLiked?'❤️':'♡'}</span><span>${p.likes||0}</span></div><div class="action" data-comment="${id}"><span>💬</span><span>${p.comments?.length||0}</span></div>${deleteBtn}</div></div></div></div>`;
+    return `<div class="post-card"><div style="display:flex;gap:12px"><div class="avatar">${name[0].toUpperCase()}</div><div style="flex:1;min-width:0"><div style="display:flex;justify-content:space-between"><div style="font-weight:700">@${name}</div><div style="font-size:11px;color:#555">${p.time? new Date(p.time.seconds? p.time.seconds*1000 : p.time).toLocaleString() : ''}</div></div>${p.body?`<div style="margin-top:6px;white-space:pre-wrap;word-break:break-word">${p.body}</div>`:''}${p.image?`<img src="${p.image}" style="width:100%;border-radius:12px;margin-top:10px;max-height:800px;object-fit:contain;background:#000">`:''}<div class="post-actions"><div class="action ${isLiked?'liked':''}" data-like="${id}"><span>${isLiked?'❤️':'♡'}</span><span>${p.likes||0}</span></div><div class="action" data-comment="${id}"><span>💬</span><span>${p.comments?.length||0}</span></div>${deleteBtn}</div></div></div></div>`;
   }).join('');
   plist.querySelectorAll('[data-like]').forEach(el=> el.onclick=()=> likePost(el.getAttribute('data-like')));
   plist.querySelectorAll('[data-comment]').forEach(el=> el.onclick=()=> openCommentModal(el.getAttribute('data-comment')));
@@ -299,7 +297,7 @@ function renderPosts(){
 function renderGroups(){
   let sorted=[...groupsCache].sort((a,b)=> (b.updatedAt?.seconds||0)-(a.updatedAt?.seconds||0));
   document.getElementById('groupsList').innerHTML=sorted.map(g=>{
-    let last=g.msgs && g.msgs[g.msgs.length-1]; let preview = last ? (last.image?'🖼️ HD Photo': last.video?'🎥 Video' : last.text.slice(0,60)) : 'Tap to open';
+    let last=g.msgs && g.msgs[g.msgs.length-1]; let preview = last ? (last.image?'🖼️ HD Photo' : last.text.slice(0,60)) : 'Tap to open';
     let isMember = g.members && g.members.includes(currentUser); let liveBadge = g.callActive ? `<div style="margin-top:6px;background:#2563eb;color:#fff;padding:4px 10px;border-radius:9999px;font-size:11px;font-weight:800;display:inline-flex;align-items:center;gap:4px"><span class="live-dot"></span>◈ LIVE JOIN</div>` : '';
     return `<div class="group-item" data-open="${g.id}"><div class="group-avatar">◈</div><div style="flex:1;min-width:0" data-open="${g.id}"><div style="font-weight:700">${g.name} ${g.callActive? '◈':''}</div><div style="font-size:11px;color:#60a5fa">Admin: ${(g.admin||'').split('@')[0]} ${isMember?'• Member':'• Max 6'}</div><div style="font-size:13px;color:#64748b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${preview}</div>${liveBadge}</div><div class="group-dots" data-dots="${g.id}">⋮</div><div class="group-menu" id="menu-${g.id}"><div class="menu-item" data-action="delete" data-gid="${g.id}">🗑 Delete/Exit</div></div></div>`;
   }).join('');
